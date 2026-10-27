@@ -1,0 +1,32 @@
+name: Verify plugin
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-checks:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Rebuild from maintained source
+        run: node scripts/build.cjs
+      - name: Run syntax and regression checks
+        run: node scripts/verify.cjs
+      - name: Preview npm package without publishing
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          npm pack --dry-run --json --ignore-scripts | Out-File -Encoding utf8 artifacts/pack-preview.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node scripts/check-pack.cjs artifacts/pack-preview.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-pack-preview
+          path: artifacts/pack-preview.json
+
