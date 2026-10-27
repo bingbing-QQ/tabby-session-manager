@@ -1,0 +1,10 @@
+const fs=require('fs'),assert=require('assert/strict'),path=require('path');const main=fs.readFileSync(path.join(__dirname,'../dist/index.js'),'utf8');const Klass=new Function("const CONFIG_KEY='sessionManager';"+main.slice(main.indexOf('class SessionManagerService {'),main.indexOf('SessionManagerService.ɵfac'))+';return SessionManagerService;')();
+(async()=>{
+ const svc=Object.create(Klass.prototype),profile={id:'a',type:'ssh'},other={id:'b',type:'ssh'};let release,count=0;
+ svc.openSingleProfile=async()=>{count++;await new Promise(r=>{release=r});return 'tab'};
+ const first=svc.openProfile(profile);assert.equal(await svc.openProfile(profile),null);assert.equal(count,1);release();assert.equal(await first,'tab');assert.equal(svc.pendingProfileOpens.size,0);
+ svc.openSingleProfile=async p=>{count++;return p.id};assert.equal(await svc.openProfile(profile),'a');assert.equal(await svc.openProfile(other),'b');
+ svc.openSingleProfile=async()=>{throw Error('failed')};await assert.rejects(svc.openProfile(profile),/failed/);assert.equal(svc.pendingProfileOpens.size,0);svc.openSingleProfile=async()=>null;assert.equal(await svc.openProfile(profile),null);assert.equal(svc.pendingProfileOpens.size,0);
+ const a={profile},b={profile},c={profile},d={profile},e={profile:other};svc.appService={tabs:[a,b,e]};assert.deepEqual([svc.windowNumber(a),svc.windowNumber(b),svc.windowNumber(e)],[1,2,1]);svc.appService.tabs=[b,e];svc.syncWindowNumbers();assert.equal(svc.windowNumber(b),2);svc.appService.tabs=[b,c,e];assert.equal(svc.windowNumber(c),3);svc.appService.tabs=[d,e];assert.equal(svc.windowNumber(d),1);assert.equal(svc.windowNumber(e),1);svc.appService.tabs=[];svc.syncWindowNumbers();assert.equal(svc.windowBatches.size,0);svc.appService.tabs=[{getAllTabs:()=>[a,b,a]}];assert.equal(svc.getOpenTabs().length,2);assert.deepEqual([svc.windowNumber(a),svc.windowNumber(b)],[1,2]);
+ console.log('PASS per-profile duplicate-open guard, failure/cancellation unlock, live-window numbering stability and reset, split-tab deduplication');
+})().catch(e=>{console.error(e);process.exitCode=1});

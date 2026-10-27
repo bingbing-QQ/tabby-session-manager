@@ -1,0 +1,53 @@
+/* Tabby 1.0.238 UI layer. Removed as one owned stylesheet; never writes appearance.css. */
+html[data-tsm-host-theme] body {color:var(--tsm-host-fg);background:var(--tsm-host-bg);}
+html[data-tsm-host-mode="light"] body {color-scheme:light;}
+html[data-tsm-host-mode="dark"] body {color-scheme:dark;}
+html[data-tsm-host-theme] :is(app-root,.window,.content.main) {background:var(--tsm-host-bg);color:var(--tsm-host-fg);}
+html[data-tsm-host-theme] :is(title-bar,.tab-bar,.tab-bar>.inset,profile-tree) {background:var(--tsm-host-scene)!important;color:var(--tsm-host-fg)!important;border-color:var(--tsm-host-edge)!important;}
+html[data-tsm-host-theme] tab-header {background:var(--tsm-host-fill)!important;color:var(--tsm-host-muted)!important;border-color:var(--tsm-host-edge)!important;}
+html[data-tsm-host-theme] :is(tab-header.active,tab-header:hover) {background:var(--tsm-host-input)!important;color:var(--tsm-host-fg)!important;box-shadow:inset 0 -2px var(--tsm-host-accent);}
+html[data-tsm-host-theme] :is(.toolbar,.tab-bar .btn,.title-bar .btn) {color:var(--tsm-host-fg);border-color:var(--tsm-host-edge);}
+html[data-tsm-host-theme] :is(settings-tab,settings-tab>.content,settings-tab .content-box,settings-tab .nav-pills) {color:var(--tsm-host-fg)!important;background:var(--tsm-host-bg)!important;border-color:var(--tsm-host-edge)!important;}
+html[data-tsm-host-theme] :is(.modal-content,.dropdown-menu,.popover,.offcanvas) {color:var(--tsm-host-fg)!important;background:var(--tsm-host-bg)!important;border:1px solid var(--tsm-host-edge);border-radius:var(--tsm-host-radius);box-shadow:var(--tsm-host-shadow);}
+html[data-tsm-host-theme] :is(.modal-header,.modal-footer,.dropdown-divider,.list-group-item,.table) {color:var(--tsm-host-fg);border-color:var(--tsm-host-edge);}
+html[data-tsm-host-theme] :is(.dropdown-item,.nav-link) {color:var(--tsm-host-muted);}
+html[data-tsm-host-theme] :is(.dropdown-item:hover,.dropdown-item:focus,.nav-pills .nav-link.active) {color:var(--tsm-host-fg)!important;background:var(--tsm-host-input)!important;}
+html[data-tsm-host-theme] :is(settings-tab,.modal-content,.offcanvas,.popover) :is(.form-control,.form-select,.input-group-text) {background:var(--tsm-host-input)!important;color:var(--tsm-host-fg)!important;border-color:var(--tsm-host-edge)!important;}
+html[data-tsm-host-theme] :is(settings-tab,.modal-content) :is(.form-control,.form-select)::placeholder {color:var(--tsm-host-muted)!important;opacity:1;}
+html[data-tsm-host-theme] :is(settings-tab,.modal-content,.popover) :is(.text-muted,.form-text) {color:var(--tsm-host-muted)!important;}
+html[data-tsm-host-theme] :is(settings-tab,.modal-content) :is(.card,.list-group-item) {background:var(--tsm-host-input);color:var(--tsm-host-fg);border-color:var(--tsm-host-edge);}
+html[data-tsm-host-theme] :is(settings-tab,.modal-content) .btn-secondary {color:var(--tsm-host-fg);background:var(--tsm-host-input);border-color:var(--tsm-host-edge);}
+html[data-tsm-host-theme] :is(settings-tab,.modal-content) .btn-primary {color:var(--tsm-host-on-accent);background:var(--tsm-host-accent);border-color:var(--tsm-host-accent);}
+html[data-tsm-host-theme="nocturneGlass"] :is(.tab-bar,.modal-header,.modal-footer) {background:linear-gradient(150deg,#ffffff12,#ffffff08),var(--tsm-host-bg)!important;box-shadow:inset 0 1px 0 #ffffff26,inset 0 -1px 0 #02061066;}
+html[data-tsm-host-theme="ghibliSky"] :is(.tab-bar,.modal-header) {background:#b0e0ee!important;}
+html[data-tsm-host-theme="ghibliSky"] :is(.modal-content,.dropdown-menu,.offcanvas) {background:#f1efdf!important;}
+html[data-tsm-host-theme="ghibliSky"] :is(settings-tab,.modal-content) .btn-primary {background:#8ac7b9;color:#263e37;border-color:#73ac9d;border-radius:18px;}
+html[data-tsm-host-theme="playfulNeo"] :is(.tab-bar,.modal-header) {background:#4ecdc4!important;border-bottom:2px solid #111!important;}
+html[data-tsm-host-theme="playfulNeo"] :is(tab-header.active,.nav-pills .nav-link.active) {background:#ffe66b!important;color:#111!important;box-shadow:2px 2px #111;border:1px solid #111;}
+html[data-tsm-host-theme="playfulNeo"] :is(.modal-content,.dropdown-menu,.offcanvas) {background:#fff!important;border:3px solid #111;box-shadow:5px 5px #ff666b;}
+html[data-tsm-host-theme="playfulNeo"] :is(settings-tab,.modal-content) :is(.btn,.form-control,.form-select) {border-radius:0;border:2px solid #111;}
+html[data-tsm-host-theme="playfulNeo"] :is(settings-tab,.modal-content) .btn-primary {background:#ffe66b;color:#111;box-shadow:3px 3px #111;}
+/* No selectors target xterm, canvas, terminal text, or individual profile colors. */
+/* Clear inherited embossed/glowing text effects, without changing font family,
+   font size, GPU rendering settings, or the terminal's own ANSI foregrounds. */
+html[data-tsm-host-theme] body,
+html[data-tsm-host-theme] :is(tab-header,title-bar,.tab-bar,profile-tree,settings-tab,.modal-content,.dropdown-menu,.popover,.offcanvas),
+html[data-tsm-host-theme] :is(tab-header,title-bar,.tab-bar,profile-tree,settings-tab,.modal-content,.dropdown-menu,.popover,.offcanvas) :is(span,a,label,p,button,input,select,textarea,small,strong),
+html[data-tsm-host-theme] :is(.xterm,.xterm-rows,.xterm-rows span) {text-shadow:none!important;}
+html[data-tsm-host-theme] :is(settings-tab,.modal-content,.dropdown-menu,.popover,.offcanvas) :is(.text-secondary,.text-body-secondary) {color:var(--tsm-host-muted)!important;}
+
+/* v3.6 host styling follows the existing sync toggle and owned stylesheet. */
+html[data-tsm-host-theme="liquidGlass"] :is(title-bar,.tab-bar) {background:linear-gradient(100deg,#383149,#24353d)!important;border-color:#d5e9ff75!important;box-shadow:inset 0 1px #ffffff66;}
+html[data-tsm-host-theme="liquidGlass"] :is(tab-header.active,tab-header:hover) {background:linear-gradient(120deg,#ffffff2a,#d0bcff15,#b0fff522)!important;border:1px solid #d5e9ff75;border-top-color:#ffdfffaa!important;border-radius:18px;box-shadow:inset 0 1px 1px #ffffff60,0 3px 12px #00000022;}
+html[data-tsm-host-theme="liquidGlass"] :is(.modal-content,.dropdown-menu,.popover,.offcanvas) {background:var(--tsm-host-scene)!important;border-color:#d5e9ff75;box-shadow:inset 0 1px 1px #ffffff80,0 18px 48px #070b2077;border-radius:22px;}
+html[data-tsm-host-theme="liquidGlass"] :is(.modal-header,.modal-footer) {background:linear-gradient(110deg,#ffffff17,#ffffff05);}
+html[data-tsm-host-theme="liquidGlass"] :is(settings-tab,.modal-content) :is(.form-control,.form-select,.btn-secondary) {border-radius:15px;box-shadow:inset 0 1px #ffffff26;}
+html[data-tsm-host-theme="modernGradient"] :is(title-bar,.tab-bar) {background:linear-gradient(90deg,#200d35,#100c25 65%,#22102c)!important;border-bottom:1px solid #b22ee65e!important;box-shadow:0 1px 12px #e01da91c;}
+html[data-tsm-host-theme="modernGradient"] tab-header {border-radius:5px;}
+html[data-tsm-host-theme="modernGradient"] :is(tab-header.active,tab-header:hover) {border:1px solid #c94dff80;border-bottom:2px solid #4df5ff!important;box-shadow:0 0 18px #bc2fff35,inset 0 1px #eb78ff45;background:linear-gradient(100deg,#a329f74d,#00d7ff19)!important;}
+html[data-tsm-host-theme="modernGradient"] :is(.modal-content,.dropdown-menu,.popover,.offcanvas) {background:var(--tsm-host-scene)!important;border:1px solid #c153ff70;border-left:2px solid #50f3ff99;border-radius:7px;box-shadow:0 0 32px #ab2af922,0 18px 48px #03071266;}
+html[data-tsm-host-theme="modernGradient"] :is(.modal-header,.modal-footer) {background:linear-gradient(100deg,#7922c92e,#ff1fa914);border-color:#c153ff50;}
+html[data-tsm-host-theme="modernGradient"] :is(settings-tab,.modal-content) :is(.form-control,.form-select,.btn) {border-radius:5px;}
+html[data-tsm-host-theme="modernGradient"] :is(settings-tab,.modal-content) :is(.form-control,.form-select):focus {border-color:#55f5ff!important;box-shadow:0 0 0 2px #55f5ff22;}
+html[data-tsm-host-theme="liquidGlass"] :is(settings-tab,.modal-content) option {background:#252b3b;color:#f4f2ff;}
+html[data-tsm-host-theme="modernGradient"] :is(settings-tab,.modal-content) option {background:#100c20;color:#f4f2ff;}

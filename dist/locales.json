@@ -1,0 +1,2954 @@
+{
+  "恢复主题同步失败：": [
+    "恢复主题同步失败：",
+    "Could not restore theme synchronization: "
+  ],
+  "主题同步失败：": [
+    "主题同步失败：",
+    "Theme synchronization failed: "
+  ],
+  "清理订阅失败": [
+    "清理订阅失败",
+    "Could not clean up subscriptions"
+  ],
+  "保存界面状态失败": [
+    "保存界面状态失败",
+    "Could not save interface settings"
+  ],
+  "界面状态保存失败，请检查 Tabby 配置文件权限。": [
+    "界面状态保存失败，请检查 Tabby 配置文件权限。",
+    "Could not save interface settings. Check Tabby configuration permissions."
+  ],
+  "读取 Tabby 会话列表失败": [
+    "读取 Tabby 会话列表失败",
+    "Could not read Tabby sessions"
+  ],
+  "会话列表暂不可用；请检查 Tabby 配置文件。": [
+    "会话列表暂不可用；请检查 Tabby 配置文件。",
+    "The session list is unavailable. Check the Tabby configuration."
+  ],
+  "ProfilesService 启动期读取失败，改用 config.yaml 回退": [
+    "ProfilesService 启动期读取失败，改用 config.yaml 回退",
+    "ProfilesService unavailable at startup; using config.yaml"
+  ],
+  "ProfileGroup 服务读取失败，改用 config.yaml 回退": [
+    "ProfileGroup 服务读取失败，改用 config.yaml 回退",
+    "ProfileGroup service unavailable; using config.yaml"
+  ],
+  "执行操作失败": [
+    "执行操作失败",
+    "Operation failed"
+  ],
+  "操作失败：": [
+    "操作失败：",
+    "Operation failed: "
+  ],
+  "请检查插件日志。": [
+    "请检查插件日志。",
+    "Please check the plugin log."
+  ],
+  "显示会话管理器（Ctrl+Alt+S）": [
+    "显示会话管理器（Ctrl+Alt+S）",
+    "Show Session Manager (Ctrl+Alt+S)"
+  ],
+  "移动到此处打开会话管理器": [
+    "移动到此处打开会话管理器",
+    "Move here to open Session Manager"
+  ],
+  "会话管理器": [
+    "会话管理器",
+    "Session Manager"
+  ],
+  "会话管理器 ": [
+    "会话管理器 ",
+    "Session Manager "
+  ],
+  "固定模式：切换为自动隐藏": [
+    "固定模式：切换为自动隐藏",
+    "Pinned: switch to auto-hide"
+  ],
+  "自动隐藏模式：固定到左侧": [
+    "自动隐藏模式：固定到左侧",
+    "Auto-hide: pin to the left"
+  ],
+  "数据管理：备份、恢复和导入会话": [
+    "数据管理：备份、恢复和导入会话",
+    "Import, Export & Backup"
+  ],
+  "新建：会话或独立目录": [
+    "新建：会话或独立目录",
+    "New Session or Folder"
+  ],
+  "新建会话": [
+    "新建会话",
+    "New Session"
+  ],
+  "新建独立目录": [
+    "新建文件夹",
+    "New Folder"
+  ],
+  "更多操作：颜色、刷新和隐藏": [
+    "更多操作：颜色、刷新和隐藏",
+    "More: themes, refresh and hide"
+  ],
+  "批量管理会话": [
+    "批量会话管理",
+    "Bulk Session Management"
+  ],
+  "查看最近导入报告": [
+    "查看上次导入结果",
+    "View Last Import Results"
+  ],
+  "清空最近打开记录": [
+    "清空最近连接记录",
+    "Clear Recent Sessions"
+  ],
+  "风格主题": [
+    "风格主题",
+    "Themes"
+  ],
+  "刷新会话列表": [
+    "刷新会话列表",
+    "Refresh Sessions"
+  ],
+  "隐藏会话管理器": [
+    "隐藏会话管理器",
+    "Hide Session Manager"
+  ],
+  "搜索名称、主机或用户名": [
+    "搜索名称、主机或用户名",
+    "Search name, host or username"
+  ],
+  "搜索会话": [
+    "搜索会话",
+    "Search Sessions"
+  ],
+  "拖动以调整会话管理器宽度": [
+    "拖动以调整会话管理器宽度",
+    "Drag to resize Session Manager"
+  ],
+  "数据管理": [
+    "数据管理",
+    "Data Management"
+  ],
+  "备份、恢复和导入均只在本机处理。默认不导出或导入密码、私钥内容、代理口令、令牌和自动登录脚本；恢复与导入会先预览，确认后才写入 Tabby 配置。": [
+    "备份、恢复和导入均只在本机处理。默认不导出或导入密码、私钥内容、代理口令、令牌和自动登录脚本；恢复与导入会先预览，确认后才写入 Tabby 配置。",
+    "Backups, restores and imports are processed locally. Passwords, private keys, proxy credentials, tokens and login scripts are excluded by default. Preview and confirm before writing to the Tabby configuration."
+  ],
+  "数据管理操作失败": [
+    "数据管理操作失败",
+    "Import, export or backup failed"
+  ],
+  "数据管理操作失败，请检查插件日志。": [
+    "数据管理操作失败，请检查插件日志。",
+    "The operation failed. Check the plugin log."
+  ],
+  "导出安全备份": [
+    "备份会话配置",
+    "Back Up Session Settings"
+  ],
+  "导出目录树和基本连接信息；不含密码或私钥。": [
+    "导出目录树和基本连接信息；不含密码或私钥。",
+    "Back up folders and basic connection settings, excluding passwords and private keys."
+  ],
+  "恢复插件备份": [
+    "恢复会话配置",
+    "Restore Session Settings"
+  ],
+  "选择 .tsm-backup.json，预览目录、会话和重复项。": [
+    "选择 .tsm-backup.json，预览目录、会话和重复项。",
+    "Choose a .tsm-backup.json file and preview folders, sessions and duplicates."
+  ],
+  "导入 Xshell 会话": [
+    "导入 Xshell 会话",
+    "Import Xshell Sessions"
+  ],
+  "支持 .xsh 单文件、多个文件、Sessions 目录和 CSV。": [
+    "支持 .xsh 单文件、多个文件、Sessions 目录和 CSV。",
+    "Import one or more .xsh files, a Sessions folder, or CSV."
+  ],
+  "导入 SecureCRT Sessions": [
+    "导入 SecureCRT 会话",
+    "Import SecureCRT Sessions"
+  ],
+  "选择包含 .ini 会话文件的 Sessions 目录，保留目录层级。": [
+    "选择包含 .ini 会话文件的 Sessions 目录，保留目录层级。",
+    "Choose the Sessions folder containing .ini files. Folder structure is preserved."
+  ],
+  "导入文本编码": [
+    "导入文本编码",
+    "Import Text Encoding"
+  ],
+  "自动（UTF-8 / UTF-16 / GB18030）": [
+    "自动（UTF-8 / UTF-16 / GB18030）",
+    "Auto (UTF-8 / UTF-16 / GB18030)"
+  ],
+  "编码偏好保存失败。": [
+    "编码偏好保存失败。",
+    "Could not save the encoding preference."
+  ],
+  "查看成功、跳过与失败记录": [
+    "查看成功、跳过与失败记录",
+    "View successful, skipped and failed entries"
+  ],
+  "关闭": [
+    "关闭",
+    "Close"
+  ],
+  "关闭数据管理": [
+    "关闭数据管理",
+    "Close Import, Export & Backup"
+  ],
+  "选择主题后立即应用并保存。六套主题已校准文字对比度；主界面与终端配色可分别同步。": [
+    "选择主题后立即应用并保存。六套主题已校准文字对比度；主界面与终端配色可分别同步。",
+    "Themes apply and save immediately. Text contrast has been checked for all six themes. Interface and terminal colors can follow the theme independently."
+  ],
+  "同步到 Tabby 主界面": [
+    "主界面跟随主题",
+    "Apply Theme to Tabby Interface"
+  ],
+  "同步终端配色（背景、文字及 ANSI 颜色）": [
+    "终端配色跟随主题",
+    "Apply Theme to Terminal Colors"
+  ],
+  "终端同步默认关闭。开启前自动备份原配色；会话单独指定的终端配色继续优先使用。": [
+    "终端同步默认关闭。开启前自动备份原配色；会话单独指定的终端配色继续优先使用。",
+    "Terminal color synchronization is off by default. Original colors are backed up before enabling it. Session-specific terminal colors remain in effect."
+  ],
+  "同步失败：": [
+    "同步失败：",
+    "Synchronization failed: "
+  ],
+  "恢复 Tabby 原设置": [
+    "恢复同步前的主题与配色",
+    "Restore Original Theme and Colors"
+  ],
+  "关闭同步并恢复 Tabby 原设置": [
+    "关闭同步并恢复 Tabby 原设置",
+    "Disable synchronization and restore original theme and colors"
+  ],
+  "应用": [
+    "应用",
+    "Apply "
+  ],
+  "支持 Tabby 1.0.238 的标签栏、工具栏、设置页和应用内弹窗。系统原生对话框不随主题改变。日志路径仍在 Session Log Manager 中设置。": [
+    "支持 Tabby 1.0.238 的标签栏、工具栏、设置页和应用内弹窗。系统原生对话框不随主题改变。日志路径仍在 Session Log Manager 中设置。",
+    "Supports Tabby 1.0.238 tabs, toolbars, settings and in-app dialogs. Native system dialogs are unaffected. Configure log paths in Session Logging Settings."
+  ],
+  "关闭风格主题": [
+    "关闭风格主题",
+    "Close Themes"
+  ],
+  "在此分组中创建会话": [
+    "在此分组中创建会话",
+    "Create a session in this folder"
+  ],
+  "当前宿主未提供窗口状态接口。": [
+    "当前宿主未提供窗口状态接口。",
+    "This host does not expose window status."
+  ],
+  "此视图暂无匹配会话。": [
+    "此视图暂无匹配会话。",
+    "No sessions match this view."
+  ],
+  "未发现已保存会话。\n点击上方“+”即可新建。": [
+    "未发现已保存会话。\n点击上方“+”即可新建。",
+    "No saved sessions found.\nClick + above to create one."
+  ],
+  "没有匹配的会话。": [
+    "没有匹配的会话。",
+    "No matching sessions."
+  ],
+  "未命名会话": [
+    "未命名会话",
+    "Unnamed Session"
+  ],
+  "会话操作": [
+    "会话操作",
+    "Session Actions"
+  ],
+  "已连接 / 已打开窗口数量（当前 Tabby 窗口）": [
+    "已连接 / 已打开窗口数量（当前 Tabby 窗口）",
+    "Connected / open windows in the current Tabby window"
+  ],
+  "展开或收起已打开窗口": [
+    "展开或收起已打开窗口",
+    "Expand or collapse open sessions"
+  ],
+  "选中会话详情": [
+    "选中会话详情",
+    "Selected Session Details"
+  ],
+  "选择一个会话即可查看连接详情。": [
+    "选择一个会话即可查看连接详情。",
+    "Select a session to view its connection details."
+  ],
+  "待补充主机": [
+    "待补充主机",
+    "Host required"
+  ],
+  "交互式": [
+    "交互式",
+    "Interactive"
+  ],
+  "密码": [
+    "密码",
+    "Password"
+  ],
+  "私钥": [
+    "私钥",
+    "Private Key"
+  ],
+  "默认": [
+    "默认",
+    "Default"
+  ],
+  "名称": [
+    "名称",
+    "Name"
+  ],
+  "主机": [
+    "主机",
+    "Host"
+  ],
+  "用户名": [
+    "用户名",
+    "Username"
+  ],
+  "协议": [
+    "协议",
+    "Protocol"
+  ],
+  "端口": [
+    "端口",
+    "Port"
+  ],
+  "分组": [
+    "文件夹",
+    "Folder"
+  ],
+  "未分组": [
+    "未分组",
+    "Ungrouped"
+  ],
+  "认证": [
+    "认证",
+    "Authentication"
+  ],
+  "此会话已被删除，请刷新列表。": [
+    "此会话已被删除，请刷新列表。",
+    "This session was deleted. Refresh the list."
+  ],
+  "此会话尚未填写主机/IP，请先编辑会话。": [
+    "此会话尚未填写主机/IP，请先编辑会话。",
+    "This session needs a host or IP address. Open Session Properties first."
+  ],
+  "生产会话连接确认": [
+    "确认连接目标",
+    "Confirm Connection"
+  ],
+  "\n请确认目标环境及登录用户。": [
+    "\n请确认目标环境及登录用户。",
+    "\nConfirm the destination and login username."
+  ],
+  "确认连接": [
+    "确认连接",
+    "Connect"
+  ],
+  "确认期间会话发生变化，请重新连接。": [
+    "确认期间会话发生变化，请重新连接。",
+    "The session changed during confirmation. Connect again."
+  ],
+  "宿主未能打开此协议的终端窗口。": [
+    "宿主未能打开此协议的终端窗口。",
+    "The host could not open a terminal for this protocol."
+  ],
+  "当前 Tabby 版本未提供打开 Profile 的公开服务。": [
+    "当前 Tabby 版本未提供打开 Profile 的公开服务。",
+    "This Tabby version does not expose the service for opening sessions."
+  ],
+  "打开会话失败": [
+    "打开会话失败",
+    "Could not open session"
+  ],
+  "无法打开此会话，请检查 Profile 配置或 Tabby 插件兼容性。": [
+    "无法打开此会话，请检查 Profile 配置或 Tabby 插件兼容性。",
+    "Could not open this session. Check its settings and plugin compatibility."
+  ],
+  "读取二级菜单状态失败": [
+    "读取二级菜单状态失败",
+    "Could not read submenu state"
+  ],
+  "无法读取日志状态，未修改任何日志或设置。": [
+    "无法读取日志状态，未修改任何日志或设置。",
+    "Could not read logging status. No logs or settings were changed."
+  ],
+  "执行菜单操作失败": [
+    "执行菜单操作失败",
+    "Menu action failed"
+  ],
+  "操作失败，请查看 Tabby 开发者工具中的插件日志。": [
+    "操作失败，请查看 Tabby 开发者工具中的插件日志。",
+    "Operation failed. Check the plugin log in Tabby developer tools."
+  ],
+  "读取日志联动接口失败": [
+    "读取日志联动接口失败",
+    "Could not access the logging bridge"
+  ],
+  "未检测到日志管理器": [
+    "未检测到日志管理器",
+    "Session logging is unavailable"
+  ],
+  "手动保存输出说明": [
+    "手动保存输出说明",
+    "About Saving Terminal Output"
+  ],
+  "无法读取日志状态": [
+    "无法读取日志状态",
+    "Could not read logging status"
+  ],
+  "无法打开日志管理器的常规目录；目录可能尚未创建。": [
+    "无法打开日志管理器的常规目录；目录可能尚未创建。",
+    "Could not open the default log folder. It may not exist yet."
+  ],
+  "当前没有已连接窗口": [
+    "当前没有已连接窗口",
+    "No connected sessions"
+  ],
+  "手动日志记录中": [
+    "手动日志记录中",
+    "Manual logging active"
+  ],
+  "常规日志记录中": [
+    "自动记录中",
+    "Automatic logging active"
+  ],
+  "本次连接日志已停止": [
+    "本次记录已停止",
+    "Logging stopped for this connection"
+  ],
+  "当前未记录": [
+    "当前未记录",
+    "Not logging"
+  ],
+  "（记录中）": [
+    "（记录中）",
+    " (Logging)"
+  ],
+  "已取消选择日志保存位置。": [
+    "已取消选择日志保存位置。",
+    "Log file selection canceled."
+  ],
+  "已为当前窗口开始手动日志；断开重连后将恢复日志管理器原有设置。": [
+    "已为当前窗口开始手动日志；断开重连后将恢复日志管理器原有设置。",
+    "Manual logging started for this window. Reconnecting restores the configured logging behavior."
+  ],
+  "（未记录）": [
+    "（未记录）",
+    " (Not logging)"
+  ],
+  "已临时停止当前窗口的全部日志；断开重连后会恢复日志管理器原有设置。": [
+    "已临时停止当前窗口的全部日志；断开重连后会恢复日志管理器原有设置。",
+    "Logging stopped for this window. Reconnecting restores the configured logging behavior."
+  ],
+  "（最近日志）": [
+    "（最近日志）",
+    " (Latest log)"
+  ],
+  "继续本次日志": [
+    "继续记录到原文件",
+    "Resume Logging to Same File"
+  ],
+  "打开本次日志目录": [
+    "打开日志文件夹",
+    "Open Log Folder"
+  ],
+  "无法打开本次日志目录。": [
+    "无法打开本次日志目录。",
+    "Could not open this connection's log folder."
+  ],
+  "状态：": [
+    "状态：",
+    "Status: "
+  ],
+  "窗口 ": [
+    "窗口 ",
+    "Window "
+  ],
+  "该窗口已经断开，日志操作未执行。": [
+    "该窗口已经断开，日志操作未执行。",
+    "This window is disconnected. The logging action was not performed."
+  ],
+  "该窗口已经在记录日志；若要改用新位置，请先选择 Log Stop。": [
+    "该窗口已经在记录日志；若要改用新位置，请先选择 Log Stop。",
+    "This window is already logging. Stop logging before choosing another file."
+  ],
+  "所选文件已存在。为保护既有日志，插件不会覆盖或追加，请选择新的文件名。": [
+    "所选文件已存在。为保护既有日志，插件不会覆盖或追加，请选择新的文件名。",
+    "This file already exists. Choose a new filename; existing logs will not be overwritten or appended to."
+  ],
+  "该窗口当前没有正在写入的日志文件。": [
+    "该窗口当前没有正在写入的日志文件。",
+    "This window has no active log file."
+  ],
+  "当前 Tabby 环境无法打开系统保存窗口。": [
+    "当前 Tabby 环境无法打开系统保存窗口。",
+    "The system save dialog is unavailable in this Tabby environment."
+  ],
+  "日志操作未完成，未修改日志管理器设置。": [
+    "日志操作未完成，未修改日志管理器设置。",
+    "Logging did not complete. Logging settings were not changed."
+  ],
+  " 原因：": [
+    " 原因：",
+    " Reason: "
+  ],
+  "日志控制：": [
+    "会话日志 — ",
+    "Session Logging — "
+  ],
+  "当前 SSH 连接": [
+    "当前 SSH 连接",
+    "Current SSH Connection"
+  ],
+  "选择当前 SSH 连接": [
+    "选择当前 SSH 连接",
+    "Select the SSH connection"
+  ],
+  "为当前连接选择本机路径并开始一份临时日志": [
+    "为当前连接选择本机路径并开始一份临时日志",
+    "Choose a local file and start temporary logging for this connection"
+  ],
+  "临时停止当前连接的全部日志记录，不影响重连后的日志管理器设置": [
+    "临时停止当前连接的全部日志记录，不影响重连后的日志管理器设置",
+    "Stop logging for this connection without changing reconnect behavior"
+  ],
+  "打开当前连接正在写入的日志文件": [
+    "打开当前连接正在写入的日志文件",
+    "Open this connection's active log file"
+  ],
+  "打开日志管理器为该 Profile 设置的常规日志目录": [
+    "打开日志管理器为该 Profile 设置的常规日志目录",
+    "Open the configured log folder for this session"
+  ],
+  "关闭当前连接日志控制": [
+    "关闭当前连接日志控制",
+    "Close Session Logging"
+  ],
+  "当前没有已连接的 SSH 终端。请先连接此会话。": [
+    "当前没有已连接的 SSH 终端。请先连接此会话。",
+    "No SSH terminal is connected. Connect this session first."
+  ],
+  "此 Profile 有多个已连接终端，请先选择其中一个连接。": [
+    "此 Profile 有多个已连接终端，请先选择其中一个连接。",
+    "This session has multiple connected terminals. Select one connection first."
+  ],
+  "当前连接已经在记录日志；如需改用另一位置，请先执行 Log Stop。": [
+    "当前连接已经在记录日志；如需改用另一位置，请先执行 Log Stop。",
+    "This connection is already logging. Stop logging before choosing another file."
+  ],
+  "所选文件已存在。为保护既有日志，插件不会覆盖或追加到该文件，请选择新的文件名。": [
+    "所选文件已存在。为保护既有日志，插件不会覆盖或追加到该文件，请选择新的文件名。",
+    "This file already exists. Choose a new filename to protect the existing log."
+  ],
+  "当前连接没有正在写入的日志文件。": [
+    "当前连接没有正在写入的日志文件。",
+    "This connection has no active log file."
+  ],
+  "日志管理器的常规目录尚未创建；首次自动记录后即可打开。": [
+    "日志管理器的常规目录尚未创建；首次自动记录后即可打开。",
+    "The default log folder does not exist yet. It is created when automatic logging starts."
+  ],
+  "当前 Tabby 环境无法打开系统保存对话框。": [
+    "当前 Tabby 环境无法打开系统保存对话框。",
+    "The system save dialog is unavailable in this Tabby environment."
+  ],
+  "日志操作未完成，未改写日志管理器设置。": [
+    "日志操作未完成，未改写日志管理器设置。",
+    "Logging did not complete. Logging settings were not changed."
+  ],
+  "无法读取当前连接的日志状态。": [
+    "无法读取当前连接的日志状态。",
+    "Could not read logging status for this connection."
+  ],
+  "当前没有已连接的 SSH 终端。": [
+    "当前没有已连接的 SSH 终端。",
+    "No SSH terminal is connected."
+  ],
+  "Log Start、Log Stop 与 Log View 仅作用于当前已连接的终端。连接此会话后重新打开本窗口即可使用。Log Directory 只打开日志管理器的常规目录，不会创建或修改日志文件。": [
+    "Log Start、Log Stop 与 Log View 仅作用于当前已连接的终端。连接此会话后重新打开本窗口即可使用。Log Directory 只打开日志管理器的常规目录，不会创建或修改日志文件。",
+    "Start Logging, Stop Logging and View Log affect only the selected connected terminal. Connect the session and reopen this dialog to use them. Open Log Folder does not create or modify log files."
+  ],
+  "连接 ": [
+    "连接 ",
+    "Connection "
+  ],
+  "当前连接正在": [
+    "当前连接正在",
+    "This connection is "
+  ],
+  "写入一份手动临时日志。": [
+    "写入一份手动临时日志。",
+    "writing to a temporary manual log."
+  ],
+  "按日志管理器设置记录日志。": [
+    "按日志管理器设置记录日志。",
+    "logging according to its saved settings."
+  ],
+  "当前连接的日志已临时停止。": [
+    "当前连接的日志已临时停止。",
+    "Logging is stopped for this connection."
+  ],
+  "当前连接尚未开始日志记录。": [
+    "当前连接尚未开始日志记录。",
+    "Logging has not started for this connection."
+  ],
+  "当前文件：": [
+    "当前文件：",
+    "Current file: "
+  ],
+  "无": [
+    "无",
+    "None"
+  ],
+  "Log Start：选择本机保存位置，为当前连接开始一份临时日志。\n": [
+    "Log Start：选择本机保存位置，为当前连接开始一份临时日志。\n",
+    "Start Logging: choose a local file and start temporary logging for this connection.\n"
+  ],
+  "Log Stop：立即停止当前连接的全部日志（常规或手动），但不会修改日志管理器设置；断开并重连后会恢复原有设置。\n": [
+    "Log Stop：立即停止当前连接的全部日志（常规或手动），但不会修改日志管理器设置；断开并重连后会恢复原有设置。\n",
+    "Stop Logging: stop automatic or manual logging without changing saved settings. Reconnecting restores configured behavior.\n"
+  ],
+  "Log View：打开当前连接正在记录的文件；Log Directory：打开日志管理器的常规目录。": [
+    "Log View：打开当前连接正在记录的文件；Log Directory：打开日志管理器的常规目录。",
+    "View Log opens the active log file. Open Log Folder opens the configured folder."
+  ],
+  "已为当前连接开始手动临时日志。断开重连后不会保留此临时状态。": [
+    "已为当前连接开始手动临时日志。断开重连后不会保留此临时状态。",
+    "Temporary manual logging started. This temporary state is not retained after reconnecting."
+  ],
+  "已临时停止当前连接的全部日志；日志管理器设置未改变，重连后会按原设置恢复。": [
+    "已临时停止当前连接的全部日志；日志管理器设置未改变，重连后会按原设置恢复。",
+    "Logging stopped for this connection. Saved settings are unchanged and apply again after reconnecting."
+  ],
+  "日志：": [
+    "会话日志 — ",
+    "Session Log — "
+  ],
+  "未检测到 Session Log Manager 的完整联动接口。会话管理器不会自行复制第二套写流逻辑，也不会创建或修改日志文件。": [
+    "未检测到 Session Log Manager 的完整联动接口。会话管理器不会自行复制第二套写流逻辑，也不会创建或修改日志文件。",
+    "The complete logging bridge is unavailable. Session Manager will not create duplicate log streams or modify log files."
+  ],
+  "如已安装官方 Save Output 插件，可按以下方式临时保存当前会话输出：\n1. 先连接并打开该会话的终端标签；\n2. 在终端内容区域右键；\n3. 选择 “Save output to file...” ；\n4. 在系统“另存为”窗口中自行选择目录和文件名；\n5. 再次通过该插件的停止操作结束记录。": [
+    "如已安装官方 Save Output 插件，可按以下方式临时保存当前会话输出：\n1. 先连接并打开该会话的终端标签；\n2. 在终端内容区域右键；\n3. 选择 “Save output to file” ；\n4. 在系统“另存为”窗口中自行选择目录和文件名；\n5. 再次通过该插件的停止操作结束记录。",
+    "With the Save Output plugin installed:\n1. Connect and open the session tab.\n2. Right-click the terminal.\n3. Choose Save output to file.\n4. Choose a folder and filename in the save dialog.\n5. Use that plugin's stop action to finish logging."
+  ],
+  "如果右键菜单中没有 “Save output to file...” ，说明官方 Save Output 尚未安装。安装 Session Log Manager 可获得按 Profile 的长期本地日志、打开目录和当前日志查看功能。": [
+    "如果右键菜单中没有 “Save output to file” ，说明官方 Save Output 尚未安装。安装 Session Log Manager 可获得按 Profile 的长期本地日志、打开目录和当前日志查看功能。",
+    "If Save output to file is absent, install the Save Output plugin. The integrated logger supports per-session local logs and log-folder access."
+  ],
+  "关闭日志说明": [
+    "关闭日志说明",
+    "Close Logging Help"
+  ],
+  "原生编辑组件不可用": [
+    "原生编辑组件不可用",
+    "Native session editor is unavailable"
+  ],
+  "会话已由 Tabby 原生设置保存。": [
+    "会话已由 Tabby 原生设置保存。",
+    "Session saved using Tabby's native editor."
+  ],
+  "保存原生编辑失败": [
+    "保存原生编辑失败",
+    "Could not save the native session editor"
+  ],
+  "监听端口必须是 1 到 65535 的整数。": [
+    "监听端口必须是 1 到 65535 的整数。",
+    "The listening port must be an integer from 1 to 65535."
+  ],
+  "Local/Remote 规则必须填写有效的目标地址和目标端口。": [
+    "Local/Remote 规则必须填写有效的目标地址和目标端口。",
+    "Local and Remote rules require a valid destination address and port."
+  ],
+  "查看端口配置": [
+    "查看转发规则",
+    "View Forwarding Rules"
+  ],
+  "当前会话端口配置": [
+    "当前转发规则",
+    "Current Forwarding Rules"
+  ],
+  "导出端口配置": [
+    "导出转发规则",
+    "Export Forwarding Rules"
+  ],
+  "导入并覆盖": [
+    "导入并替换现有规则",
+    "Import and Replace Existing Rules"
+  ],
+  "导入并增加": [
+    "导入并合并规则",
+    "Import and Merge Rules"
+  ],
+  "已导出 ": [
+    "已导出 ",
+    "Exported "
+  ],
+  " 条端口配置；未包含密码、私钥或其它会话设置。": [
+    " 条端口配置；未包含密码、私钥或其它会话设置。",
+    " forwarding rules, excluding passwords, private keys and other session settings."
+  ],
+  "端口配置文件不是有效 JSON。": [
+    "端口配置文件不是有效 JSON。",
+    "The forwarding file is not valid JSON."
+  ],
+  "不支持的端口配置文件格式。": [
+    "不支持的端口配置文件格式。",
+    "Unsupported forwarding file format."
+  ],
+  "单个端口配置文件最多包含 100 条规则。": [
+    "单个端口配置文件最多包含 100 条规则。",
+    "A forwarding file may contain at most 100 rules."
+  ],
+  "第 ": [
+    "第 ",
+    "Entry "
+  ],
+  " 条：": [
+    " 条：",
+    ": "
+  ],
+  "导入端口配置": [
+    "导入转发规则",
+    "Import Forwarding Rules"
+  ],
+  "会话：": [
+    "会话：",
+    "Session: "
+  ],
+  "；当前 ": [
+    "；当前 ",
+    "; current: "
+  ],
+  " 条，": [
+    " 条，",
+    " rules; "
+  ],
+  "共 ": [
+    "共 ",
+    "Total: "
+  ],
+  "待导入 ": [
+    "待导入 ",
+    "To import: "
+  ],
+  " 条。": [
+    " 条。",
+    " rules."
+  ],
+  "来源：": [
+    "来源：",
+    "Source: "
+  ],
+  "其余规则已超出预览范围。": [
+    "其余规则已超出预览范围。",
+    "Additional rules are outside the preview limit."
+  ],
+  "导入方式": [
+    "导入方式",
+    "Import Method"
+  ],
+  "覆盖当前端口配置": [
+    "覆盖当前端口配置",
+    "Replace Existing Forwarding Rules"
+  ],
+  "增加到当前端口配置": [
+    "增加到当前端口配置",
+    "Merge with Existing Forwarding Rules"
+  ],
+  "增加模式冲突处理": [
+    "增加模式冲突处理",
+    "Merge Conflict Handling"
+  ],
+  "跳过冲突规则（推荐）": [
+    "跳过冲突规则（推荐）",
+    "Skip Conflicting Rules (Recommended)"
+  ],
+  "用导入规则替换冲突规则": [
+    "用导入规则替换冲突规则",
+    "Replace Conflicting Rules with Imported Rules"
+  ],
+  "监听地址/端口冲突：": [
+    "监听地址/端口冲突：",
+    "Listening address/port conflicts: "
+  ],
+  " 个。覆盖模式会整体替换；增加模式将按上方冲突处理方式执行。": [
+    " 个。覆盖模式会整体替换；增加模式将按上方冲突处理方式执行。",
+    ". Replace replaces all existing rules. Merge uses the selected conflict handling."
+  ],
+  "取消": [
+    "取消",
+    "Cancel"
+  ],
+  "确认导入": [
+    "确认导入",
+    "Import"
+  ],
+  "确认保存端口配置": [
+    "确认保存端口配置",
+    "Save Forwarding Rules"
+  ],
+  "端口配置已保存：": [
+    "端口配置已保存：",
+    "Forwarding rules saved: "
+  ],
+  " 条规则。": [
+    " 条规则。",
+    " rules."
+  ],
+  "保存端口配置失败": [
+    "保存端口配置失败",
+    "Could not save forwarding rules"
+  ],
+  "保存失败：": [
+    "保存失败：",
+    "Save failed: "
+  ],
+  "请检查 Tabby 配置权限。": [
+    "请检查 Tabby 配置权限。",
+    "Check Tabby configuration permissions."
+  ],
+  "会话已被删除，请刷新后重试。": [
+    "会话已被删除，请刷新后重试。",
+    "This session was deleted. Refresh and try again."
+  ],
+  "端口规则无效，未保存。": [
+    "端口规则无效，未保存。",
+    "Invalid forwarding rules. Nothing was saved."
+  ],
+  "导入文件内存在监听冲突，请修正规则后重试。": [
+    "导入文件内存在监听冲突，请修正规则后重试。",
+    "The imported file contains listening conflicts. Correct the rules and try again."
+  ],
+  "连接": [
+    "连接",
+    "Connect"
+  ],
+  "编辑会话": [
+    "会话属性",
+    "Session Properties"
+  ],
+  "取消收藏": [
+    "从收藏夹移除",
+    "Remove from Favorites"
+  ],
+  "收藏并置顶": [
+    "添加到收藏夹",
+    "Add to Favorites"
+  ],
+  "切换到已打开窗口": [
+    "切换到已打开的会话",
+    "Switch to Open Session"
+  ],
+  "关闭生产连接确认": [
+    "取消连接前确认",
+    "Disable Connection Confirmation"
+  ],
+  "开启生产连接确认": [
+    "启用连接前确认",
+    "Enable Connection Confirmation"
+  ],
+  "端口配置": [
+    "端口转发",
+    "Port Forwarding"
+  ],
+  "日志…": [
+    "会话日志",
+    "Session Logging"
+  ],
+  "移动会话": [
+    "移动会话",
+    "Move Session"
+  ],
+  "复制会话": [
+    "创建会话副本",
+    "Duplicate Session"
+  ],
+  "删除会话": [
+    "删除会话",
+    "Delete Session"
+  ],
+  "新建子分组": [
+    "新建子文件夹",
+    "New Subfolder"
+  ],
+  "移动目录": [
+    "移动文件夹",
+    "Move Folder"
+  ],
+  "重命名分组": [
+    "重命名文件夹",
+    "Rename Folder"
+  ],
+  "删除分组及会话": [
+    "删除文件夹及其会话",
+    "Delete Folder and Its Sessions"
+  ],
+  "新建根分组": [
+    "新建文件夹",
+    "New Folder"
+  ],
+  "根目录（无分组）": [
+    "根目录（无分组）",
+    "Root (Ungrouped)"
+  ],
+  "点击选择已有分组，或输入新路径": [
+    "点击选择已有分组，或输入新路径",
+    "Choose an existing folder or enter a new path"
+  ],
+  "Tabby 未提供可写入 Profile 的服务。": [
+    "Tabby 未提供可写入 Profile 的服务。",
+    "Tabby does not expose the service for saving sessions."
+  ],
+  "会话": [
+    "会话",
+    "Session"
+  ],
+  "（副本）": [
+    "（副本）",
+    " (Copy)"
+  ],
+  "已创建会话副本。": [
+    "已创建会话副本。",
+    "Session copy created."
+  ],
+  "将移动到所选目录；移动按 Tabby 分组唯一 ID 执行，不会按同名目录批量修改。": [
+    "将移动到所选目录；移动按 Tabby 分组唯一 ID 执行，不会按同名目录批量修改。",
+    "Move to the selected folder. Folders are identified by their Tabby IDs; other folders with the same name are unaffected."
+  ],
+  "目标目录": [
+    "目标目录",
+    "Destination Folder"
+  ],
+  "移动": [
+    "移动",
+    "Move"
+  ],
+  "确认移动": [
+    "确认移动",
+    "Confirm Move"
+  ],
+  "移动操作失败": [
+    "移动操作失败",
+    "Move failed"
+  ],
+  "移动失败，原配置未被本插件进一步修改。请检查 Tabby 版本、配置权限或插件日志。": [
+    "移动失败，原配置未被本插件进一步修改。请检查 Tabby 版本、配置权限或插件日志。",
+    "Move failed. The plugin made no further changes. Check the Tabby version, permissions or plugin log."
+  ],
+  "会话“": [
+    "会话“",
+    "Session “"
+  ],
+  "会话已在该目录中，未作修改。": [
+    "会话已在该目录中，未作修改。",
+    "The session is already in this folder. Nothing changed."
+  ],
+  "会话已移动到": [
+    "会话已移动到",
+    "Session moved to "
+  ],
+  "根目录。": [
+    "根目录。",
+    "the root folder."
+  ],
+  "目录“": [
+    "目录“",
+    "Folder “"
+  ],
+  "”及其子目录": [
+    "”及其子目录",
+    "” and its subfolders"
+  ],
+  "目录已在该位置，未作修改。": [
+    "目录已在该位置，未作修改。",
+    "The folder is already in this location. Nothing changed."
+  ],
+  "不能将目录移动到自身或其子目录中。": [
+    "不能将目录移动到自身或其子目录中。",
+    "A folder cannot be moved into itself or one of its subfolders."
+  ],
+  "当前 Tabby 版本未提供移动分组所需的公开服务。": [
+    "当前 Tabby 版本未提供移动分组所需的公开服务。",
+    "This Tabby version does not expose the service for moving folders."
+  ],
+  "目录及其子目录已移动到": [
+    "目录及其子目录已移动到",
+    "Folder and subfolders moved to "
+  ],
+  "名称 *": [
+    "名称 *",
+    "Name *"
+  ],
+  "类型": [
+    "类型",
+    "Type"
+  ],
+  "Serial 串口": [
+    "Serial 串口",
+    "Serial"
+  ],
+  "本地终端": [
+    "本地终端",
+    "Local Terminal"
+  ],
+  "主机 / 设备": [
+    "主机 / 设备",
+    "Host / Device"
+  ],
+  "点击分组输入框即可从已有目录中搜索并选择；选择项会按 Tabby 原生唯一 ID 保存。也可直接输入新路径作为兼容分组。": [
+    "点击分组输入框即可从已有目录中搜索并选择；选择项会按 Tabby 原生唯一 ID 保存。也可直接输入新路径作为兼容分组。",
+    "Search and select an existing folder, saved by its Tabby ID. A new path can also be entered for compatibility."
+  ],
+  "当前没有可选的已有分组；可直接输入路径作为兼容分组。": [
+    "当前没有可选的已有分组；可直接输入路径作为兼容分组。",
+    "No existing folders are available. Enter a folder path instead."
+  ],
+  "认证方式": [
+    "认证方式",
+    "Authentication Method"
+  ],
+  "交互式（推荐）": [
+    "交互式（推荐）",
+    "Interactive (Recommended)"
+  ],
+  "保存密码": [
+    "保存密码",
+    "Saved Password"
+  ],
+  "私钥路径（仅私钥认证）": [
+    "私钥路径（仅私钥认证）",
+    "Private Key Path (Key Authentication Only)"
+  ],
+  "密码（不会回显；输入新值同步到 Tabby 凭据库；留空不修改）": [
+    "密码（不会回显；输入新值同步到 Tabby 凭据库；留空不修改）",
+    "Password (Hidden; Enter to Update Tabby Credentials; Leave Blank to Keep)"
+  ],
+  "颜色": [
+    "颜色",
+    "Color"
+  ],
+  "备注": [
+    "备注",
+    "Description"
+  ],
+  "本窗口不展示已保存密码，也不提供原始 JSON 导出，以避免凭据与连接信息被意外暴露。": [
+    "本窗口不展示已保存密码，也不提供原始 JSON 导出，以避免凭据与连接信息被意外暴露。",
+    "Saved passwords are not displayed and raw session JSON is not exported to protect credentials."
+  ],
+  "保存": [
+    "保存",
+    "Save"
+  ],
+  "保存会话": [
+    "保存会话",
+    "Save Session"
+  ],
+  "请填写会话名称。": [
+    "请填写会话名称。",
+    "Enter a session name."
+  ],
+  "SSH 和 Telnet 会话必须填写主机。": [
+    "SSH 和 Telnet 会话必须填写主机。",
+    "SSH and Telnet sessions require a host."
+  ],
+  "端口必须是 1 到 65535 的整数。": [
+    "端口必须是 1 到 65535 的整数。",
+    "The port must be an integer from 1 to 65535."
+  ],
+  "请在主机 / 设备中填写串口设备，例如 COM3。": [
+    "请在主机 / 设备中填写串口设备，例如 COM3。",
+    "Enter a serial device in Host / Device, such as COM3."
+  ],
+  "选择私钥认证时请填写私钥路径。": [
+    "选择私钥认证时请填写私钥路径。",
+    "Enter a private key path when using key authentication."
+  ],
+  "当前 Tabby 环境未提供安全密码存储服务。为避免把新密码写入普通配置，请使用“配置和连接”中的原生密码设置。": [
+    "当前 Tabby 环境未提供安全密码存储服务。为避免把新密码写入普通配置，请使用“配置和连接”中的原生密码设置。",
+    "Secure password storage is unavailable. Use Tabby's Profiles & Connections editor to avoid saving passwords in ordinary configuration."
+  ],
+  "配置在保存期间再次变化，请重新打开编辑。": [
+    "配置在保存期间再次变化，请重新打开编辑。",
+    "The configuration changed again while saving. Reopen Session Properties."
+  ],
+  "会话已创建。": [
+    "会话已创建。",
+    "Session created."
+  ],
+  "会话已保存。": [
+    "会话已保存。",
+    "Session saved."
+  ],
+  "保存会话失败": [
+    "保存会话失败",
+    "Could not save session"
+  ],
+  "保存密码前请先填写用户名；Tabby 的安全凭据库按用户名、主机和端口保存。": [
+    "保存密码前请先填写用户名；Tabby 的安全凭据库按用户名、主机和端口保存。",
+    "Enter a username before saving a password. Tabby credentials are keyed by username, host and port."
+  ],
+  "当前 Tabby 环境未提供安全密码存储服务。请使用“配置和连接”中的原生密码设置。": [
+    "当前 Tabby 环境未提供安全密码存储服务。请使用“配置和连接”中的原生密码设置。",
+    "Secure password storage is unavailable. Use the native password settings in Profiles & Connections."
+  ],
+  "保存失败，请检查 Tabby 配置权限或插件日志。": [
+    "保存失败，请检查 Tabby 配置权限或插件日志。",
+    "Could not save. Check configuration permissions or the plugin log."
+  ],
+  "分组名称": [
+    "文件夹名称",
+    "Folder Name"
+  ],
+  "当前 Tabby 版本未提供安全重命名分组所需的公开服务。": [
+    "当前 Tabby 版本未提供安全重命名分组所需的公开服务。",
+    "This Tabby version does not expose the service for safely renaming folders."
+  ],
+  "目录已重命名。": [
+    "目录已重命名。",
+    "Folder renamed."
+  ],
+  "重命名分组失败": [
+    "重命名分组失败",
+    "Could not rename folder"
+  ],
+  "重命名分组失败，未按名称批量修改其它分组。": [
+    "重命名分组失败，未按名称批量修改其它分组。",
+    "Could not rename the folder. Other folders with the same name were not modified."
+  ],
+  "新建子目录": [
+    "新建子文件夹",
+    "New Subfolder"
+  ],
+  "分组名称 *": [
+    "文件夹名称 *",
+    "Folder Name *"
+  ],
+  "父级目录：": [
+    "父级目录：",
+    "Parent folder: "
+  ],
+  "将在 Tabby 根目录下创建一个独立目录。": [
+    "将在 Tabby 根目录下创建一个独立目录。",
+    "A new folder will be created at the Tabby root."
+  ],
+  "创建": [
+    "创建",
+    "Create"
+  ],
+  "创建分组": [
+    "创建分组",
+    "Create Folder"
+  ],
+  "请填写分组名称。": [
+    "请填写分组名称。",
+    "Enter a folder name."
+  ],
+  "当前 Tabby 版本未提供创建分组所需的公开服务。": [
+    "当前 Tabby 版本未提供创建分组所需的公开服务。",
+    "This Tabby version does not expose the service for creating folders."
+  ],
+  "目录已创建，并已同步到 Tabby 配置和连接。": [
+    "目录已创建，并已同步到 Tabby 配置和连接。",
+    "Folder created and synchronized with Tabby Profiles & Connections."
+  ],
+  "创建分组失败": [
+    "创建分组失败",
+    "Could not create folder"
+  ],
+  "创建分组失败，请检查 Tabby 版本或配置权限。": [
+    "创建分组失败，请检查 Tabby 版本或配置权限。",
+    "Could not create the folder. Check the Tabby version or configuration permissions."
+  ],
+  "当前 Tabby 环境不支持本地文件下载。": [
+    "当前 Tabby 环境不支持本地文件下载。",
+    "Local file downloads are unavailable in this Tabby environment."
+  ],
+  "已导出安全备份：": [
+    "已导出安全备份：",
+    "Session settings backed up: "
+  ],
+  " 个目录，": [
+    " 个目录，",
+    " folders, "
+  ],
+  " 个会话；未包含密码或私钥。": [
+    " 个会话；未包含密码或私钥。",
+    " sessions. Passwords and private keys are excluded."
+  ],
+  "未选择文件。": [
+    "未选择文件。",
+    "No file selected."
+  ],
+  "单个导入文件不能超过 10 MB。": [
+    "单个导入文件不能超过 10 MB。",
+    "Each import file must be no larger than 10 MB."
+  ],
+  "读取文件失败。": [
+    "读取文件失败。",
+    "Could not read the file."
+  ],
+  "当前宿主不支持文件读取。": [
+    "当前宿主不支持文件读取。",
+    "This host does not support reading files."
+  ],
+  "文件无法按 ": [
+    "文件无法按 ",
+    "Could not decode the file using "
+  ],
+  " 解码，请在数据管理中选择正确的文本编码。": [
+    " 解码，请在数据管理中选择正确的文本编码。",
+    ". Choose the correct encoding in Import, Export & Backup."
+  ],
+  "导入文件": [
+    "导入文件",
+    "Import File"
+  ],
+  "单次最多预览 5000 条记录，超出部分已忽略。": [
+    "单次最多预览 5000 条记录，超出部分已忽略。",
+    "At most 5000 records can be previewed. Additional records were ignored."
+  ],
+  "导入预览": [
+    "导入预览",
+    "Import Preview"
+  ],
+  " · 有效 ": [
+    " · 有效 ",
+    " · Valid: "
+  ],
+  " · 重复 ": [
+    " · 重复 ",
+    " · Duplicates: "
+  ],
+  " · 无效 ": [
+    " · 无效 ",
+    " · Invalid: "
+  ],
+  "。可搜索、分页和逐项勾选；未勾选会话不会导入。": [
+    "。可搜索、分页和逐项勾选；未勾选会话不会导入。",
+    ". Search, browse pages and select individual records. Unselected sessions are not imported."
+  ],
+  "安全备份不包含密码、私钥、代理、脚本、转发及本地启动命令和环境变量；恢复后请在原生窗口补充。目录结构会一并恢复，包括空目录。": [
+    "安全备份不包含密码、私钥、代理、脚本、转发及本地启动命令和环境变量；恢复后请在原生窗口补充。目录结构会一并恢复，包括空目录。",
+    "Backups exclude credentials, proxies, scripts, forwarding, local startup commands and environment variables. Complete these in Tabby's native editor after restoring. Folder structure, including empty folders, is preserved."
+  ],
+  " · 待补充主机": [
+    " · 待补充主机",
+    " · Host required"
+  ],
+  " · 重复": [
+    " · 重复",
+    " · Duplicate"
+  ],
+  "无效 · 第 ": [
+    "无效 · 第 ",
+    "Invalid · Entry "
+  ],
+  " 条": [
+    " 条",
+    " records"
+  ],
+  "重复会话处理": [
+    "重复会话处理",
+    "Duplicate Sessions"
+  ],
+  "跳过重复项（推荐）": [
+    "跳过重复项（推荐）",
+    "Skip Duplicates (Recommended)"
+  ],
+  "导入为副本，不覆盖已有会话": [
+    "导入为副本，不覆盖已有会话",
+    "Import as Copies without Overwriting Existing Sessions"
+  ],
+  "取消导入": [
+    "取消导入",
+    "Cancel Import"
+  ],
+  "确认导入所选": [
+    "确认导入所选",
+    "Import Selected"
+  ],
+  "导入勾选记录并查看结果": [
+    "导入勾选记录并查看结果",
+    "Import selected records and view results"
+  ],
+  "请至少勾选一个会话。": [
+    "请至少勾选一个会话。",
+    "Select at least one session."
+  ],
+  "导入失败。": [
+    "导入失败。",
+    "Import failed."
+  ],
+  "Tabby 未提供可写入分组的服务。": [
+    "Tabby 未提供可写入分组的服务。",
+    "Tabby does not expose the service for saving folders."
+  ],
+  "已有导入正在进行，请等待完成。": [
+    "已有导入正在进行，请等待完成。",
+    "An import is in progress. Wait for it to finish."
+  ],
+  "Tabby 未提供可写入配置的服务。": [
+    "Tabby 未提供可写入配置的服务。",
+    "Tabby does not expose the service for saving configuration."
+  ],
+  "【待补充主机】请右键选择“编辑会话”并填写主机/IP 后再连接。": [
+    "【待补充主机】请右键选择“编辑会话”并填写主机/IP 后再连接。",
+    "[Host required] Open Session Properties and enter a host or IP before connecting."
+  ],
+  "（导入）": [
+    "（导入）",
+    " (Imported)"
+  ],
+  "导入回滚保存失败": [
+    "导入回滚保存失败",
+    "Could not save import rollback"
+  ],
+  "备份目录存在循环或缺失父目录，未完成恢复。": [
+    "备份目录存在循环或缺失父目录，未完成恢复。",
+    "The backup contains circular folders or missing parents. Restore was not completed."
+  ],
+  "不支持的备份格式。": [
+    "不支持的备份格式。",
+    "Unsupported backup format."
+  ],
+  "单次最多恢复 5000 个会话及 5000 个目录。": [
+    "单次最多恢复 5000 个会话及 5000 个目录。",
+    "At most 5000 sessions and 5000 folders can be restored at once."
+  ],
+  "备份目录信息不完整。": [
+    "备份目录信息不完整。",
+    "Backup folder information is incomplete."
+  ],
+  "备份目录 ID 重复。": [
+    "备份目录 ID 重复。",
+    "Duplicate folder ID in backup."
+  ],
+  "备份目录存在循环。": [
+    "备份目录存在循环。",
+    "The backup contains circular folders."
+  ],
+  "备份目录缺失父目录。": [
+    "备份目录缺失父目录。",
+    "A parent folder is missing from the backup."
+  ],
+  "会话管理器安全备份": [
+    "会话管理器安全备份",
+    "Session Settings Backup"
+  ],
+  "名称为空或协议不受支持。": [
+    "名称为空或协议不受支持。",
+    "The name is empty or the protocol is unsupported."
+  ],
+  "读取备份文件失败": [
+    "读取备份文件失败",
+    "Could not read backup file"
+  ],
+  "无法读取备份：": [
+    "无法读取备份：",
+    "Could not read backup: "
+  ],
+  "文件损坏。": [
+    "文件损坏。",
+    "The file is damaged."
+  ],
+  "Xshell / 通用 CSV：": [
+    "Xshell / 通用 CSV：",
+    "Xshell / Generic CSV: "
+  ],
+  "读取 CSV 失败": [
+    "读取 CSV 失败",
+    "Could not read CSV"
+  ],
+  "无法解析 CSV。请确认包含名称、主机、端口、用户名、协议、目录或备注等列，并检查引号与分隔符。": [
+    "无法解析 CSV。请确认包含名称、主机、端口、用户名、协议、目录或备注等列，并检查引号与分隔符。",
+    "Could not parse CSV. Check the name, host, port, username, protocol, folder and description columns, quoting and delimiters."
+  ],
+  "所选目录中未找到可导入的 .ini 会话文件。": [
+    "所选目录中未找到可导入的 .ini 会话文件。",
+    "No importable .ini session files were found in the selected folder."
+  ],
+  "文件读取失败。": [
+    "文件读取失败。",
+    "Could not read the file."
+  ],
+  "SecureCRT Sessions 目录：": [
+    "SecureCRT Sessions 目录：",
+    "SecureCRT Sessions folder: "
+  ],
+  " 个 INI 文件": [
+    " 个 INI 文件",
+    " INI files"
+  ],
+  "读取 SecureCRT INI 失败": [
+    "读取 SecureCRT INI 失败",
+    "Could not read SecureCRT INI"
+  ],
+  "无法导入 SecureCRT Sessions 目录。请在文件选择框中选择包含 .ini 会话文件的目录。": [
+    "无法导入 SecureCRT Sessions 目录。请在文件选择框中选择包含 .ini 会话文件的目录。",
+    "Could not import SecureCRT sessions. Select a folder containing .ini session files."
+  ],
+  "未找到可导入的 .xsh 会话文件。": [
+    "未找到可导入的 .xsh 会话文件。",
+    "No importable .xsh session files were found."
+  ],
+  " 个会话文件": [
+    " 个会话文件",
+    " session files"
+  ],
+  "Xshell XSH 文件：": [
+    "Xshell XSH 文件：",
+    "Xshell XSH file: "
+  ],
+  " 个文件": [
+    " 个文件",
+    " files"
+  ],
+  "读取 Xshell XSH 文件失败": [
+    "读取 Xshell XSH 文件失败",
+    "Could not read Xshell XSH"
+  ],
+  "无法解析 Xshell XSH。请确认选择的是有效的 .xsh 会话文件。": [
+    "无法解析 Xshell XSH。请确认选择的是有效的 .xsh 会话文件。",
+    "Could not parse Xshell XSH. Select a valid .xsh session file."
+  ],
+  "Xshell Sessions 目录：": [
+    "Xshell Sessions 目录：",
+    "Xshell Sessions folder: "
+  ],
+  "读取 Xshell XSH 目录失败": [
+    "读取 Xshell XSH 目录失败",
+    "Could not read Xshell Sessions folder"
+  ],
+  "无法导入 Xshell Sessions 目录。请在文件选择框中选择包含 .xsh 会话文件的目录。": [
+    "无法导入 Xshell Sessions 目录。请在文件选择框中选择包含 .xsh 会话文件的目录。",
+    "Could not import Xshell sessions. Select a folder containing .xsh session files."
+  ],
+  "Xshell 常见的 .xsh 会话文件可直接导入。若选择整个 Sessions 目录，插件会递归读取 .xsh 文件，并依据子目录恢复 Tabby 分组；不会读取 Password 等敏感字段。": [
+    "Xshell 常见的 .xsh 会话文件可直接导入。若选择整个 Sessions 目录，插件会递归读取 .xsh 文件，并依据子目录恢复 Tabby 分组；不会读取 Password 等敏感字段。",
+    "Import .xsh files directly. Selecting a Sessions folder imports files recursively and preserves subfolders. Password fields are not read."
+  ],
+  "选择 XSH 文件": [
+    "选择 XSH 文件",
+    "Select XSH Files"
+  ],
+  "选择一个或多个 .xsh 会话文件；会话名默认取文件名。": [
+    "选择一个或多个 .xsh 会话文件；会话名默认取文件名。",
+    "Select one or more .xsh session files. Session names default to filenames."
+  ],
+  "选择 Xshell Sessions 目录": [
+    "选择 Xshell Sessions 目录",
+    "Select Xshell Sessions Folder"
+  ],
+  "递归读取 .xsh，并将子文件夹恢复为分组目录。": [
+    "递归读取 .xsh，并将子文件夹恢复为分组目录。",
+    "Read .xsh files recursively and recreate their subfolders."
+  ],
+  "选择 CSV 文件": [
+    "选择 CSV 文件",
+    "Select CSV File"
+  ],
+  "仍支持已有的 Xshell/通用 CSV 会话清单。": [
+    "仍支持已有的 Xshell/通用 CSV 会话清单。",
+    "Import an existing Xshell or generic CSV session list."
+  ],
+  "关闭 Xshell 导入": [
+    "关闭 Xshell 导入",
+    "Close Xshell Import"
+  ],
+  "保存最近打开记录失败": [
+    "保存最近打开记录失败",
+    "Could not save recent sessions"
+  ],
+  "全部": [
+    "全部会话",
+    "All Sessions"
+  ],
+  "收藏": [
+    "收藏夹",
+    "Favorites"
+  ],
+  "最近": [
+    "最近连接",
+    "Recent Sessions"
+  ],
+  "已开窗口": [
+    "已打开",
+    "Open Sessions"
+  ],
+  "撤销最近删除": [
+    "撤销最近删除",
+    "Undo Last Deletion"
+  ],
+  "十分钟内可撤销；退出 Tabby 后失效": [
+    "十分钟内可撤销；退出 Tabby 后失效",
+    "Available for ten minutes in this window; cleared when Tabby exits"
+  ],
+  "已开 ": [
+    "已开 ",
+    "Open: "
+  ],
+  "当前 Tabby 窗口内没有此会话的终端。": [
+    "当前 Tabby 窗口内没有此会话的终端。",
+    "This session has no terminals in the current Tabby window."
+  ],
+  "（已连接）": [
+    "（已连接）",
+    " (Connected)"
+  ],
+  "（连接状态待确认）": [
+    "（连接状态待确认）",
+    " (Connection status pending)"
+  ],
+  "切换终端窗口": [
+    "切换终端窗口",
+    "Switch Terminal Window"
+  ],
+  "窗口已关闭，请刷新后重试。": [
+    "窗口已关闭，请刷新后重试。",
+    "This window was closed. Refresh and try again."
+  ],
+  "读取继承连接参数失败": [
+    "读取继承连接参数失败",
+    "Could not read inherited connection settings"
+  ],
+  "编辑尚未保存": [
+    "编辑尚未保存",
+    "Unsaved Session Changes"
+  ],
+  "保存失败。": [
+    "保存失败。",
+    "Save failed."
+  ],
+  " 本次草稿保留在此窗口，关闭后失效。": [
+    " 本次草稿保留在此窗口，关闭后失效。",
+    " Your draft remains in this dialog and is discarded when it closes."
+  ],
+  "重试保存草稿": [
+    "重试保存草稿",
+    "Retry Saving Draft"
+  ],
+  "重新检查冲突后保存": [
+    "重新检查冲突后保存",
+    "Recheck conflicts and save"
+  ],
+  "编辑草稿已保存。": [
+    "编辑草稿已保存。",
+    "Draft saved."
+  ],
+  "继续编辑草稿": [
+    "继续编辑草稿",
+    "Continue Editing Draft"
+  ],
+  "保留本次修改继续编辑": [
+    "保留本次修改继续编辑",
+    "Keep editing these changes"
+  ],
+  "此会话已被删除，不能保存旧窗口中的编辑。": [
+    "此会话已被删除，不能保存旧窗口中的编辑。",
+    "This session was deleted. Changes from the old editor cannot be saved."
+  ],
+  "会话已在其他位置修改": [
+    "会话已在其他位置修改",
+    "Session Modified Elsewhere"
+  ],
+  "”在此编辑窗口打开后发生了变化。继续会用本窗口内容覆盖当前设置；取消后可重新打开编辑。": [
+    "”在此编辑窗口打开后发生了变化。继续会用本窗口内容覆盖当前设置；取消后可重新打开编辑。",
+    "” changed after this editor opened. Continuing overwrites current settings with this draft. Cancel and reopen to load the latest settings."
+  ],
+  "仍然覆盖": [
+    "仍然覆盖",
+    "Overwrite Anyway"
+  ],
+  "已取消覆盖，请重新打开编辑窗口读取最新配置。": [
+    "已取消覆盖，请重新打开编辑窗口读取最新配置。",
+    "Overwrite canceled. Reopen the editor to load the latest settings."
+  ],
+  "配置再次发生变化，请重新打开编辑窗口。": [
+    "配置再次发生变化，请重新打开编辑窗口。",
+    "The configuration changed again. Reopen the editor."
+  ],
+  "已有删除或撤销正在处理。": [
+    "已有删除或撤销正在处理。",
+    "A deletion or undo is already in progress."
+  ],
+  "删除影响预览": [
+    "删除影响预览",
+    "Review Deletion"
+  ],
+  "将删除 ": [
+    "将删除 ",
+    "Delete "
+  ],
+  " 个目录（含所选目录及子目录）、": [
+    " 个目录（含所选目录及子目录）、",
+    " folders, including descendants, and "
+  ],
+  " 个会话。": [
+    " 个会话。",
+    " sessions."
+  ],
+  "\n会话：": [
+    "\n会话：",
+    "\nSessions: "
+  ],
+  "\n删除后十分钟内可在本窗口撤销；退出 Tabby 后撤销失效。已连接终端不会关闭，凭据库不会被清理。": [
+    "\n删除后十分钟内可在本窗口撤销；退出 Tabby 后撤销失效。已连接终端不会关闭，凭据库不会被清理。",
+    "\nDeletion can be undone for ten minutes in this window. Undo is cleared when Tabby exits. Connected terminals remain open and stored credentials are retained."
+  ],
+  "确认删除": [
+    "确认删除",
+    "Delete"
+  ],
+  "删除范围内的数据已发生变化，请重新检查后删除。": [
+    "删除范围内的数据已发生变化，请重新检查后删除。",
+    "The data selected for deletion changed. Review it again."
+  ],
+  "已删除 ": [
+    "已删除 ",
+    "Deleted "
+  ],
+  " 个会话、": [
+    " 个会话、",
+    " sessions and "
+  ],
+  " 个目录。可在十分钟内撤销。": [
+    " 个目录。可在十分钟内撤销。",
+    " folders. Undo is available for ten minutes."
+  ],
+  "删除回滚保存失败": [
+    "删除回滚保存失败",
+    "Could not save deletion rollback"
+  ],
+  "没有可撤销的删除，或已超过十分钟。": [
+    "没有可撤销的删除，或已超过十分钟。",
+    "There is no deletion to undo, or ten minutes have elapsed."
+  ],
+  "原 ID 已被其他数据占用，未执行撤销。": [
+    "原 ID 已被其他数据占用，未执行撤销。",
+    "An original ID is already in use. Nothing was restored."
+  ],
+  "会话原目录已被删除，请先恢复该目录。": [
+    "会话原目录已被删除，请先恢复该目录。",
+    "The session's original folder was deleted. Restore that folder first."
+  ],
+  "原父目录已被删除，请先撤销该目录的删除。": [
+    "原父目录已被删除，请先撤销该目录的删除。",
+    "The original parent folder was deleted. Undo its deletion first."
+  ],
+  "最近一次删除已撤销。": [
+    "最近一次删除已撤销。",
+    "Last deletion undone."
+  ],
+  "搜索名称、地址、目录或状态": [
+    "搜索名称、地址、目录或状态",
+    "Search name, address, folder or status"
+  ],
+  " 条；筛选 ": [
+    " 条；筛选 ",
+    " records; filtered: "
+  ],
+  "已选 ": [
+    "已选 ",
+    "Selected: "
+  ],
+  "；筛选 ": [
+    "；筛选 ",
+    "; filtered: "
+  ],
+  "上一页": [
+    "上一页",
+    "Previous"
+  ],
+  "下一页": [
+    "下一页",
+    "Next"
+  ],
+  "全选筛选结果": [
+    "全选筛选结果",
+    "Select All Filtered"
+  ],
+  "选择所有匹配记录，包括其他页": [
+    "选择所有匹配记录，包括其他页",
+    "Select all matching records across all pages"
+  ],
+  "取消筛选结果": [
+    "取消筛选结果",
+    "Clear Filtered Selection"
+  ],
+  "取消所有匹配记录": [
+    "取消所有匹配记录",
+    "Deselect all matching records"
+  ],
+  "批量移动的目标目录": [
+    "批量移动的目标目录",
+    "Destination Folder for Selected Sessions"
+  ],
+  "批量修改用户名（仅 SSH/Telnet；留空不改）": [
+    "批量修改用户名（仅 SSH/Telnet；留空不改）",
+    "Username for Selected SSH/Telnet Sessions (Blank to Keep)"
+  ],
+  "批量修改端口（仅 SSH/Telnet；留空不改）": [
+    "批量修改端口（仅 SSH/Telnet；留空不改）",
+    "Port for Selected SSH/Telnet Sessions (Blank to Keep)"
+  ],
+  "批量连接并发数（1–5）": [
+    "批量连接并发数（1–5）",
+    "Concurrent Connections (1–5)"
+  ],
+  "批量连接逐批打开终端，最多等待每个连接 30 秒；遇到待确认连接会停止后续任务，已有窗口继续由 Tabby 处理，不自动重连。修改用户名后可能需要重新输入密码。": [
+    "批量连接逐批打开终端，最多等待每个连接 30 秒；遇到待确认连接会停止后续任务，已有窗口继续由 Tabby 处理，不自动重连。修改用户名后可能需要重新输入密码。",
+    "Connections open in batches and wait up to 30 seconds each. Further connections stop if one needs attention. Existing windows remain open and are not reconnected automatically. Changing a username may require entering the password again."
+  ],
+  "请先勾选会话。": [
+    "请先勾选会话。",
+    "Select sessions first."
+  ],
+  "移动所选": [
+    "移动所选",
+    "Move Selected"
+  ],
+  "批量移动": [
+    "批量移动",
+    "Move Selected Sessions"
+  ],
+  "修改所选": [
+    "修改所选",
+    "Edit Selected"
+  ],
+  "批量修改用户名和端口": [
+    "批量修改用户名和端口",
+    "Edit Selected Usernames and Ports"
+  ],
+  "连接所选": [
+    "连接所选",
+    "Connect Selected"
+  ],
+  "限并发打开所选会话": [
+    "限并发打开所选会话",
+    "Open selected sessions with limited concurrency"
+  ],
+  "并发数必须是 1–5 的整数。": [
+    "并发数必须是 1–5 的整数。",
+    "Concurrency must be an integer from 1 to 5."
+  ],
+  "删除所选": [
+    "删除所选",
+    "Delete Selected"
+  ],
+  "预览后批量删除": [
+    "预览后批量删除",
+    "Review and delete selected sessions"
+  ],
+  "已有批量修改正在处理。": [
+    "已有批量修改正在处理。",
+    "A bulk edit is already in progress."
+  ],
+  "端口必须是 1–65535 的整数。": [
+    "端口必须是 1–65535 的整数。",
+    "The port must be an integer from 1 to 65535."
+  ],
+  "目标目录已不存在。": [
+    "目标目录已不存在。",
+    "The destination folder no longer exists."
+  ],
+  "请填写要修改的用户名或端口。": [
+    "请填写要修改的用户名或端口。",
+    "Enter a username or port to change."
+  ],
+  "部分会话已被删除，请重新打开批量管理。": [
+    "部分会话已被删除，请重新打开批量管理。",
+    "Some sessions were deleted. Reopen Bulk Session Management."
+  ],
+  "没有可修改的 SSH/Telnet 会话。": [
+    "没有可修改的 SSH/Telnet 会话。",
+    "No SSH or Telnet sessions can be edited."
+  ],
+  "确认批量修改": [
+    "确认批量修改",
+    "Confirm Bulk Edit"
+  ],
+  "将修改 ": [
+    "将修改 ",
+    "Modify "
+  ],
+  "\n用户名：": [
+    "\n用户名：",
+    "\nUsername: "
+  ],
+  "\n端口：": [
+    "\n端口：",
+    "\nPort: "
+  ],
+  "\n目标：": [
+    "\n目标：",
+    "\nDestination: "
+  ],
+  "根目录": [
+    "根目录",
+    "Root"
+  ],
+  "确认修改": [
+    "确认修改",
+    "Apply Changes"
+  ],
+  "会话在预览期间已被修改，请重新操作。": [
+    "会话在预览期间已被修改，请重新操作。",
+    "A session changed during preview. Review the operation again."
+  ],
+  "批量处理期间会话发生变化，已停止继续修改。": [
+    "批量处理期间会话发生变化，已停止继续修改。",
+    "A session changed during bulk processing. Further changes were stopped."
+  ],
+  "已修改 ": [
+    "已修改 ",
+    "Modified "
+  ],
+  "批量修改回滚失败": [
+    "批量修改回滚失败",
+    "Could not roll back bulk changes"
+  ],
+  "已有批量连接正在进行。": [
+    "已有批量连接正在进行。",
+    "A bulk connection task is already running."
+  ],
+  "部分会话已被删除，请重新选择。": [
+    "部分会话已被删除，请重新选择。",
+    "Some sessions were deleted. Select them again."
+  ],
+  "本批包含 ": [
+    "本批包含 ",
+    "This batch contains "
+  ],
+  " 个需要确认的会话：\n": [
+    " 个需要确认的会话：\n",
+    " sessions requiring confirmation:\n"
+  ],
+  "会话在连接预览后已修改，请重新确认。": [
+    "会话在连接预览后已修改，请重新确认。",
+    "A session changed after connection preview. Confirm again."
+  ],
+  "存在连接待确认的窗口，已停止后续任务。": [
+    "存在连接待确认的窗口，已停止后续任务。",
+    "A connection needs attention. Further connections were stopped."
+  ],
+  "批量连接进度": [
+    "批量连接进度",
+    "Connection Progress"
+  ],
+  "停止后续连接": [
+    "停止后续连接",
+    "Stop Remaining Connections"
+  ],
+  "已打开的窗口不会关闭": [
+    "已打开的窗口不会关闭",
+    "Already opened windows remain open"
+  ],
+  " · 已请求停止后续连接": [
+    " · 已请求停止后续连接",
+    " · Stop requested"
+  ],
+  "准备打开 ": [
+    "准备打开 ",
+    "Preparing to open "
+  ],
+  " 个会话，并发 ": [
+    " 个会话，并发 ",
+    " sessions; concurrency: "
+  ],
+  "。关闭此进度窗口不会关闭终端。": [
+    "。关闭此进度窗口不会关闭终端。",
+    ". Closing this progress dialog does not close terminals."
+  ],
+  "已处理 ": [
+    "已处理 ",
+    "Processed: "
+  ],
+  " · 已停止后续任务": [
+    " · 已停止后续任务",
+    " · Further tasks stopped"
+  ],
+  "已连接": [
+    "已连接",
+    "Connected"
+  ],
+  "窗口已打开": [
+    "窗口已打开",
+    "Window Opened"
+  ],
+  "连接待确认": [
+    "连接待确认",
+    "Connection Needs Attention"
+  ],
+  "窗口已关闭": [
+    "窗口已关闭",
+    "Window Closed"
+  ],
+  "打开失败": [
+    "打开失败",
+    "Open Failed"
+  ],
+  "已完成 ": [
+    "已完成 ",
+    "Completed "
+  ],
+  " 个连接任务": [
+    " 个连接任务",
+    " connection tasks"
+  ],
+  "，其余未打开。": [
+    "，其余未打开。",
+    "; remaining sessions were not opened."
+  ],
+  "已有导入正在进行。": [
+    "已有导入正在进行。",
+    "An import is already in progress."
+  ],
+  "目录准备失败：": [
+    "目录准备失败：",
+    "Could not prepare folders: "
+  ],
+  "目录结构": [
+    "目录结构",
+    "Folder Structure"
+  ],
+  "已写入": [
+    "已写入",
+    "Imported"
+  ],
+  "重复项，按当前规则跳过": [
+    "重复项，按当前规则跳过",
+    "Duplicate skipped according to current policy"
+  ],
+  "无效记录": [
+    "无效记录",
+    "Invalid record"
+  ],
+  "本次运行尚无导入报告。": [
+    "本次运行尚无导入报告。",
+    "No import results are available in this run."
+  ],
+  "导入结果报告": [
+    "导入结果",
+    "Import Results"
+  ],
+  "成功 ": [
+    "成功 ",
+    "Succeeded: "
+  ],
+  " · 跳过 ": [
+    " · 跳过 ",
+    " · Skipped: "
+  ],
+  " · 失败 ": [
+    " · 失败 ",
+    " · Failed: "
+  ],
+  "成功": [
+    "成功",
+    "Succeeded"
+  ],
+  "失败": [
+    "失败",
+    "Failed"
+  ],
+  "跳过": [
+    "跳过",
+    "Skipped"
+  ],
+  "导出报告": [
+    "导出报告",
+    "Export Report"
+  ],
+  "导出不含凭据的结果报告": [
+    "导出不含凭据的结果报告",
+    "Export results without credentials"
+  ],
+  "仅重试失败项": [
+    "仅重试失败项",
+    "Retry Failed Only"
+  ],
+  "已成功的会话不会再次导入": [
+    "已成功的会话不会再次导入",
+    "Successful sessions will not be imported again"
+  ],
+  "该终端窗口已关闭。": [
+    "该终端窗口已关闭。",
+    "This terminal window was closed."
+  ],
+  "等待连接": [
+    "等待连接",
+    "Waiting for Connection"
+  ],
+  "正在停止…": [
+    "正在停止",
+    "Stopping"
+  ],
+  "无法创建日志": [
+    "无法创建日志",
+    "Could Not Create Log"
+  ],
+  "写入失败": [
+    "写入失败",
+    "Write Failed"
+  ],
+  "自动记录中": [
+    "自动记录中",
+    "Automatic Logging"
+  ],
+  "手动记录中": [
+    "手动记录中",
+    "Manual Logging"
+  ],
+  "本次已停止": [
+    "本次已停止",
+    "Logging Stopped"
+  ],
+  "未记录": [
+    "未记录",
+    "Not Logging"
+  ],
+  "切换到此终端窗口": [
+    "切换到此终端窗口",
+    "Switch to This Terminal Window"
+  ],
+  " 连接": [
+    " 连接",
+    " connected"
+  ],
+  "连接状态待确认": [
+    "连接状态待确认",
+    "Connection status pending"
+  ],
+  "停止": [
+    "停止",
+    "Stop"
+  ],
+  "记录": [
+    "记录",
+    "Log"
+  ],
+  "控制此窗口日志": [
+    "控制此窗口日志",
+    "Control logging for this window"
+  ],
+  "查看": [
+    "查看",
+    "View"
+  ],
+  "查看此窗口最近日志": [
+    "查看此窗口最近日志",
+    "View the latest log for this window"
+  ],
+  "当前终端日志": [
+    "当前会话日志",
+    "Current Session Log"
+  ],
+  "连接详情": [
+    "连接详情",
+    "Session Details"
+  ],
+  "展开或收起连接详情": [
+    "展开或收起连接详情",
+    "Expand or collapse session details"
+  ],
+  "切换到一个 SSH 终端，即可控制该窗口的日志。": [
+    "切换到一个 SSH 终端，即可控制该窗口的日志。",
+    "Switch to an SSH terminal to control logging for that window."
+  ],
+  " · 窗口 ": [
+    " · 窗口 ",
+    " · Window "
+  ],
+  "检测到独立日志插件，请退出 Tabby 后移出旧插件。": [
+    "检测到独立日志插件，请退出 Tabby 后移出旧插件。",
+    "A standalone logger is also installed. Exit Tabby and remove the old plugin from its plugin folders."
+  ],
+  "尚未创建日志": [
+    "尚未创建日志",
+    "No Log File Yet"
+  ],
+  "停止本次记录": [
+    "停止记录",
+    "Stop Logging"
+  ],
+  "继续记录到上次文件": [
+    "继续记录到原文件",
+    "Resume Logging to Same File"
+  ],
+  "开始记录…": [
+    "开始记录",
+    "Start Logging"
+  ],
+  "控制当前终端日志": [
+    "控制当前终端日志",
+    "Control Current Session Logging"
+  ],
+  "查看日志": [
+    "查看日志",
+    "View Log"
+  ],
+  "打开本次连接最近的日志文件": [
+    "打开本次连接最近的日志文件",
+    "Open the latest log for this connection"
+  ],
+  "打开目录": [
+    "打开日志文件夹",
+    "Open Log Folder"
+  ],
+  "打开本次日志所在目录": [
+    "打开本次日志所在目录",
+    "Open this connection's log folder"
+  ],
+  "选择新日志…": [
+    "新建日志文件",
+    "New Log File"
+  ],
+  "为当前连接选择新的日志文件": [
+    "为当前连接选择新的日志文件",
+    "Choose a new log file for this connection"
+  ],
+  "仅影响此窗口；重连后按原日志设置重新记录。": [
+    "仅影响此窗口；重连后按原日志设置重新记录。",
+    "Applies only to this window. Reconnecting uses the saved logging settings."
+  ],
+  "此连接尚未就绪，或独立日志插件仍在运行；请检查插件部署。": [
+    "此连接尚未就绪，或独立日志插件仍在运行；请检查插件部署。",
+    "This connection is not ready, or a standalone logger is still active. Check the plugin installation."
+  ],
+  "当前日志接口不支持此操作。": [
+    "当前日志接口不支持此操作。",
+    "This logging interface does not support the action."
+  ],
+  "原连接已经重连或关闭，请重新选择窗口。": [
+    "原连接已经重连或关闭，请重新选择窗口。",
+    "The original connection was reconnected or closed. Select a window again."
+  ],
+  "上次日志不存在，请选择新日志文件。": [
+    "上次日志不存在，请选择新日志文件。",
+    "The previous log is missing. Choose a new log file."
+  ],
+  "此文件已存在，请选择新文件名。": [
+    "此文件已存在，请选择新文件名。",
+    "This file exists. Choose a different filename."
+  ],
+  "日志写入失败，请检查磁盘空间及目录权限。": [
+    "日志写入失败，请检查磁盘空间及目录权限。",
+    "Log write failed. Check free disk space and folder permissions."
+  ],
+  "日志正在结束，请稍后重试。": [
+    "日志正在结束，请稍后重试。",
+    "The log is finishing. Try again shortly."
+  ],
+  "日志操作正在进行，请稍后重试。": [
+    "日志操作正在进行，请稍后重试。",
+    "A logging action is in progress. Try again shortly."
+  ],
+  "日志操作失败。": [
+    "日志操作失败。",
+    "Logging action failed."
+  ],
+  "确认": [
+    "确认",
+    "Confirm"
+  ],
+  "Language": [
+    "界面语言",
+    "Language"
+  ],
+  "Follow Tabby": [
+    "跟随 Tabby",
+    "Follow Tabby"
+  ],
+  "Language applies to this plugin only. Session names and log files are not translated.": [
+    "仅切换本插件界面语言，不翻译会话名称、文件夹名称或日志文件。",
+    "Language applies to this plugin only. Session names, folder names and log files are not translated."
+  ],
+  "Could not save language preference.": [
+    "语言设置保存失败。",
+    "Could not save language preference."
+  ],
+  "Tabby Session Suite": [
+    "Tabby 会话管理套件",
+    "Tabby Session Suite"
+  ],
+  "SESSION DETAILS": [
+    "会话信息",
+    "Session Details"
+  ],
+  "Log Start": [
+    "开始记录",
+    "Start Logging"
+  ],
+  "Log Stop": [
+    "停止记录",
+    "Stop Logging"
+  ],
+  "Log View": [
+    "查看日志",
+    "View Log"
+  ],
+  "Log Directory": [
+    "打开日志文件夹",
+    "Open Log Folder"
+  ],
+  "Session Log Manager": [
+    "会话日志设置",
+    "Session Logging Settings"
+  ],
+  "General": [
+    "常规设置",
+    "General"
+  ],
+  "Permanent local SSH session records — the plugin never deletes or alters existing log files.": [
+    "SSH 会话日志保存在本机；插件不会删除或改写已有日志。",
+    "SSH session logs are stored locally. Existing logs are never deleted or altered."
+  ],
+  "Enable default automatic logging": [
+    "默认自动记录日志",
+    "Enable Automatic Logging by Default"
+  ],
+  "Default log directory": [
+    "默认日志文件夹",
+    "Default Log Folder"
+  ],
+  "Browse": [
+    "浏览",
+    "Browse"
+  ],
+  "Used only when an SSH profile has no specific directory. Existing log files are kept permanently and are never cleaned up by this plugin.": [
+    "会话未单独指定日志文件夹时使用。插件不会自动清理已有日志。",
+    "Used when an SSH session has no specific log folder. Existing logs are never automatically cleaned up."
+  ],
+  "Record submitted command lines": [
+    "记录提交的命令行",
+    "Record Submitted Command Lines"
+  ],
+  "Disabled by default. Enable only when command auditing is required: typed passwords or tokens may be written to local logs.": [
+    "默认关闭。仅在需要命令审计时启用：输入的密码或令牌可能被写入本地日志。",
+    "Off by default. Enable only for command auditing: typed passwords or tokens may be written to local logs."
+  ],
+  "SSH profile log directories": [
+    "SSH 会话日志文件夹",
+    "SSH Session Log Folders"
+  ],
+  "Set a separate local log directory for each SSH profile.": [
+    "为每个 SSH 会话设置独立的本地日志文件夹。",
+    "Set a separate local log folder for each SSH session."
+  ],
+  "Loading...": [
+    "正在加载",
+    "Loading"
+  ],
+  "Loading SSH profiles...": [
+    "正在加载 SSH 会话",
+    "Loading SSH Sessions"
+  ],
+  "Loading": [
+    "正在加载",
+    "Loading"
+  ],
+  "Reload": [
+    "刷新",
+    "Refresh"
+  ],
+  "Failed to load SSH profiles: ": [
+    "SSH 会话加载失败：",
+    "Could not load SSH sessions: "
+  ],
+  "No saved SSH profiles were detected.": [
+    "未发现已保存的 SSH 会话。",
+    "No saved SSH sessions were found."
+  ],
+  "Expand all": [
+    "全部展开",
+    "Expand All"
+  ],
+  "Collapse all": [
+    "全部折叠",
+    "Collapse All"
+  ],
+  "profiles": [
+    "个会话",
+    "sessions"
+  ],
+  "folders": [
+    "个文件夹",
+    "folders"
+  ],
+  "Profile": [
+    "会话",
+    "Session"
+  ],
+  "Log directory": [
+    "日志文件夹",
+    "Log Folder"
+  ],
+  "Logs": [
+    "日志",
+    "Logs"
+  ],
+  "Collapse logs": [
+    "收起日志",
+    "Collapse Logs"
+  ],
+  "Show logs": [
+    "展开日志",
+    "Show Logs"
+  ],
+  "Choose log directory": [
+    "选择日志文件夹",
+    "Choose Log Folder"
+  ],
+  "No log directory configured": [
+    "尚未设置日志文件夹",
+    "No Log Folder Configured"
+  ],
+  "Filter file names": [
+    "筛选文件名",
+    "Filter Filenames"
+  ],
+  "Filter log file names": [
+    "筛选日志文件名",
+    "Filter Log Filenames"
+  ],
+  "Sort logs": [
+    "日志排序",
+    "Sort Logs"
+  ],
+  "Newest": [
+    "最新优先",
+    "Newest First"
+  ],
+  "Oldest": [
+    "最早优先",
+    "Oldest First"
+  ],
+  "Name A-Z": [
+    "名称升序",
+    "Name A-Z"
+  ],
+  "Name Z-A": [
+    "名称降序",
+    "Name Z-A"
+  ],
+  "Largest": [
+    "最大优先",
+    "Largest First"
+  ],
+  "Smallest": [
+    "最小优先",
+    "Smallest First"
+  ],
+  "Open Folder": [
+    "打开日志文件夹",
+    "Open Log Folder"
+  ],
+  "No log files found.": [
+    "未找到日志文件。",
+    "No Log Files Found"
+  ],
+  "View": [
+    "查看日志",
+    "View Log"
+  ],
+  "Folders are shown as a collapsed tree by default and remember your expand/collapse choices. Each new SSH session creates a unique local log file named YYYY-MM-DD_HH-mm-ss-mmm_SessionName_ID.log. The ProfileTag keeps same-name profiles separate in a shared default directory. Existing logs stay unchanged and are kept permanently until you delete them yourself outside this plugin.": [
+    "文件夹默认折叠，并记住展开状态。每次新建 SSH 连接都会生成独立日志，文件名为日期时间_会话名称_6位ID.log；重名时自动避让。共享文件夹中的同名会话通过日志文件头标识区分。已有日志保持不变，由你自行保管或删除。",
+    "Folders start collapsed and remember their state. Each SSH connection creates a unique DateTime_SessionName_6DigitID.log file with collision protection. Log headers distinguish same-name sessions in shared folders. Existing logs remain unchanged until you delete them yourself."
+  ],
+  "Ungrouped": [
+    "未分组",
+    "Ungrouped"
+  ],
+  "夜航玻璃": [
+    "夜航玻璃",
+    "Nocturne Glass"
+  ],
+  "石墨月光": [
+    "石墨月光",
+    "Graphite Moonlight"
+  ],
+  "曜石香槟": [
+    "曜石香槟",
+    "Obsidian Champagne"
+  ],
+  "暖霜石墨": [
+    "暖霜石墨",
+    "Warm Frost"
+  ],
+  "吉卜力晴空": [
+    "吉卜力晴空",
+    "Ghibli Sky"
+  ],
+  "俏皮野兽派": [
+    "俏皮野兽派",
+    "Playful Neo-Brutalism"
+  ],
+  "原炭灰玻璃底 · 加强文字对比": [
+    "原炭灰玻璃底 · 加强文字对比",
+    "Original graphite glass with clearer text"
+  ],
+  "近黑中性底 · 柔和香槟金": [
+    "近黑中性底 · 柔和香槟金",
+    "Neutral near-black with soft champagne accents"
+  ],
+  "微黄奶霜底 · 深黑字": [
+    "微黄奶霜底 · 深黑字",
+    "Warm cream background with dark text"
+  ],
+  "深墨大底 · 局部玻璃受光": [
+    "深墨大底 · 局部玻璃受光",
+    "Deep ink scene with softly lit glass"
+  ],
+  "天空蓝 · 奶油与薄荷": [
+    "天空蓝 · 奶油与薄荷",
+    "Sky blue, cream and mint"
+  ],
+  "青绿 · 亮黄 · 珊瑚红与硬阴影": [
+    "青绿 · 亮黄 · 珊瑚红与硬阴影",
+    "Teal, yellow, coral and hard shadows"
+  ],
+  "终端配色备份不可用，未重新写入终端设置。": [
+    "终端配色备份不可用，未重新写入终端设置。",
+    "The terminal color backup is unavailable. Terminal settings were not rewritten."
+  ],
+  "已恢复原配色；同步期间手动更改的配色项已保留。": [
+    "已恢复原配色；同步期间手动更改的配色项已保留。",
+    "Original colors restored. Color fields changed manually during synchronization were kept."
+  ],
+  "主题服务已关闭。": [
+    "主题服务已关闭。",
+    "The theme service is closed."
+  ],
+  "Tabby 配置尚未就绪，请稍后重试。": [
+    "Tabby 配置尚未就绪，请稍后重试。",
+    "Tabby configuration is not ready. Try again shortly."
+  ],
+  "终端配色备份不可用，请先关闭终端同步并检查设置。": [
+    "终端配色备份不可用，请先关闭终端同步并检查设置。",
+    "The terminal color backup is unavailable. Disable terminal synchronization and check settings."
+  ],
+  "终端配色备份格式不完整，未修改配色。": [
+    "终端配色备份格式不完整，未修改配色。",
+    "The terminal color backup is incomplete. Colors were not modified."
+  ],
+  "终端配色备份格式不完整，未执行恢复。": [
+    "终端配色备份格式不完整，未执行恢复。",
+    "The terminal color backup is incomplete. Restore was not performed."
+  ],
+  "显示或隐藏会话管理器": [
+    "显示或隐藏会话管理器",
+    "Show or Hide Session Manager"
+  ],
+  "Failed to load SSH profiles:": [
+    "SSH 会话加载失败：",
+    "Could not load SSH sessions:"
+  ],
+  "会话信息": [
+    "会话信息",
+    "Session Info"
+  ],
+  "未选择会话": [
+    "未选择会话",
+    "No session selected"
+  ],
+  "连接地址": [
+    "连接地址",
+    "Address"
+  ],
+  "日志插件冲突": [
+    "日志插件冲突",
+    "Logging plugin conflict"
+  ],
+  "继续记录": [
+    "继续",
+    "Resume"
+  ],
+  "目录": [
+    "目录",
+    "Folder"
+  ],
+  "新建": [
+    "新建",
+    "New"
+  ],
+  "CSV 引号未闭合。": [
+    "CSV 引号未闭合。",
+    "CSV contains an unclosed quoted field."
+  ],
+  "默认安全备份：不包含密码、私钥内容、代理口令、登录脚本或端口转发。": [
+    "默认安全备份：不包含密码、私钥内容、代理口令、登录脚本或端口转发。",
+    "Safe backup: excludes passwords, private key contents, proxy credentials, login scripts, and port forwarding."
+  ],
+  "Cannot create log directory: ": [
+    "无法创建日志文件夹：",
+    "Cannot create log directory: "
+  ],
+  "刷新终端配色失败": [
+    "刷新终端配色失败",
+    "Failed to refresh terminal colors"
+  ],
+  "Save current session log": [
+    "保存当前会话日志",
+    "Save Current Session Log"
+  ],
+  "Log files": [
+    "日志文件",
+    "Log Files"
+  ],
+  "All files": [
+    "所有文件",
+    "All Files"
+  ],
+  "固定": [
+    "固定",
+    "Pinned"
+  ],
+  "浮动": [
+    "浮动",
+    "Floating"
+  ],
+  "设置": [
+    "设置",
+    "Settings"
+  ],
+  "端口转发检查": [
+    "端口转发检查",
+    "Port Forwarding Check"
+  ],
+  "检查对象": [
+    "检查对象",
+    "Check Targets"
+  ],
+  "当前窗口": [
+    "当前窗口",
+    "Current Window"
+  ],
+  "已打开窗口": [
+    "已打开窗口",
+    "Open Windows"
+  ],
+  "已保存会话": [
+    "已保存会话",
+    "Saved Sessions"
+  ],
+  "检查所选": [
+    "检查所选",
+    "Check Selected"
+  ],
+  "刷新对象": [
+    "刷新对象",
+    "Refresh Targets"
+  ],
+  "选择检查对象": [
+    "选择检查对象",
+    "Select Check Targets"
+  ],
+  "没有包含转发规则的可选 SSH 对象。": [
+    "没有包含转发规则的可选 SSH 对象。",
+    "No SSH targets with forwarding rules are available."
+  ],
+  "条规则": [
+    "条规则",
+    "rules"
+  ],
+  "已保存会话仅检查配置和本地绑定，不会自动建立 SSH 连接。": [
+    "已保存会话仅检查配置和本地绑定，不会自动建立 SSH 连接。",
+    "Saved sessions are checked for configuration and local binding only. No SSH connection is opened."
+  ],
+  "选择包含转发规则的窗口后执行检查。": [
+    "选择包含转发规则的窗口后执行检查。",
+    "Select windows with forwarding rules to check."
+  ],
+  "仅检查所选对象，不自动连接、不重建转发、不修改规则或系统设置。可以监听仅代表检查时的绑定结果。": [
+    "仅检查所选对象，不自动连接、不重建转发、不修改规则或系统设置。可以监听仅代表检查时的绑定结果。",
+    "Checks selected targets only. No automatic connections, forwarding rebuilds, rule changes, or system changes. Bind availability is valid only at check time."
+  ],
+  "导出检查报告": [
+    "导出检查报告",
+    "Export Check Report"
+  ],
+  "对象与转发": [
+    "对象与转发",
+    "Target and Forward"
+  ],
+  "转发运行": [
+    "转发运行",
+    "Forwarding State"
+  ],
+  "端口绑定": [
+    "端口绑定",
+    "Port Binding"
+  ],
+  "详情": [
+    "详情",
+    "Details"
+  ],
+  "查看检查详情": [
+    "查看检查详情",
+    "View Check Details"
+  ],
+  "未能确认": [
+    "未能确认",
+    "Unconfirmed"
+  ],
+  "正在检查": [
+    "正在检查",
+    "Checking"
+  ],
+  "检查完成：": [
+    "检查完成：",
+    "Check complete: "
+  ],
+  "规则超过 1000 条，请减少所选对象后分批检查。": [
+    "规则超过 1000 条，请减少所选对象后分批检查。",
+    "More than 1,000 rules. Select fewer targets and check in batches."
+  ],
+  "检查失败，请重试。": [
+    "检查失败，请重试。",
+    "Check failed. Please try again."
+  ],
+  "已配置": [
+    "已配置",
+    "Configured"
+  ],
+  "正在监听": [
+    "正在监听",
+    "Listening"
+  ],
+  "端口冲突": [
+    "端口冲突",
+    "Port Conflict"
+  ],
+  "连接失效": [
+    "连接失效",
+    "Disconnected"
+  ],
+  "远端已登记": [
+    "远端已登记",
+    "Registered Remotely"
+  ],
+  "可以监听": [
+    "可以监听",
+    "Can Bind"
+  ],
+  "系统排除": [
+    "系统排除",
+    "System Exclusion"
+  ],
+  "普通占用": [
+    "普通占用",
+    "In Use"
+  ],
+  "当前连接使用": [
+    "当前连接使用",
+    "Current Connection"
+  ],
+  "绑定被拒绝": [
+    "绑定被拒绝",
+    "Binding Denied"
+  ],
+  "规则无效": [
+    "规则无效",
+    "Invalid Rule"
+  ],
+  "需在远端检查": [
+    "需在远端检查",
+    "Check Remote Host"
+  ],
+  "对象已变化": [
+    "对象已变化",
+    "Target Changed"
+  ],
+  "检查已取消": [
+    "检查已取消",
+    "Cancelled"
+  ],
+  "系统排除范围：": [
+    "系统排除范围：",
+    "System excluded range: "
+  ],
+  "未知进程": [
+    "未知进程",
+    "Unknown process"
+  ],
+  "相关窗口：": [
+    "相关窗口：",
+    "Related window: "
+  ],
+  "临时监听已立即关闭，未保留检查端口。": [
+    "临时监听已立即关闭，未保留检查端口。",
+    "The temporary listener was closed immediately. The check does not retain the port."
+  ],
+  "当前转发自己的监听未被停止或重新绑定。": [
+    "当前转发自己的监听未被停止或重新绑定。",
+    "The current forward listener was neither stopped nor rebound."
+  ],
+  "错误代码：": [
+    "错误代码：",
+    "Error code: "
+  ],
+  "远程转发监听在服务器端，本工具不登录远端执行检查。": [
+    "远程转发监听在服务器端，本工具不登录远端执行检查。",
+    "Remote forwarding listens on the server. This tool does not sign in to run remote checks."
+  ],
+  "当前仅检查明确的 IPv4 或 IPv6 监听地址，未解析主机名。": [
+    "当前仅检查明确的 IPv4 或 IPv6 监听地址，未解析主机名。",
+    "Only explicit IPv4 or IPv6 bind addresses are checked. Hostnames are not resolved."
+  ],
+  "监听端口必须是 1–65535 的整数。": [
+    "监听端口必须是 1–65535 的整数。",
+    "The listening port must be an integer from 1 to 65535."
+  ],
+  "无法识别转发类型。": [
+    "无法识别转发类型。",
+    "Unrecognized forwarding type."
+  ],
+  "已确认当前转发的本地监听，未验证远端业务。": [
+    "已确认当前转发的本地监听，未验证远端业务。",
+    "The local listener is confirmed. The remote application has not been tested."
+  ],
+  "此窗口复用了同一个 SSH 连接和转发监听。": [
+    "此窗口复用了同一个 SSH 连接和转发监听。",
+    "This window shares the same SSH connection and forwarding listener."
+  ],
+  "转发已登记，但无法确认监听属于当前转发。": [
+    "转发已登记，但无法确认监听属于当前转发。",
+    "The forward is registered, but listener ownership is unconfirmed."
+  ],
+  "绑定被拒绝，但未确认命中系统排除范围，不能据此认定端口被占用。": [
+    "绑定被拒绝，但未确认命中系统排除范围，不能据此认定端口被占用。",
+    "Binding was denied without a confirmed system exclusion. This alone does not prove port occupancy."
+  ],
+  "转发已登记，但没有确认到运行中的本地监听。": [
+    "转发已登记，但没有确认到运行中的本地监听。",
+    "The forward is registered, but no running local listener was confirmed."
+  ],
+  "多个所选对象使用同一监听地址和端口，启动独立连接时可能冲突。": [
+    "多个所选对象使用同一监听地址和端口，启动独立连接时可能冲突。",
+    "Multiple selected targets use the same bind address and port. Independent connections may conflict."
+  ],
+  "检查期间对象已关闭、重连或规则已变化，请重新选择并检查。": [
+    "检查期间对象已关闭、重连或规则已变化，请重新选择并检查。",
+    "The target closed, reconnected, or changed rules during the check. Select it again and recheck."
+  ],
+  "当前平台无法读取 Windows 排除范围和进程信息。": [
+    "当前平台无法读取 Windows 排除范围和进程信息。",
+    "Windows exclusions and process details are unavailable on this platform."
+  ],
+  "未能读取 IPv4 排除范围。": [
+    "未能读取 IPv4 排除范围。",
+    "IPv4 exclusion ranges could not be read."
+  ],
+  "未能读取 IPv6 排除范围。": [
+    "未能读取 IPv6 排除范围。",
+    "IPv6 exclusion ranges could not be read."
+  ],
+  "未能读取本地监听进程，普通占用仍通过绑定错误判断。": [
+    "未能读取本地监听进程，普通占用仍通过绑定错误判断。",
+    "Local listener processes could not be read. Bind errors can still indicate occupancy."
+  ],
+  "本地或远程转发必须指定有效的目标地址和目标端口。": [
+    "本地或远程转发必须指定有效的目标地址和目标端口。",
+    "Local and remote forwards require a valid target address and target port."
+  ],
+  "转发检查详情": [
+    "转发检查详情",
+    "Forwarding Check Details"
+  ],
+  "监听地址：": [
+    "监听地址：",
+    "Listening address: "
+  ],
+  "目标地址：": [
+    "目标地址：",
+    "Target address: "
+  ],
+  "检查时间：": [
+    "检查时间：",
+    "Checked at: "
+  ],
+  "SSH 连接已断开，端口可以绑定也不代表转发已经恢复。": [
+    "SSH 连接已断开，端口可以绑定也不代表转发已经恢复。",
+    "The SSH connection is disconnected. A bindable port does not mean forwarding has recovered."
+  ],
+  "规则已保存，但未确认当前对象有运行中的转发。": [
+    "规则已保存，但未确认当前对象有运行中的转发。",
+    "The rule is saved, but a running forward has not been confirmed for this target."
+  ],
+  "端口命中 Windows 系统排除范围，创建监听会受到限制。": [
+    "端口命中 Windows 系统排除范围，创建监听会受到限制。",
+    "This port is in a Windows system exclusion range, which restricts listener creation."
+  ],
+  "该地址和端口已有监听，请查看占用进程或相关窗口。": [
+    "该地址和端口已有监听，请查看占用进程或相关窗口。",
+    "A listener already uses this address and port. Check the owning process or related windows."
+  ],
+  "现有信息不足以确认状态，请结合查询提示和错误代码判断。": [
+    "现有信息不足以确认状态，请结合查询提示和错误代码判断。",
+    "The available information is insufficient to confirm the state. Review query warnings and error codes."
+  ],
+  "清空最近连接": [
+    "清空最近连接",
+    "Clear Recent Connections"
+  ],
+  "移除最近记录": [
+    "移除最近记录",
+    "Remove from Recent Connections"
+  ],
+  "仅清空最近连接记录，保留全部会话、设置和已打开窗口。": [
+    "仅清空最近连接记录，保留全部会话、设置和已打开窗口。",
+    "Clear recent connection history only. All saved sessions, settings and open windows are preserved."
+  ],
+  "清空": [
+    "清空",
+    "Clear"
+  ],
+  "仅清空记录，保留全部会话": [
+    "仅清空记录，保留全部会话",
+    "Clear history only; keep all saved sessions"
+  ],
+  "流动玻璃": [
+    "流动玻璃",
+    "Liquid Glass"
+  ],
+  "现代渐变": [
+    "现代渐变",
+    "Modern Gradient"
+  ],
+  "通透叠层 · 青紫折射与柔亮边缘": [
+    "通透叠层 · 青紫折射与柔亮边缘",
+    "Layered glass · cyan-violet refraction and soft highlights"
+  ],
+  "赛博朋克 · 电紫、霓虹青与玫红": [
+    "赛博朋克 · 电紫、霓虹青与玫红",
+    "Cyberpunk · electric violet, neon cyan and magenta"
+  ],
+  "会话日志": [
+    "会话日志",
+    "Session Logging"
+  ],
+  "会话已被删除。": [
+    "会话已被删除。",
+    "The session has been deleted."
+  ],
+  "不能移动到自身或子目录。": [
+    "不能移动到自身或子目录。",
+    "Cannot move a folder into itself or its descendants."
+  ],
+  "名称不能为空。": [
+    "名称不能为空。",
+    "A name is required."
+  ],
+  "请填写主机。": [
+    "请填写主机。",
+    "Enter a host."
+  ],
+  "端口配置无效。": [
+    "端口配置无效。",
+    "Invalid port forwarding configuration."
+  ],
+  "界面语言": [
+    "界面语言",
+    "Language"
+  ],
+  "跟随 Tabby": [
+    "跟随 Tabby",
+    "Follow Tabby"
+  ],
+  "同步终端配色": [
+    "同步终端配色",
+    "Synchronize terminal colors"
+  ],
+  "编辑端口配置": [
+    "编辑端口配置",
+    "Edit Forwarding Rules"
+  ],
+  "不支持的端口配置格式。": [
+    "不支持的端口配置格式。",
+    "Unsupported forwarding file format."
+  ],
+  "删除": [
+    "删除",
+    "Remove"
+  ],
+  "覆盖": [
+    "覆盖",
+    "Replace"
+  ],
+  "增加": [
+    "增加",
+    "Add"
+  ],
+  "开启自动日志": [
+    "开启自动日志",
+    "Enable Automatic Logging"
+  ],
+  "关闭自动日志": [
+    "关闭自动日志",
+    "Disable Automatic Logging"
+  ],
+  "端口规则存在冲突。": [
+    "端口规则存在冲突。",
+    "Conflicting forwarding rules."
+  ],
+  "保存日志路径失败。": [
+    "保存日志路径失败。",
+    "Could not save the local log path mapping."
+  ],
+  "Enable automatic logging": [
+    "启用自动日志",
+    "Enable automatic logging"
+  ],
+  "Record commands": [
+    "记录命令输入",
+    "Record commands"
+  ],
+  "Search logs": [
+    "搜索日志",
+    "Search logs"
+  ],
+  "Newest first": [
+    "最新优先",
+    "Newest first"
+  ],
+  "Oldest first": [
+    "最早优先",
+    "Oldest first"
+  ],
+  "Largest first": [
+    "最大优先",
+    "Largest first"
+  ],
+  "Name": [
+    "名称",
+    "Name"
+  ],
+  "Smallest first": [
+    "最小优先",
+    "Smallest first"
+  ],
+  "Input recording may include passwords and tokens.": [
+    "记录输入可能包含密码和令牌。",
+    "Input recording may include passwords and tokens."
+  ],
+  "导入 SecureCRT 会话": [
+    "导入 SecureCRT 会话",
+    "Import SecureCRT Sessions"
+  ],
+  "恢复安全备份": [
+    "恢复安全备份",
+    "Restore Safe Backup"
+  ]
+}

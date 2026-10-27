@@ -1,0 +1,20 @@
+{
+  "version": "4.0.0",
+  "algorithm": "sha256",
+  "status": "maintainer-reported-functional-validation;publication-not-executed",
+  "files": {
+    "dist/contrast.js": "e4708330f7f5516a89382906ec801ce2878e27d16cba4c01554d3bbeea940af5",
+    "dist/credential-guard.js": "04032b393f24a2353b0d70c279cec68da9aaedc403bf5a09ce53b9965ea0cb4d",
+    "dist/forward-check-ui.js": "63af5db03235bb77444f6d980de2460fa3b5c033d1a5f250b5745cf584cbe655",
+    "dist/forward-check.js": "88a8c2aa740ee13f8e2e4fa0c787e1320fbbbf7304ad019a79e02dace338a4d1",
+    "dist/host-theme.css": "fdf5c38186ce764aadd2101d28ef6bd5fc70b6205334276888e1585fbdf54281",
+    "dist/host-theme.js": "ab466798eb9a2e500022524de6e6cf11bc93a74c6137f8265658b6a48adcd179",
+    "dist/i18n.js": "758d94bec9022ea4cc9c4d6b680bce9f4802b25045f7c0c46e26036f695fa81d",
+    "dist/index.js": "6d3dcada0d72b11e6d5a1a3f9142024707a6704bae3603095d3cbead0229fb31",
+    "dist/locales.json": "ff2788d36621c91db5426c0a4f9eb960ee2dec41dae55472fba93209bfb8f5ac",
+    "dist/logging-core.js": "86ebe798f5e111483d586ceacf8a5d13e7a79a51213ded5e30af4a41f49e5360",
+    "dist/logging-settings.js": "416c0bbdb783e4c1e78a7d3fcde5ab295eb302a99fb0c4b6a2a33354bb4ee150",
+    "dist/logging.js": "767690fed6a5f850fabb1a523730bff409eef669c2c4d5426a6fc4397940383e",
+    "dist/palettes.json": "7274ea628df5a7137dfadd8f7dcdccea46f2e894b07ef82ff0a9eddc75b1455e"
+  }
+}

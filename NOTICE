@@ -1,0 +1,13 @@
+Tabby Session Suite 4.0.0
+Copyright 2026 Bingbing (bingbing-QQ), to the extent copyright subsists in the applicable contributions.
+
+Independent community plugin, not an official Tabby product.
+This release replaces the originally supplied Manus-era session-management implementation, logger, settings UI and sidebar stylesheet. Earlier implementation was inspected for behavior compatibility; this is not claimed to be a clean-room legal certification.
+
+Applicable historical and upstream notices remain in licenses/:
+- Original logger metadata: MIT, author BingBing; no original LICENSE/year provided.
+- StyleKit design reference: MIT, copyright 2026 AnxForever.
+- Tabby host: MIT, copyright 2017 Tabby Developers. Host packages are not bundled.
+
+Project Apache-2.0 terms do not replace applicable third-party licenses, revoke prior MIT grants or grant third-party trademark rights.
+

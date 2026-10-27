@@ -1,0 +1,64 @@
+{
+  "name": "tabby-session-manager",
+  "version": "4.0.0",
+  "description": "Bilingual session management, per-window SSH logging, eight themes and port forwarding diagnostics for Tabby",
+  "main": "dist/index.js",
+  "keywords": [
+    "tabby-plugin",
+    "session-manager",
+    "xshell",
+    "securecrt",
+    "ssh",
+    "dock"
+  ],
+  "tabbyVersion": ">=1.0.238",
+  "engines": {
+    "node": ">=16.9.0"
+  },
+  "displayName": "Tabby Session Suite",
+  "private": true,
+  "files": [
+    "dist/",
+    "README.md",
+    "README.en.md",
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_NOTICES.md",
+    "PRIVACY.md",
+    "SECURITY.md",
+    "licenses/",
+    "docs/REIMPLEMENTATION.md",
+    "CHANGELOG.md",
+    "docs/INSTALL.md",
+    "docs/COMPATIBILITY.md",
+    "docs/images/"
+  ],
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "test": "node scripts/verify.cjs",
+    "prepublishOnly": "node scripts/check-release.cjs && node scripts/verify.cjs",
+    "test:ui": "node scripts/verify-ui.cjs",
+    "release:check": "node scripts/check-release.cjs",
+    "pack:preview": "npm pack --dry-run --json --ignore-scripts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "author": {
+    "name": "Bingbing (bingbing-QQ)",
+    "url": "https://github.com/bingbing-QQ"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bingbing-QQ/tabby-session-manager.git"
+  },
+  "homepage": "https://github.com/bingbing-QQ/tabby-session-manager#readme",
+  "bugs": {
+    "url": "https://github.com/bingbing-QQ/tabby-session-manager/issues"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

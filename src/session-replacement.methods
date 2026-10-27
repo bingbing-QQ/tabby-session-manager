@@ -1,0 +1,162 @@
+  constructor(config, profilesService, zone, ngbModal, passwordStorage, appService, logger) {
+    Object.assign(this,{config,profilesService,zone,ngbModal,passwordStorage,appService,logger});
+    this.profiles=[];this.groups=[];this.viewMode='all';this.searchQuery='';this.activeProfileId=null;
+    this.collapsedFolders=new Set();this.connectionMap=new Map();this.undoStack=[];this.subscriptions=[];
+    this.sidebarWidth=280;this.isVisible=true;this.dockMode='pinned';this.themePreset='nocturneGlass';
+    this.startTimer=setTimeout(()=>this.start(),0);
+  }
+  start() {
+    if(this.started||this.destroyed)return;this.started=true;
+    this.loadUIState();this.injectStyles();this.mountRoot();
+    if(typeof SessionHostThemeSync==='function')this.hostThemeSync=new SessionHostThemeSync(this.config,this.appService,()=>this.getThemePalettes(),(m,e)=>this.log(m,e));
+    if(typeof installSharedCredentialGuard==='function')this.removeCredentialGuard=installSharedCredentialGuard(this.profilesService,this.config);
+    const listen=(stream,fn)=>{if(stream&&stream.subscribe)this.trackSubscription(stream.subscribe(fn));};
+    listen(this.config&&this.config.ready$,()=>{this.loadUIState();void this.refreshAndRender();if(this.hostThemeSync)void this.hostThemeSync.initialize(this.themePreset).catch(e=>this.notify(e.message,'error'));});
+    listen(this.config&&this.config.changed$,()=>{this.loadUIState();this.applyAppearance();this.scheduleRefresh();});
+    for(const name of ['tabsChanged$','tabOpened$','tabClosed$'])listen(this.appService&&this.appService[name],()=>{this.refreshConnections(true);this.scheduleSearchTreeRefresh();});
+    listen(this.appService&&this.appService.activeTabChange$,()=>this.handleActiveSessionChange());
+    this.syncTimer=setInterval(()=>{this.refreshIfConfigChanged();this.updateUnifiedLogUI(false);},3000);
+    if(this.hostThemeSync)void this.hostThemeSync.initialize(this.themePreset).catch(e=>this.notify(e.message,'error'));
+    void this.refreshAndRender();
+  }
+  ngOnDestroy() {
+    this.destroyed=true;clearTimeout(this.startTimer);clearTimeout(this.refreshTimer);clearTimeout(this.hideTimer);clearInterval(this.syncTimer);
+    for(const s of this.subscriptions||[])try{s.unsubscribe();}catch{}
+    for(const s of this.splitFocusSubscriptions?.values()||[])try{s.unsubscribe();}catch{}
+    this.removeCredentialGuard?.();this.hostThemeSync?.destroy();this.closeContextMenu();
+    if(typeof document!=='undefined'){document.removeEventListener('mousemove',this.resizeMoveHandler);document.removeEventListener('mouseup',this.resizeEndHandler);this.getRoot()?.remove();document.getElementById(STYLE_ID)?.remove();document.body.classList.remove('tsm2-pinned','tsm2-resizing');document.body.style.removeProperty('--tsm2-width');}
+  }
+  trackSubscription(value) {if(value)(this.subscriptions||(this.subscriptions=[])).push(value);return value;}
+  log(message,error) {if(typeof console!=='undefined'&&error)console.warn('[Session Suite]',message,error);}
+  notify(message,kind='info') {this.statusMessage=String(message);this.statusKind=kind;const node=this.getRoot()?.querySelector('.tsm2-status');if(node){node.textContent=message;node.hidden=!message;node.dataset.kind=kind;}}
+  runInZone(action) {return this.zone&&this.zone.run?this.zone.run(action):action();}
+  getRoot() {return typeof document==='undefined'?null:document.getElementById(ROOT_ID);}
+  clampWidth(value) {return Math.max(220,Math.min(Number(value)||280,typeof window==='undefined'?640:Math.max(220,window.innerWidth-200)));}
+  getStateStore() {return this.config?.store?.sessionManager||null;}
+  loadUIState() {
+    const state=this.getStateStore()||{};this.sidebarWidth=this.clampWidth(state.sidebarWidth);this.isVisible=state.sidebarVisible!==false;this.dockMode=state.dockMode==='autohide'?'autohide':'pinned';
+    this.themePreset=Object.hasOwn(this.getThemePalettes(),state.themePreset)?state.themePreset:'nocturneGlass';this.collapsedFolders=new Set(state.collapsedList||[]);
+  }
+  async saveUIState() {
+    const target=this.getStateStore();if(!target)return;
+    Object.assign(target,{sidebarWidth:this.sidebarWidth,sidebarVisible:this.isVisible,dockMode:this.dockMode,themePreset:this.themePreset,collapsedList:[...this.collapsedFolders]});await this.saveFeatureState();
+  }
+  scheduleRefresh() {clearTimeout(this.refreshTimer);this.refreshTimer=setTimeout(()=>{void this.refreshAndRender().catch(e=>this.notify(e.message,'error'));},40);}
+  getConfigSignature() {
+    const select=p=>[p.id,p.name,p.group,p.type,p.color,p.description,...['host','target','port','user','username','device','auth'].map(k=>p.options?.[k])];
+    return JSON.stringify([(this.config?.store?.profiles||[]).map(select),this.config?.store?.groups||[],this.featureState().favoriteIds,this.featureState().recentConnections,this.featureState().confirmProfileIds]);
+  }
+  refreshIfConfigChanged() {const next=this.getConfigSignature();if(next!==this.configSignature){this.configSignature=next;this.scheduleRefresh();}}
+  async refreshAndRender() {if(this.destroyed)return;const ticket=(this.refreshGeneration||0)+1;this.refreshGeneration=ticket;const [profiles,groups]=await Promise.all([this.loadProfiles(),this.loadGroups()]);if(this.destroyed||this.refreshGeneration!==ticket)return;this.profiles=profiles;this.groups=groups;this.treeModel=null;this.refreshConnections(false);this.configSignature=this.getConfigSignature();this.runInZone(()=>this.render());}
+  async loadProfiles() {let list;try{list=await this.profilesService?.getProfiles?.({includeBuiltin:false});}catch{}const fallback=this.config?.store?.profiles||[];return (Array.isArray(list)&&list.length?list:fallback).filter(p=>p&&p.name&&!p.isTemplate);}
+  async loadGroups() {let list;try{list=await this.profilesService?.getProfileGroups?.({includeNonUserGroup:false,includeProfiles:false});}catch{}const fallback=this.config?.store?.groups||[];return (Array.isArray(list)&&list.length?list:fallback).filter(g=>g&&g.id&&g.name);}
+  makeId(prefix='session') {return prefix+':'+(typeof globalThis.crypto?.randomUUID==='function'?globalThis.crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));}
+  clone(value) {return value==null?{}:JSON.parse(JSON.stringify(value));}
+  validColor(value) {return /^#[0-9a-f]{6}$/i.test(String(value))?value:'#3b82f6';}
+  groupId(value) {return value==null?'':String(value);}
+  groupHasAncestor(id,wanted) {
+    const seen=new Set(),byId=new Map((this.groups||[]).map(g=>[String(g.id),g]));
+    for(let at=this.groupId(id);at&&!seen.has(at);){if(at===this.groupId(wanted))return true;seen.add(at);const g=byId.get(at);at=this.groupId(g?.parentGroupId||g?.parentId);}
+    return false;
+  }
+  displayGroup(id) {
+    const groups=this.groups||[],seen=new Set(),parts=[];let at=String(id||'');
+    while(at&&!seen.has(at)){seen.add(at);const g=groups.find(x=>String(x.id)===at);if(!g)return parts.length?parts.join(' / '):at.replace(/[\\/]+/g,' / ');parts.unshift(g.name);at=String(g.parentGroupId||g.parentId||'');}return parts.join(' / ');
+  }
+  profileGroupChoices() {const rows=(this.groups||[]).map(g=>({value:String(g.id),label:this.displayGroup(g.id)})),counts=new Map();rows.forEach(r=>counts.set(r.label,(counts.get(r.label)||0)+1));return [{value:'',label:this.t('根目录（无分组）')},...rows.map(r=>counts.get(r.label)>1?{...r,label:r.label+' · '+r.value.slice(-6)}:r)];}
+  moveDestinationOptions(exclude) {return this.profileGroupChoices().filter(g=>!exclude||!g.value||!this.groupHasAncestor(g.value,exclude));}
+  hasNativePasswordStorage() {return typeof this.passwordStorage?.savePassword==='function';}
+  async saveNativePassword(profile,password) {
+    if(!password)return {ok:true,skipped:true};if(!this.hasNativePasswordStorage())return {ok:false,code:'PASSWORD_STORAGE_UNAVAILABLE'};
+    if(!String(profile?.options?.user||'').trim())return {ok:false,code:'USERNAME_REQUIRED'};await this.passwordStorage.savePassword(profile,password);return {ok:true};
+  }
+  async writeProfile(profile,isNew=false) {
+    const svc=this.profilesService;const op=isNew?svc?.newProfile:svc?.writeProfile;
+    if(op)await op.call(svc,profile);else {const list=this.liveProfiles();const index=list.findIndex(p=>p.id===profile.id);if(index<0)list.push(profile);else list[index]=profile;this.config.store.profiles=list;}
+    await this.saveFeatureState();
+  }
+  async cloneProfile(profile) {
+    if(this.cloneInProgress)return;this.cloneInProgress=true;
+    try{const source=suiteI18n.copyBase(profile,this.config),base=source.baseName||profile.name||this.t('会话');let n=0;const names=new Set(this.liveProfiles().flatMap(p=>[p.name,this.profileName(p)]));
+      const suffix=(i,lang)=>suiteI18n.copySuffix(i,{store:{sessionManager:{language:lang}}});while(['zh-CN','en-US'].some(lang=>names.has(base+suffix(n,lang))))n++;
+      const next=this.clone(profile);next.id=this.makeId(profile.type||'ssh');next.name=base+suiteI18n.copySuffix(n,this.config);next.sessionManagerGeneratedName={kind:'copy',baseName:base,savedName:next.name,sourceId:String(source.sourceId||profile.id),copyIndex:n};
+      await this.writeProfile(next,true);await this.refreshAndRender();
+    }finally{this.cloneInProgress=false;}
+  }
+  async deleteProfile(profile) {return this.deleteWithUndo([String(profile.id)],[]);}
+  async deleteGroup(group) {return this.deleteWithUndo([],[String(group.id)]);}
+  async openProfile(profile,request) {
+    if(!profile)return null;this.pendingProfileOpens||=new Map();const key=String(profile.id);if(this.pendingProfileOpens.has(key))return null;
+    const marker={};this.pendingProfileOpens.set(key,marker);try{return await this.openSingleProfile(profile,request);}finally{if(this.pendingProfileOpens.get(key)===marker)this.pendingProfileOpens.delete(key);}
+  }
+  forwardingType(value) {const text=String(value||'').toLowerCase();return /dynamic|socks/.test(text)?'Dynamic':/remote/.test(text)?'Remote':'Local';}
+  normalizeForwardRule(raw) {const r=raw||{},type=this.forwardingType(r.type),host=String(r.host||r.listenAddress||r.sourceAddress||'127.0.0.1').trim(),port=Number(r.port??r.listenPort??r.sourcePort),targetAddress=String(r.targetAddress||r.targetHost||r.destinationAddress||r.destinationHost||'').trim(),targetPort=Number(r.targetPort??r.destinationPort??0);if(!Number.isInteger(port)||port<1||port>65535||!host||/[\x00-\x20]/.test(host)||type!=='Dynamic'&&(!targetAddress||!Number.isInteger(targetPort)||targetPort<1||targetPort>65535))return {error:this.t('端口配置无效。')};return {rule:{type,host,port,targetAddress:type==='Dynamic'?'':targetAddress,targetPort:type==='Dynamic'?0:targetPort,description:this.safeImportText(r.description||r.comment,512)}};}
+  getForwardingRules(profile) {const rules=this.effectiveConnectionOptions(profile).forwardedPorts;return (Array.isArray(rules)?rules:[]).map(r=>this.normalizeForwardRule(r)).filter(r=>r.rule).map(r=>r.rule);}
+  forwardingRuleKey(raw) {const r=this.normalizeForwardRule(raw).rule;if(!r)throw Error(this.t('端口配置无效。'));return JSON.stringify([r.type,r.host.toLowerCase(),r.port,r.targetAddress.toLowerCase(),r.targetPort]);}
+  forwardingListenerKey(raw) {const r=this.normalizeForwardRule(raw).rule;if(!r)throw Error(this.t('端口配置无效。'));return JSON.stringify([r.type==='Remote'?'remote':'local',r.host.toLowerCase(),r.port]);}
+  createPortConfigDocument(p) {return {format:'tabby-session-manager-port-forwarding',schemaVersion:1,exportedAt:new Date().toISOString(),source:{profileName:this.safeImportText(p.name,256),profileType:p.type||'ssh'},rules:this.getForwardingRules(p)};}
+  async applyPortConfig(profile,rules,mode='add',onConflict='skip') {
+    const live=this.profileById(profile.id);if(!live)throw Error(this.t('会话已被删除。'));
+    const incoming=rules.map(r=>{const n=this.normalizeForwardRule(r);if(n.error)throw Error(n.error);return n.rule;}),next=mode==='replace'?[]:this.getForwardingRules(live);
+    if(mode==='replace')for(let i=0;i<incoming.length;i++)if(incoming.slice(0,i).some(r=>this.forwardingListenersConflict(r,incoming[i])))throw Error(this.t('端口规则存在冲突。'));
+    for(const rule of incoming){const collisions=next.filter(r=>this.forwardingListenersConflict(r,rule));if(collisions.length&&onConflict!=='replace')continue;for(const r of collisions)next.splice(next.indexOf(r),1);next.push(rule);}
+    const copy=this.clone(live);copy.options={...copy.options,forwardedPorts:next};await this.writeProfile(copy);await this.refreshAndRender();return {count:next.length};
+  }
+  safeImportText(value,limit=4096) {return String(value??'').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,'').trim().slice(0,limit);}
+  protocolToTabby(value) {const key=String(value||'ssh').toLowerCase().replace(/[ _-]/g,'');return ({ssh:'ssh',ssh1:'ssh',ssh2:'ssh',sshv1:'ssh',sshv2:'ssh',secureshell:'ssh',telnet:'telnet',local:'local',serial:'serial',com:'serial'})[key]||null;}
+  safeProfileForBackup(profile) {return {sourceId:String(profile.id),name:this.safeImportText(profile.name,256),type:profile.type,color:this.validColor(profile.color),groupRef:String(profile.group||''),groupPath:this.displayGroup(profile.group),description:this.safeImportText(profile.description,2000),options:this.safeBackupOptions(profile.type,profile.options),favorite:this.isFavorite(profile.id),confirmBeforeConnect:this.productionRequired(profile)};}
+  createBackupDocument() {return {format:'tabby-session-manager-backup',schemaVersion:2,createdAt:new Date().toISOString(),groups:(this.groups||[]).map(g=>({sourceId:String(g.id),name:g.name,parentSourceId:String(g.parentGroupId||g.parentId||'')})),profiles:(this.profiles||[]).map(p=>this.safeProfileForBackup(p))};}
+  exportSafeBackup() {this.downloadTextFile('tabby-sessions.tsm-backup.json',JSON.stringify(this.createBackupDocument(),null,2));}
+  normalizeImportRecord(input) {
+    const r=input||{},o=r.options||{},type=this.protocolToTabby(r.type||r.protocol||'ssh'),name=this.safeImportText(r.name||r.sessionName||r.session_name||r.host||o.host,256),host=this.safeImportText(r.host||r.hostname||r.ip||r.address||o.host||o.target,512);
+    const raw=r.port??o.port,port=raw==null||raw===''?(type==='ssh'?22:undefined):Number(raw);if(!type||!name||(['ssh','telnet'].includes(type)&&!host&&!r.allowEmptyHost)||port!==undefined&&(!Number.isInteger(port)||port<1||port>65535))return {error:this.t('名称为空或协议不受支持。')};
+    return {profile:{name,type,host,port,username:this.safeImportText(r.username||r.user||o.user||o.username,256),groupPath:this.canonicalGroupPath(r.groupPath||r.folder||r.group||r.path),description:this.safeImportText(r.description||r.comment||r.remarks,2000),pendingHost:!host&&!!r.allowEmptyHost,color:this.validColor(r.color)}};
+  }
+  profileIdentityKey(p) {const o=p.options||{};return [p.type||'ssh',p.name,o.host||o.target||p.host,o.port??p.port,o.user||o.username||p.username].map(v=>String(v??'').trim().toLowerCase()).join('\u001f');}
+  buildImportPlan(records,sourceLabel,groupPaths=[]) {
+    const plan={sourceLabel,groupPaths:[...new Set(groupPaths)],entries:[],conflicts:[],invalid:[]},keys=new Set((this.profiles||[]).map(p=>this.profileIdentityKey(p)));
+    (records||[]).slice(0,5000).forEach((r,index)=>{const item=r?.parseError?{error:r.parseError}:this.normalizeImportRecord(r);if(item.error){plan.invalid.push({index:index+1,message:(r?.sourceFile?r.sourceFile+'：':'')+item.error});return;}const key=this.profileIdentityKey(item.profile),entry={index:index+1,profile:item.profile,conflict:keys.has(key),sourceFile:this.safeImportText(r.sourceFile,256)};keys.add(key);plan.entries.push(entry);if(entry.conflict)plan.conflicts.push(entry);});return plan;
+  }
+  async ensureImportGroups(paths,added) {
+    const resolved=new Map();for(const source of paths){const full=this.canonicalGroupPath(source);let parent='',at='';for(const name of full.split('/').filter(Boolean)){at=at?at+'/'+name:name;let group=this.liveGroups().find(g=>g.name===name&&String(g.parentGroupId||g.parentId||'')===parent);if(!group){group={id:this.makeId('group'),name,parentGroupId:parent||undefined};added.push(group.id);if(this.profilesService?.newProfileGroup)await this.profilesService.newProfileGroup(group,{genId:false});else this.config.store.groups=[...this.liveGroups(),group];}parent=String(group.id);resolved.set(at,parent);}}return {resolved};
+  }
+  async applyImportPlan(plan,mode='skip') {
+    if(this.importInProgress)throw Error(this.t('已有导入正在进行。'));this.importInProgress=true;const added=[],created=[],outcomes=[],state=this.featureState();const favoriteBefore=[...(state.favoriteIds||[])],confirmBefore=[...(state.confirmProfileIds||[])];
+    try {
+      const groupResult=plan.preparedGroups instanceof Map?{resolved:plan.preparedGroups}:plan.backupGroups?await this.ensureBackupGroups(plan.backupGroups,added):await this.ensureImportGroups((plan.groupPaths||[]).concat((plan.entries||[]).map(e=>e.profile.groupPath)),added);
+      const resolved=groupResult.resolved||new Map(),keys=new Set(this.liveProfiles().map(p=>this.profileIdentityKey(p)));
+      for(const entry of plan.entries||[]){const p=entry.profile,key=this.profileIdentityKey(p);if(mode==='skip'&&keys.has(key)){outcomes.push({index:entry.index,status:'skipped'});continue;}const profile={id:this.makeId(p.type+':import'),type:p.type,name:p.name,color:p.color,description:p.description,group:resolved.get(p.groupRef)||resolved.get(p.groupPath)||undefined,options:p.backupOptions?this.clone(p.backupOptions):{host:p.host,port:p.port,user:p.username}};
+        if(p.pendingHost)profile.description='【待补充主机】'+(profile.description||'');
+        if(keys.has(key)){profile.name+='（导入副本）';profile.sessionManagerGeneratedName={kind:'import',baseName:p.name,savedName:profile.name};}
+        created.push(profile.id);if(this.profilesService?.newProfile)await this.profilesService.newProfile(profile);else this.config.store.profiles=[...this.liveProfiles(),profile];
+        if(p.favorite)state.favoriteIds=[...(state.favoriteIds||[]),profile.id];if(p.confirmBeforeConnect)state.confirmProfileIds=[...(state.confirmProfileIds||[]),profile.id];keys.add(key);outcomes.push({index:entry.index,status:'success'});
+      }
+      try{await this.saveFeatureState();}catch(e){e.tsmPersistenceFailure=true;throw e;}
+      await this.refreshAndRender();return {imported:created.length,outcomes,resolved};
+    }catch(e){this.config.store.profiles=this.liveProfiles().filter(p=>!created.includes(p.id));const used=new Set(this.liveProfiles().map(p=>String(p.group||'')));this.config.store.groups=this.liveGroups().filter(g=>!added.includes(g.id)||used.has(String(g.id)));state.favoriteIds=(state.favoriteIds||[]).filter(id=>!created.includes(id));state.confirmProfileIds=(state.confirmProfileIds||[]).filter(id=>!created.includes(id));try{await this.saveFeatureState();}catch{}throw e;}finally{this.importInProgress=false;}
+  }
+  async restoreBackupFromFile() {const files=await this.chooseLocalFiles({accept:'.json'});if(files.length)this.showImportPreview(this.buildBackupImportPlan(JSON.parse(await this.readLocalText(files[0]))));}
+  detectCsvDelimiter(text) {const counts=new Map([[',',0],[';',0],['\t',0]]);let quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"')i++;else quoted=!quoted;}else if(!quoted){if(c==='\r'||c==='\n')break;if(counts.has(c))counts.set(c,counts.get(c)+1);}}return [...counts].sort((a,b)=>b[1]-a[1])[0][0];}
+  parseDelimitedText(text,separator) {
+    const rows=[],line=[];let cell='',quoted=false;const commit=()=>{line.push(cell);cell='';};
+    for(let i=0;i<String(text).length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){cell+='"';i++;}else quoted=!quoted;}else if(!quoted&&c===separator)commit();else if(!quoted&&(c==='\n'||c==='\r')){if(c==='\r'&&text[i+1]==='\n')i++;commit();if(line.some(Boolean))rows.push(line.splice(0));else line.length=0;}else cell+=c;}
+    if(quoted)throw Error(this.t('CSV 引号未闭合。'));commit();if(line.some(Boolean))rows.push(line);return rows;
+  }
+  csvHeaderKey(value) {const key=String(value).replace(/^\uFEFF/,'').trim().toLowerCase().replace(/[ _-]/g,'');return ({sessionname:'name',会话名称:'name',名称:'name',hostname:'host',主机:'host',地址:'host',ip:'host',username:'user',用户名:'user',端口:'port',protocol:'type',协议:'type',分组:'folder',目录:'folder',备注:'description'})[key]||key;}
+  parseCsvRecords(text) {const rows=this.parseDelimitedText(text,this.detectCsvDelimiter(text)),headers=(rows.shift()||[]).map(k=>this.csvHeaderKey(k));return rows.map(row=>Object.fromEntries(headers.map((k,i)=>[k,row[i]||''])));}
+  async importCsvFromFile() {const files=await this.chooseLocalFiles({accept:'.csv,.txt'});if(files.length)this.showImportPreview(this.buildImportPlan(this.parseCsvRecords(await this.readLocalText(files[0])),files[0].name));}
+  decodeSecureCRTString(value) {return String(value??'').replace(/\\([0-7]{3})/g,(_,n)=>String.fromCharCode(parseInt(n,8))).replace(/\\"/g,'"').replace(/\\\\/g,'\\');}
+  parseSecureCRTIni(text,fileName,relativePath) {
+    const data=Object.create(null);for(const line of text.split(/\r?\n/)){const match=line.match(/^([SD]):"([^"]+)"=(.*)$/);if(match)data[match[2]]={type:match[1],value:match[3]};}
+    const get=k=>this.decodeSecureCRTString(data[k]?.value||''),numeric=k=>parseInt(data[k]?.value||'0',16);return {name:String(fileName).replace(/\.ini$/i,''),host:get('Hostname'),port:numeric('[SSH2] Port')||numeric('Port')||numeric('[Telnet] Port')||22,user:get('Username'),protocol:get('Protocol Name')||'ssh',folder:String(relativePath||'').split(/[\\/]/).slice(0,-1).join('/')};
+  }
+  async importSecureCrtIniDirectory() {
+    const files=await this.chooseLocalFiles({directory:true});const records=[];for(const file of files.filter(f=>/\.ini$/i.test(f.name)&&!/^__FolderData__\.ini$/i.test(f.name))){try{records.push({...this.parseSecureCRTIni(await this.readLocalText(file),file.name,file.webkitRelativePath),sourceFile:file.webkitRelativePath||file.name});}catch(e){records.push({parseError:e.message,sourceFile:file.name});}}this.showImportPreview(this.buildImportPlan(records,'SecureCRT'));
+  }
+  parseXshellXsh(text,fileName,relativePath) {
+    const values=Object.create(null);for(const line of text.split(/\r?\n/)){const m=line.match(/^([^;#=\[]+)=(.*)$/);if(m)values[m[1].trim().toLowerCase()]=m[2].trim();}
+    let host=values.host||'';const parts=host.match(/^\[([^\]]+)\]:(\d+)$/)||host.match(/^([^:]+):(\d+)$/);if(parts)host=parts[1];return {name:String(fileName).replace(/\.xsh$/i,''),host,port:Number(values.port)||(parts?Number(parts[2]):22),user:values.username||'',protocol:values.protocol||'ssh',allowEmptyHost:true,folder:String(relativePath||'').split(/[\\/]/).slice(0,-1).join('/')};
+  }
+  async importXshellXshFiles(files,label) {const records=[];for(const f of files.filter(f=>/\.xsh$/i.test(f.name))){try{records.push({...this.parseXshellXsh(await this.readLocalText(f),f.name,f.webkitRelativePath),sourceFile:f.webkitRelativePath||f.name});}catch(e){records.push({parseError:e.message,sourceFile:f.name});}}this.showImportPreview(this.buildImportPlan(records,label||'Xshell'));}
+  async importXshellXshFilePicker() {return this.importXshellXshFiles(await this.chooseLocalFiles({multiple:true,accept:'.xsh'}));}
+  async importXshellXshDirectory() {return this.importXshellXshFiles(await this.chooseLocalFiles({directory:true}));}

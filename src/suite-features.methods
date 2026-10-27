@@ -1,0 +1,813 @@
+  t(text) {return typeof suiteI18n!=='undefined'?suiteI18n.t(text,this.config):text;}
+
+  async setLanguage(language) {
+    if(!['auto','zh-CN','en-US'].includes(language))throw Error('Unsupported language');
+    const state=this.getStateStore();if(!state)throw Error(this.t('Tabby 配置尚未就绪，请稍后重试。'));
+    const previous=state.language;state.language=language;
+    try{await this.config.save();}catch(error){state.language=previous;throw error;}
+    this.runInZone(()=>{this.closeContextMenu();document.querySelectorAll('.tsm2-overlay').forEach(overlay=>overlay.remove());this.render();if(typeof window!=='undefined')window.dispatchEvent(new Event('tabby-session-suite-language-changed'));});
+  }
+
+  getThemePalettes() { return {"graphiteGlass":{"label":"石墨月光","note":"原炭灰玻璃底 · 加强文字对比","a":"#17191e","b":"#252930","glow":"166,177,194","accent":"#dbe9f9","fg":"#f3f4f6","muted":"#dce1e8"},"obsidianChampagne":{"label":"曜石香槟","note":"近黑中性底 · 柔和香槟金","a":"#151619","b":"#151619","accent":"#d9bd89","fg":"#f4f3ef","muted":"#c8c5bd","edge":"#38393f","fill":"#ffffff09"},"warmFrost":{"label":"暖霜石墨","note":"微黄奶霜底 · 深黑字","a":"#f1eddf","b":"#f1eddf","accent":"#59492d","fg":"#171714","muted":"#414037","edge":"#d0c8b4","fill":"#fffdf344","light":true},"nocturneGlass":{"label":"夜航玻璃","note":"深墨大底 · 局部玻璃受光","a":"#0b1322","b":"#0b1322","accent":"#e4b863","fg":"#f0f2f6","muted":"#a6afbf","edge":"#ffffff26","fill":"#ffffff0b","scene":"radial-gradient(ellipse at 100% 22%,rgba(124,156,196,.075),transparent 35%),radial-gradient(ellipse at 0% 85%,rgba(228,184,99,.025),transparent 30%),#0b1322"},"ghibliSky":{"label":"吉卜力晴空","note":"天空蓝 · 奶油与薄荷","a":"#8bcfe4","b":"#9ad7e6","accent":"#1d493c","fg":"#142c29","muted":"#29413e","edge":"#73b5b6","fill":"#f9f4df75","input":"#f8f5e8d9","light":true,"scene":"radial-gradient(ellipse at 0% 0%,#d3f1f5 0,transparent 35%),linear-gradient(170deg,#8bcfe4,#9ad7e6)"},"playfulNeo":{"label":"俏皮野兽派","note":"青绿 · 亮黄 · 珊瑚红与硬阴影","a":"#4ecdc4","b":"#4ecdc4","accent":"#111111","fg":"#111111","muted":"#24312f","edge":"#111111","fill":"#ffffff","input":"#ffffff","light":true},"liquidGlass":{"label":"流动玻璃","note":"通透叠层 · 青紫折射与柔亮边缘","a":"#252b3b","b":"#24343d","fg":"#f4f2ff","muted":"#e3dfef","accent":"#a3eeea","edge":"#d5e9ff75","fill":"#ffffff0d","input":"linear-gradient(120deg,#ffffff22,#c3bfff0d,#aeffff16)","selected":"linear-gradient(130deg,#ffffff1c,#b8beff0e 45%,#a9ffeb18)","scene":"radial-gradient(ellipse at -25% 15%,#a879e95c,transparent 58%),radial-gradient(ellipse at 140% 75%,#5ae2da52,transparent 60%),linear-gradient(145deg,#36374b,#242d3b)"},"modernGradient":{"label":"现代渐变","note":"赛博朋克 · 电紫、霓虹青与玫红","a":"#100c20","b":"#1d0f29","fg":"#f4f2ff","muted":"#ccc5df","accent":"#5df6ff","edge":"#c153ff50","fill":"#ffffff08","input":"#140f27","selected":"linear-gradient(100deg,#a626f860,#e91ba538,#00edff20)","scene":"radial-gradient(ellipse at 0% 5%,#7922c94a,transparent 65%),radial-gradient(ellipse at 100% 100%,#ff1fa92b,transparent 55%),linear-gradient(155deg,#1a102c,#0b0c20)"}}; }
+
+  applyThemeToSurface(surface) {
+    const p = this.getThemePalettes()[this.themePreset] || this.getThemePalettes().nocturneGlass;
+    surface.dataset.tsmTheme = this.themePreset;
+    surface.dataset.modernTheme = String(this.themePreset !== 'graphiteGlass');
+    for (const [key,value] of Object.entries({'--sk-ink':p.a,'--sk-accent-rgb':p.accent.match(/[a-f0-9]{2}/gi).map(x=>parseInt(x,16)).join(','),'--sk-gold':p.accent,'--sk-scene':'radial-gradient(ellipse at 90% 0%,rgba('+p.glow+',.25),transparent 58%),linear-gradient(155deg,'+p.a+','+p.b+')','--theme-bg-1':p.a,'--tsm2-accent':p.accent,'--tsm2-fg':'#e8edf5','--tsm2-muted':'#aab8ca'})) surface.style.setProperty(key,value);
+    const customKeys=['--sk-light','--sk-muted','--sk-edge','--sk-depth','--ui-scheme','--ui-fill','--ui-input','--ui-selected','--ui-highlight','--ui-danger','--ui-success'];
+    customKeys.forEach(key=>surface.style.removeProperty(key));
+    if(this.themePreset === 'graphiteGlass') { for(const [key,value] of Object.entries({'--sk-light':p.fg,'--sk-muted':p.muted,'--tsm2-fg':p.fg,'--tsm2-muted':p.muted})) surface.style.setProperty(key,value); return; }
+    const values={'--sk-scene':p.scene||p.a,'--sk-light':p.fg,'--sk-muted':p.muted,'--sk-edge':p.edge,'--tsm2-fg':p.fg,'--tsm2-muted':p.muted,'--sk-depth':p.light?'0 12px 32px #00000018':'0 18px 48px #03071255,inset 0 1px 0 #ffffff26','--ui-scheme':p.light?'light':'dark','--ui-fill':p.fill,'--ui-input':p.input||p.fill,'--ui-selected':p.selected||(p.light?'#ffffffb0':'#ffffff14'),'--ui-highlight':p.light?'#ffffff99':'#ffffff20','--ui-danger':p.light?'#9b2535':'#ffc5c9','--ui-success':p.light?'#19442d':'#b2ceb8'};
+    Object.entries(values).forEach(([key,value])=>surface.style.setProperty(key,value));
+  }
+
+  showForwardCheckDialog() { return forwardCheckUI.show(this); }
+
+  async openSingleProfile(profile, request) {
+    if (!profile) return null;
+    const live = this.profileById(profile.id);
+    if (!live) throw new Error(this.t('此会话已被删除，请刷新列表。'));
+    profile = this.clone(live);
+    const expected = this.fingerprint(profile) + this.connectionTargetKey(profile);
+    const options = profile.options || {};
+    if (!(options.host || options.target || options.device) && /待补充主机/.test(String(profile.description || ''))) {
+      const error = new Error(this.t('此会话尚未填写主机/IP，请先编辑会话。')); if (request && request.throwOnFailure) throw error; this.notify(error.message, 'info'); return null;
+    }
+    if (!(request && request.confirmed) && this.productionRequired(profile) && !await this.confirm(this.t('生产会话连接确认'), this.connectionSummary(profile) + this.t('\n请确认目标环境及登录用户。'), this.t('确认连接'))) return null;
+    if (this.fingerprint(this.profileById(profile.id)) + this.connectionTargetKey(this.profileById(profile.id)) !== expected) throw new Error(this.t('确认期间会话发生变化，请重新连接。'));
+    this.activeProfileId = String(profile.id); this.render();
+    try {
+      const opened = await this.runInZone(async () => {
+        if (this.profilesService && typeof this.profilesService.openNewTabForProfile === 'function') {
+          const tab = await this.profilesService.openNewTabForProfile(profile);
+          if (!tab) throw new Error(this.t('宿主未能打开此协议的终端窗口。'));
+          return tab;
+        }
+        if (this.profilesService && typeof this.profilesService.launchProfile === 'function') { await this.profilesService.launchProfile(profile); return null; }
+        throw new Error(this.t('当前 Tabby 版本未提供打开 Profile 的公开服务。'));
+      });
+      await this.rememberOpened(profile); this.refreshConnections(false);
+      if (this.dockMode === 'autohide') this.closeDrawer();
+      return opened;
+    } catch (error) { this.log(this.t('打开会话失败'), error); if (request && request.throwOnFailure) throw error; this.notify(this.t('无法打开此会话，请检查 Profile 配置或 Tabby 插件兼容性。'), 'error'); return null; }
+  }
+
+  deferMenuAction(action, delay) {
+    const context = this.currentMenu; if (!context) return;
+    if (!context.timers) context.timers = new Set();
+    const timer = setTimeout(() => { context.timers.delete(timer); if (this.currentMenu === context) action(); }, delay);
+    context.timers.add(timer);
+  }
+
+  closeSubmenusFrom(level) {
+    if (!this.currentMenu) return;
+    this.currentMenu.elements = this.currentMenu.elements.filter(menu => {
+      if (Number(menu.dataset.menuLevel || 0) < level) return true;
+      if (menu._anchor) { menu._anchor._submenuWanted = false; menu._anchor.setAttribute('aria-expanded', 'false'); }
+      if (menu._hoverAnchor) menu._hoverAnchor._submenuWanted = false;
+      menu.remove(); return false;
+    });
+  }
+
+  queueSubmenuClose(anchor) {
+    this.deferMenuAction(() => {
+      if (!anchor._submenuWanted || anchor._pointerInside) return;
+      const level = Number(anchor.closest('.tsm2-menu')?.dataset.menuLevel || 0) + 1;
+      const children = this.currentMenu.elements.filter(menu => Number(menu.dataset.menuLevel || 0) >= level);
+      if (children.some(menu => menu._pointerInside)) return;
+      anchor._submenuWanted = false; this.closeSubmenusFrom(level);
+    }, 180);
+  }
+
+  forwardingListenersConflict(a, b) {
+    if ((a.type === 'Remote') !== (b.type === 'Remote') || a.port !== b.port) return false;
+    const host = value => String(value || '127.0.0.1').toLowerCase().replace(/^\[|\]$/g, '');
+    const left = host(a.host), right = host(b.host);
+    return left === right || ['*', '0.0.0.0', '::'].includes(left) || ['*', '0.0.0.0', '::'].includes(right);
+  }
+
+  profileName(profile) { return typeof suiteI18n !== 'undefined' && suiteI18n.profileName ? suiteI18n.profileName(profile, this.config) : String(profile && profile.name || ''); }
+
+  safeBackupOptions(type, options) {
+    const result = {};
+    const keys = type === 'serial'
+      ? ['port', 'baudrate', 'databits', 'stopbits', 'parity', 'rtscts', 'xon', 'xoff', 'xany', 'slowSend']
+      : type === 'local' ? ['cwd', 'shellType', 'pauseAfterExit']
+      : ['host', 'target', 'port', 'user', 'username', 'auth'];
+    keys.forEach(key => { const value = (options || {})[key]; if (['string', 'number', 'boolean'].includes(typeof value) && (typeof value !== 'number' || Number.isFinite(value))) result[key] = typeof value === 'string' ? value.slice(0, 4096) : value; });
+    return result;
+  }
+
+  canonicalGroupPath(value) {
+    return this.safeImportText(value, 4096).split(/[\\/]/).map(part => this.safeImportText(part, 256)).filter(Boolean).join('/');
+  }
+
+  async ensureBackupGroups(groups, addedGroups) {
+    const resolved = new Map();
+    const pending = groups.slice();
+    while (pending.length) {
+      let progressed = false;
+      for (let index = 0; index < pending.length;) {
+        const source = pending[index];
+        if (source.parentSourceId && !resolved.has(source.parentSourceId)) { index++; continue; }
+        const parent = resolved.get(source.parentSourceId) || '';
+        let group = (this.config.store.groups || []).find(item => item.name === source.name && String(item.parentGroupId || item.parentId || '') === parent && !Array.from(resolved.values()).includes(item.id));
+        if (!group) {
+          group = { id: this.makeId('group:import'), name: source.name, parentGroupId: parent || undefined };
+          addedGroups.push(group.id);
+          if (this.profilesService && typeof this.profilesService.newProfileGroup === 'function') await this.profilesService.newProfileGroup(group, { genId: false });
+          else { if (!Array.isArray(this.config.store.groups)) this.config.store.groups = []; this.config.store.groups.push(group); }
+        }
+        resolved.set(source.sourceId, group.id); pending.splice(index, 1); progressed = true;
+      }
+      if (!progressed) throw new Error(this.t('备份目录存在循环或缺失父目录，未完成恢复。'));
+    }
+    return { resolved };
+  }
+
+  buildBackupImportPlan(data) {
+    if (!data || ![1, 2].includes(data.schemaVersion) || data.format !== 'tabby-session-manager-backup' || !Array.isArray(data.profiles) || !Array.isArray(data.groups)) throw new Error(this.t('不支持的备份格式。'));
+    if (data.profiles.length > 5000 || data.groups.length > 5000) throw new Error(this.t('单次最多恢复 5000 个会话及 5000 个目录。'));
+    const groups = data.groups.map(group => {
+      if (!group || !group.sourceId || !group.name) throw new Error(this.t('备份目录信息不完整。'));
+      return { sourceId: String(group.sourceId), name: this.safeImportText(group.name, 256), parentSourceId: String(group.parentSourceId || '') };
+    });
+    const byId = new Map(groups.map(group => [group.sourceId, group]));
+    if (byId.size !== groups.length) throw new Error(this.t('备份目录 ID 重复。'));
+    const visited = new Set();
+    for (const group of groups) {
+      let current = group; const chain = new Set();
+      while (current && !visited.has(current.sourceId)) {
+        if (chain.has(current.sourceId)) throw new Error(this.t('备份目录存在循环。'));
+        chain.add(current.sourceId);
+        if (current.parentSourceId && !byId.has(current.parentSourceId)) throw new Error(this.t('备份目录缺失父目录。'));
+        current = byId.get(current.parentSourceId);
+      }
+      chain.forEach(id => visited.add(id));
+    }
+    const plan = { sourceLabel: this.t('会话管理器安全备份'), entries: [], conflicts: [], invalid: [], groupPaths: groups.map(group => group.name), backupGroups: groups };
+    const keys = new Set(this.profiles.map(profile => this.profileIdentityKey(profile)));
+    data.profiles.forEach((raw, index) => {
+      if (!raw || !raw.name || !['ssh', 'telnet', 'local', 'serial'].includes(raw.type)) { plan.invalid.push({ index: index + 1, message: this.t('名称为空或协议不受支持。') }); return; }
+      const options = this.safeBackupOptions(raw.type, raw.options);
+      const profile = { name: this.safeImportText(raw.name, 256), type: raw.type, color: this.validColor(raw.color), description: this.safeImportText(raw.description, 2000), host: options.host || options.target || '', port: options.port, username: options.user || options.username || '', groupRef: String(raw.groupRef || ''), groupPath: byId.has(String(raw.groupRef || '')) ? '' : this.canonicalGroupPath(raw.groupPath), backupOptions: options, favorite: raw.favorite === true, confirmBeforeConnect: raw.confirmBeforeConnect === true };
+      if (['ssh', 'telnet'].includes(raw.type) && !profile.host) profile.pendingHost = true;
+      const key = this.profileIdentityKey(profile), conflict = keys.has(key); keys.add(key);
+      const entry = { index: index + 1, profile, conflict }; plan.entries.push(entry); if (conflict) plan.conflicts.push(entry);
+    });
+    return plan;
+  }
+
+  featureState() {
+    return this.getStateStore() || {};
+  }
+
+  liveProfiles() { return this.config && this.config.store && Array.isArray(this.config.store.profiles) ? this.config.store.profiles : this.profiles || []; }
+
+  liveGroups() { return this.config && this.config.store && Array.isArray(this.config.store.groups) ? this.config.store.groups : this.groups || []; }
+
+  profileById(id) { return this.liveProfiles().find(profile => String(profile.id) === String(id)); }
+
+  isFavorite(id) { return (this.featureState().favoriteIds || []).includes(String(id)); }
+
+  async saveFeatureState() {
+    if (this.config && typeof this.config.save === 'function') await this.config.save();
+  }
+
+  async toggleFavorite(profile) {
+    const state = this.featureState();
+    const ids = new Set((state.favoriteIds || []).map(String));
+    if (ids.has(String(profile.id))) ids.delete(String(profile.id)); else ids.add(String(profile.id));
+    state.favoriteIds = Array.from(ids);
+    await this.saveFeatureState(); this.treeModel = null; this.render();
+  }
+
+  async updateRecentConnections(transform) {
+    // History actions must never call profile deletion or credential cleanup.
+    if (this.recentCleanupInProgress) return false;
+    this.recentCleanupInProgress = true;
+    const state = this.featureState(), previous = state.recentConnections || [];
+    const next = transform(previous);
+    state.recentConnections = next;
+    try { await this.saveFeatureState(); }
+    catch (error) {
+      // Preserve connections recorded while persistence was pending.
+      const current = state.recentConnections;
+      if (current === next) state.recentConnections = previous;
+      else {
+        const ids = new Set((current || []).map(item => String(item.id)));
+        state.recentConnections = (current || []).concat(previous.filter(item => !ids.has(String(item.id)))).slice(0, 30);
+      }
+      throw error;
+    } finally { this.recentCleanupInProgress = false; }
+    this.treeModel = null; this.render(); return true;
+  }
+
+  async removeRecentConnection(profileId) {
+    return this.updateRecentConnections(items => items.filter(item => item && String(item.id) !== String(profileId)));
+  }
+
+  async clearRecentConnections() {
+    if (!(this.featureState().recentConnections || []).length) return false;
+    if (!await this.confirm(this.t('清空最近连接'), this.t('仅清空最近连接记录，保留全部会话、设置和已打开窗口。'), this.t('清空'))) return false;
+    return this.updateRecentConnections(() => []);
+  }
+
+  async rememberOpened(profile) {
+    if (!profile || !profile.id) return;
+    const state = this.featureState();
+    state.recentConnections = [{ id: String(profile.id), at: new Date().toISOString() }].concat((state.recentConnections || []).filter(item => item && item.id !== String(profile.id))).slice(0, 30);
+    try { await this.saveFeatureState(); } catch (error) { this.log(this.t('保存最近打开记录失败'), error); }
+  }
+
+  renderFeatureBar(panel) {
+    const bar = document.createElement('div'); bar.className = 'tsm2-feature-bar';
+    [
+      ['all', this.t('全部'), ['M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z']],
+      ['favorites', this.t('收藏'), ['m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z']],
+      ['recent', this.t('最近'), ['M3 11a9 9 0 1 1 2.6 7.4 M3 4v7h7 M12 7v5l3 2']],
+      ['opened', this.t('已开窗口'), ['M8 7V3h13v13h-4 M3 8h13v13H3z']]
+    ].forEach(([value, label, paths]) => {
+      const button = this.createSvgButton(paths, label, () => { this.viewMode = value; const recentActions = this.getRoot().querySelector('.tsm2-recent-actions'); if (recentActions) recentActions.hidden = value !== 'recent'; this.refreshSearchTree(); this.getRoot().querySelectorAll('.tsm2-feature-bar button').forEach(item => { const selected = item.dataset.view === value; item.classList.toggle('selected', selected); item.setAttribute('aria-pressed', String(selected)); }); });
+      button.className = 'tsm2-view-button' + ((this.viewMode || 'all') === value ? ' selected' : '');
+      button.setAttribute('aria-pressed', String((this.viewMode || 'all') === value));
+      button.firstElementChild.setAttribute('aria-hidden', 'true');
+      button.firstElementChild.setAttribute('focusable', 'false');
+      button.dataset.view = value; bar.appendChild(button);
+    });
+    panel.appendChild(bar);
+    const recentActions = document.createElement('div'); recentActions.className = 'tsm2-undo-bar tsm2-recent-actions';
+    recentActions.hidden = this.viewMode !== 'recent';
+    const clearRecent = this.createButton(this.t('清空最近连接'), this.t('仅清空记录，保留全部会话'), () => this.clearRecentConnections(), 'tsm2-secondary');
+    clearRecent.disabled = !(this.featureState().recentConnections || []).length;
+    recentActions.appendChild(clearRecent); panel.appendChild(recentActions);
+    this.pruneUndo();
+    if (this.undoStack && this.undoStack.length) {
+      const undo = document.createElement('div'); undo.className = 'tsm2-undo-bar';
+      undo.appendChild(this.createButton(this.t('撤销最近删除'), this.t('十分钟内可撤销；退出 Tabby 后失效'), () => this.undoLastDeletion(), 'tsm2-secondary'));
+      panel.appendChild(undo);
+    }
+  }
+
+  filteredFeatureProfiles() {
+    let profiles = (this.profiles || []).slice();
+    const state = this.featureState(), view = this.viewMode || 'all';
+    if (view === 'favorites') profiles = profiles.filter(profile => this.isFavorite(profile.id));
+    if (view === 'opened') profiles = profiles.filter(profile => (this.connectionMap && this.connectionMap.get(String(profile.id)) || []).length);
+    if (view === 'recent') {
+      const ids = (state.recentConnections || []).map(item => item.id);
+      profiles = profiles.filter(profile => ids.includes(String(profile.id))).sort((a, b) => ids.indexOf(String(a.id)) - ids.indexOf(String(b.id)));
+    }
+    return profiles.filter(profile => !this.searchQuery.trim() || this.profileMatches(profile));
+  }
+
+  getOpenTabs() {
+    if (!this.appService || !Array.isArray(this.appService.tabs)) return [];
+    const result = [], seen = new Set();
+    for (const top of this.appService.tabs) {
+      const tabs = typeof top.getAllTabs === 'function' ? top.getAllTabs() : [top];
+      for (const tab of tabs) if (tab && !seen.has(tab)) { seen.add(tab); result.push({ tab, top }); }
+    }
+    return result;
+  }
+
+  refreshConnections(recordNew) {
+    this.syncSplitFocusSubscriptions();
+    this.syncWindowNumbers();
+    const map = new Map();
+    if (!this.seenTabs) this.seenTabs = new WeakSet();
+    for (const item of this.getOpenTabs()) {
+      const profile = item.tab.profile;
+      if (!profile || !profile.id) continue;
+      const id = String(profile.id);
+      if (!map.has(id)) map.set(id, []);
+      map.get(id).push(item);
+      if (!this.seenTabs.has(item.tab)) {
+        this.seenTabs.add(item.tab);
+        if (recordNew && this.profileById(id)) void this.rememberOpened(profile);
+      }
+    }
+    const signature = JSON.stringify(Array.from(map, ([id, items]) => [id, items.map(item => item.tab.session && item.tab.session.open === true)]));
+    const changed = signature !== this.connectionSignature;
+    this.connectionMap = map; this.connectionSignature = signature;
+    this.updateUnifiedLogUI(false);
+    if (changed && this.getRoot() && !this.destroyed) this.refreshSearchTree();
+  }
+
+  connectionLabel(profile) {
+    if (!this.appService) return '';
+    const windows = this.connectionMap && this.connectionMap.get(String(profile.id)) || [];
+    if (!windows.length) return '';
+    const connected = windows.filter(item => item.tab.session && item.tab.session.open === true).length;
+    return connected ? '● ' + connected + '/' + windows.length : this.t('已开 ') + windows.length;
+  }
+
+  async showOpenWindows(profile) {
+    this.refreshConnections(false);
+    const windows = this.connectionMap && this.connectionMap.get(String(profile.id)) || [];
+    if (!windows.length) { this.notify(this.t('当前 Tabby 窗口内没有此会话的终端。'), 'info'); return; }
+    const ref = this.createOverlay(this.t('切换到已打开窗口'));
+    const body = document.createElement('div'); body.className = 'tsm2-dialog-body';
+    windows.forEach((item, index) => body.appendChild(this.createButton(this.t('窗口 ') + (index + 1) + ' · ' + (item.tab.displayTitle || item.tab.title || profile.name) + (item.tab.session && item.tab.session.open ? this.t('（已连接）') : this.t('（连接状态待确认）')), this.t('切换终端窗口'), () => {
+      if (!this.getOpenTabs().some(current => current.tab === item.tab)) throw new Error(this.t('窗口已关闭，请刷新后重试。'));
+      this.runInZone(() => { this.appService.selectTab(item.top); if (item.top !== item.tab && typeof item.top.focus === 'function') item.top.focus(item.tab); });
+      ref.overlay.remove();
+    }, 'tsm2-secondary')));
+    ref.dialog.appendChild(body);
+  }
+
+  productionRequired(profile) {
+    return (this.featureState().confirmProfileIds || []).includes(String(profile.id));
+  }
+
+  async toggleProduction(profile) {
+    const state = this.featureState(), ids = new Set((state.confirmProfileIds || []).map(String));
+    if (ids.has(String(profile.id))) ids.delete(String(profile.id)); else ids.add(String(profile.id));
+    state.confirmProfileIds = Array.from(ids); await this.saveFeatureState(); this.render();
+  }
+
+  connectionSummary(profile) {
+    const options = this.effectiveConnectionOptions(profile);
+    return this.profileName(profile) + ' · ' + (options.user ? options.user + '@' : '') + (options.host || options.target || options.port || this.t('本地终端')) + (profile.type === 'ssh' || profile.type === 'telnet' ? ':' + (options.port || (profile.type === 'ssh' ? 22 : 23)) : '') + ' · ' + String(profile.type || '').toUpperCase();
+  }
+
+  effectiveConnectionOptions(profile) {
+    if (this.profilesService && typeof this.profilesService.getConfigProxyForProfile === 'function') {
+      try { return this.profilesService.getConfigProxyForProfile(profile).options || {}; }
+      catch (error) { this.log(this.t('读取继承连接参数失败'), error); }
+    }
+    return profile.options || {};
+  }
+
+  connectionTargetKey(profile) {
+    if (!profile) return '';
+    const options = this.effectiveConnectionOptions(profile);
+    return JSON.stringify([profile.type, ...['host', 'target', 'port', 'user', 'username', 'device', 'command', 'cwd'].map(key => options[key])]);
+  }
+
+  showEditDraftRecovery(draft, original, error) {
+    const ref = this.createOverlay(this.t('编辑尚未保存')); const body = document.createElement('div'); body.className = 'tsm2-dialog-body';
+    const message = document.createElement('div'); message.className = 'tsm2-help'; message.textContent = String(error && this.t(error.message) || this.t('保存失败。')) + this.t(' 本次草稿保留在此窗口，关闭后失效。'); body.appendChild(message);
+    body.append(this.createButton(this.t('重试保存草稿'), this.t('重新检查冲突后保存'), async () => { try { await this.guardedWriteProfile(draft, original); ref.overlay.remove(); await this.refreshAndRender(); this.notify(this.t('编辑草稿已保存。'), 'info'); } catch (failure) { this.inlineDialogError(body, String(failure.message || failure)); } }, 'tsm2-primary'), this.createButton(this.t('继续编辑草稿'), this.t('保留本次修改继续编辑'), () => { ref.overlay.remove(); return this.editProfile(original, draft); }, 'tsm2-secondary'));
+    ref.dialog.appendChild(body);
+  }
+
+  fingerprint(value) {
+    const stable = item => {
+      if (!item || typeof item !== 'object') return item;
+      if (Array.isArray(item)) return item.map(stable);
+      const result = {};
+      Object.keys(item).sort().forEach(key => { if (!key.startsWith('__')) result[key] = stable(item[key]); });
+      return result;
+    };
+    return JSON.stringify(stable(value));
+  }
+
+  async checkEditConflict(profile, original) {
+    let live = this.profileById(profile.id);
+    if (!live) throw new Error(this.t('此会话已被删除，不能保存旧窗口中的编辑。'));
+    if (this.fingerprint(live) !== this.fingerprint(original)) {
+      const expected = this.fingerprint(live);
+      if (!await this.confirm(this.t('会话已在其他位置修改'), '“' + this.profileName(profile) + this.t('”在此编辑窗口打开后发生了变化。继续会用本窗口内容覆盖当前设置；取消后可重新打开编辑。'), this.t('仍然覆盖'))) throw new Error(this.t('已取消覆盖，请重新打开编辑窗口读取最新配置。'));
+      live = this.profileById(profile.id);
+      if (!live || this.fingerprint(live) !== expected) throw new Error(this.t('配置再次发生变化，请重新打开编辑窗口。'));
+    }
+    return this.clone(live);
+  }
+
+  async guardedWriteProfile(profile, original) {
+    await this.checkEditConflict(profile, original);
+    await this.writeProfile(profile, false);
+  }
+
+  deletionImpact(profileIds, groupIds) {
+    const groups = this.liveGroups(); const affected = new Set((groupIds || []).map(String));
+    let changed = true;
+    while (changed) { changed = false; groups.forEach(group => { if (!affected.has(String(group.id)) && affected.has(String(group.parentGroupId || group.parentId || ''))) { affected.add(String(group.id)); changed = true; } }); }
+    const ids = new Set((profileIds || []).map(String));
+    const profiles = this.liveProfiles().filter(profile => ids.has(String(profile.id)) || affected.has(String(profile.group || '')));
+    return { profiles, groups: groups.filter(group => affected.has(String(group.id))) };
+  }
+
+  pruneUndo() {
+    this.undoStack = (this.undoStack || []).filter(item => item.expires > Date.now()).slice(-10);
+  }
+
+  async deleteWithUndo(profileIds, groupIds) {
+    if (this.deleteInProgress) throw new Error(this.t('已有删除或撤销正在处理。'));
+    const preview = this.deletionImpact(profileIds, groupIds);
+    if (!preview.profiles.length && !preview.groups.length) return;
+    const signature = this.fingerprint(preview);
+    const names = preview.profiles.slice(0, 8).map(profile => this.profileName(profile)).join('、');
+    if (!await this.confirm(this.t('删除影响预览'), this.t('将删除 ') + preview.groups.length + this.t(' 个目录（含所选目录及子目录）、') + preview.profiles.length + this.t(' 个会话。') + (names ? this.t('\n会话：') + names + (preview.profiles.length > 8 ? '…' : '') : '') + this.t('\n删除后十分钟内可在本窗口撤销；退出 Tabby 后撤销失效。已连接终端不会关闭，凭据库不会被清理。'), this.t('确认删除'))) return;
+    const live = this.deletionImpact(profileIds, groupIds);
+    if (this.fingerprint(live) !== signature) throw new Error(this.t('删除范围内的数据已发生变化，请重新检查后删除。'));
+    this.deleteInProgress = true;
+    const snapshot = this.clone(live), pids = new Set(live.profiles.map(profile => String(profile.id))), gids = new Set(live.groups.map(group => String(group.id)));
+    snapshot.requiredParents = Array.from(new Set(live.profiles.map(profile => String(profile.group || '')).filter(id => id && !gids.has(id) && this.liveGroups().some(group => String(group.id) === id))));
+    const hotkeys = this.config.store.hotkeys && this.config.store.hotkeys.profile;
+    snapshot.hotkeys = {};
+    if (hotkeys) pids.forEach(id => { const key = id.replace(/\./g, '-'); if (Object.prototype.hasOwnProperty.call(hotkeys, key)) { snapshot.hotkeys[key] = this.clone(hotkeys[key]); delete hotkeys[key]; } });
+    this.config.store.profiles = this.liveProfiles().filter(profile => !pids.has(String(profile.id)));
+    this.config.store.groups = this.liveGroups().filter(group => !gids.has(String(group.id)));
+    try {
+      await this.saveFeatureState();
+      this.pruneUndo(); this.undoStack.push({ ...snapshot, expires: Date.now() + 10 * 60 * 1000 }); this.pruneUndo();
+      this.activeProfileId = null; await this.refreshAndRender(); this.notify(this.t('已删除 ') + pids.size + this.t(' 个会话、') + gids.size + this.t(' 个目录。可在十分钟内撤销。'), 'info'); return true;
+    } catch (error) {
+      this.restoreDeletedSnapshot(snapshot);
+      try { await this.saveFeatureState(); } catch (rollbackError) { this.log(this.t('删除回滚保存失败'), rollbackError); }
+      throw error;
+    } finally { this.deleteInProgress = false; }
+  }
+
+  restoreDeletedSnapshot(snapshot) {
+    const profiles = this.liveProfiles(), groups = this.liveGroups();
+    snapshot.groups.forEach(group => { if (!groups.some(item => item.id === group.id)) groups.push(this.clone(group)); });
+    snapshot.profiles.forEach(profile => { if (!profiles.some(item => item.id === profile.id)) profiles.push(this.clone(profile)); });
+    this.config.store.groups = groups; this.config.store.profiles = profiles;
+    const hotkeys = this.config.store.hotkeys && this.config.store.hotkeys.profile;
+    if (hotkeys) Object.keys(snapshot.hotkeys || {}).forEach(key => { if (!Object.prototype.hasOwnProperty.call(hotkeys, key)) hotkeys[key] = this.clone(snapshot.hotkeys[key]); });
+  }
+
+  async undoLastDeletion() {
+    if (this.deleteInProgress) throw new Error(this.t('已有删除或撤销正在处理。'));
+    this.pruneUndo(); const snapshot = this.undoStack[this.undoStack.length - 1];
+    if (!snapshot) { this.notify(this.t('没有可撤销的删除，或已超过十分钟。'), 'info'); return; }
+    if (snapshot.profiles.some(profile => this.profileById(profile.id)) || snapshot.groups.some(group => this.liveGroups().some(item => item.id === group.id))) throw new Error(this.t('原 ID 已被其他数据占用，未执行撤销。'));
+    const restoredGroups = new Set(snapshot.groups.map(group => String(group.id)));
+    if ((snapshot.requiredParents || []).some(id => !this.liveGroups().some(group => String(group.id) === id))) throw new Error(this.t('会话原目录已被删除，请先恢复该目录。'));
+    if (snapshot.groups.some(group => { const parent = String(group.parentGroupId || group.parentId || ''); return parent && !restoredGroups.has(parent) && !this.liveGroups().some(item => String(item.id) === parent); })) throw new Error(this.t('原父目录已被删除，请先撤销该目录的删除。'));
+    this.deleteInProgress = true;
+    const previousHotkeys = new Set(Object.keys(this.config.store.hotkeys && this.config.store.hotkeys.profile || {}));
+    this.restoreDeletedSnapshot(snapshot);
+    try { await this.saveFeatureState(); this.undoStack.pop(); await this.refreshAndRender(); this.notify(this.t('最近一次删除已撤销。'), 'info'); }
+    catch (error) {
+      const ids = new Set(snapshot.profiles.map(profile => profile.id)), gids = new Set(snapshot.groups.map(group => group.id));
+      this.config.store.profiles = this.liveProfiles().filter(profile => !ids.has(profile.id)); this.config.store.groups = this.liveGroups().filter(group => !gids.has(group.id));
+      const hotkeys = this.config.store.hotkeys && this.config.store.hotkeys.profile;
+      if (hotkeys) Object.keys(snapshot.hotkeys || {}).forEach(key => { if (!previousHotkeys.has(key) && this.fingerprint(hotkeys[key]) === this.fingerprint(snapshot.hotkeys[key])) delete hotkeys[key]; });
+      throw error;
+    } finally { this.deleteInProgress = false; }
+  }
+
+  createPagedChecklist(container, items, selected, onChange, readonly) {
+    const filter = this.input('search', ''); filter.placeholder = this.t('搜索名称、地址、目录或状态');
+    const controls = document.createElement('div'); controls.className = 'tsm2-list-controls';
+    const summary = document.createElement('span'), list = document.createElement('div'); list.className = 'tsm2-check-list';
+    const pager = document.createElement('div'); pager.className = 'tsm2-list-controls';
+    let page = 0; const pageSize = 60;
+    const matching = () => { const query = filter.value.trim().toLocaleLowerCase(); return items.filter(item => !query || (item.label + ' ' + (item.detail || '')).toLocaleLowerCase().includes(query)); };
+    const draw = () => {
+      const rows = matching(), pages = Math.max(1, Math.ceil(rows.length / pageSize)); page = Math.min(page, pages - 1);
+      summary.textContent = readonly ? this.t('共 ') + items.length + this.t(' 条；筛选 ') + rows.length + this.t(' 条') : this.t('已选 ') + selected.size + ' / ' + items.filter(item => !item.disabled).length + this.t('；筛选 ') + rows.length + this.t(' 条');
+      list.replaceChildren();
+      rows.slice(page * pageSize, (page + 1) * pageSize).forEach(item => {
+        const row = document.createElement('label'); row.className = 'tsm2-check-row';
+        const checkbox = this.input('checkbox'); checkbox.checked = selected.has(item.key); checkbox.disabled = !!item.disabled;
+        checkbox.addEventListener('change', () => { if (checkbox.checked) selected.add(item.key); else selected.delete(item.key); summary.textContent = this.t('已选 ') + selected.size + this.t('；筛选 ') + rows.length + this.t(' 条'); if (onChange) onChange(); });
+        const text = document.createElement('span'), title = document.createElement('strong'), detail = document.createElement('small'); title.textContent = item.label; detail.textContent = item.detail || ''; text.append(title, detail); if (!readonly) row.appendChild(checkbox); row.appendChild(text); list.appendChild(row);
+      });
+      pager.replaceChildren(this.createButton(this.t('上一页'), this.t('上一页'), () => { page = Math.max(0, page - 1); draw(); }, 'tsm2-secondary'), document.createTextNode((page + 1) + ' / ' + pages), this.createButton(this.t('下一页'), this.t('下一页'), () => { page = Math.min(pages - 1, page + 1); draw(); }, 'tsm2-secondary'));
+    };
+    controls.append(summary, this.createButton(this.t('全选筛选结果'), this.t('选择所有匹配记录，包括其他页'), () => { matching().filter(item => !item.disabled).forEach(item => selected.add(item.key)); draw(); if (onChange) onChange(); }, 'tsm2-secondary'), this.createButton(this.t('取消筛选结果'), this.t('取消所有匹配记录'), () => { matching().forEach(item => selected.delete(item.key)); draw(); if (onChange) onChange(); }, 'tsm2-secondary'));
+    if (readonly) controls.replaceChildren(summary);
+    filter.addEventListener('input', () => { page = 0; draw(); });
+    container.append(filter, controls, list, pager); draw();
+    return { selected, draw };
+  }
+
+  showBulkManager() {
+    const ref = this.createOverlay(this.t('批量管理会话')); ref.dialog.classList.add('tsm2-wide-dialog');
+    const body = document.createElement('div'); body.className = 'tsm2-dialog-body';
+    const selected = new Set();
+    this.createPagedChecklist(body, this.liveProfiles().map(profile => ({ key: String(profile.id), label: this.profileName(profile), detail: this.connectionSummary(profile) + ' · ' + this.displayGroup(profile.group) })), selected);
+    const group = this.addField(body, this.t('批量移动的目标目录'), this.select(this.moveDestinationOptions(), ''));
+    const user = this.addField(body, this.t('批量修改用户名（仅 SSH/Telnet；留空不改）'), this.input('text', ''));
+    const port = this.addField(body, this.t('批量修改端口（仅 SSH/Telnet；留空不改）'), this.input('number', ''));
+    const concurrency = this.addField(body, this.t('批量连接并发数（1–5）'), this.input('number', '2')); concurrency.min = '1'; concurrency.max = '5';
+    const help = document.createElement('div'); help.className = 'tsm2-help'; help.textContent = this.t('批量连接逐批打开终端，最多等待每个连接 30 秒；遇到待确认连接会停止后续任务，已有窗口继续由 Tabby 处理，不自动重连。修改用户名后可能需要重新输入密码。'); body.appendChild(help);
+    const actions = document.createElement('div'); actions.className = 'tsm2-list-controls';
+    const ids = () => { if (!selected.size) throw new Error(this.t('请先勾选会话。')); return Array.from(selected); };
+    let busy = false;
+    const run = async action => { if (busy) return; busy = true; actions.querySelectorAll('button').forEach(button => button.disabled = true); try { await action(); } catch (error) { this.inlineDialogError(body, String(this.t(error.message) || error)); } finally { busy = false; actions.querySelectorAll('button').forEach(button => button.disabled = false); } };
+    actions.append(
+      this.createButton(this.t('移动所选'), this.t('批量移动'), () => run(() => this.applyBulkEdits(ids(), { group: group.value })), 'tsm2-secondary'),
+      this.createButton(this.t('修改所选'), this.t('批量修改用户名和端口'), () => run(() => this.applyBulkEdits(ids(), { user: user.value.trim(), port: port.value.trim() })), 'tsm2-secondary'),
+      this.createButton(this.t('连接所选'), this.t('限并发打开所选会话'), () => run(async () => { const count = Number(concurrency.value); if (!Number.isInteger(count) || count < 1 || count > 5) throw new Error(this.t('并发数必须是 1–5 的整数。')); await this.showBulkConnectProgress(ids(), count); }), 'tsm2-primary'),
+      this.createButton(this.t('删除所选'), this.t('预览后批量删除'), () => run(async () => { if (await this.deleteWithUndo(ids(), [])) ref.overlay.remove(); }), 'tsm2-danger')
+    ); body.appendChild(actions); ref.dialog.appendChild(body);
+  }
+
+  async applyBulkEdits(ids, patch) {
+    if (this.bulkEditInProgress) throw new Error(this.t('已有批量修改正在处理。'));
+    if (patch.port && (!Number.isInteger(Number(patch.port)) || Number(patch.port) < 1 || Number(patch.port) > 65535)) throw new Error(this.t('端口必须是 1–65535 的整数。'));
+    if (patch.group && !this.liveGroups().some(group => String(group.id) === String(patch.group))) throw new Error(this.t('目标目录已不存在。'));
+    if (!Object.prototype.hasOwnProperty.call(patch, 'group') && !patch.user && !patch.port) throw new Error(this.t('请填写要修改的用户名或端口。'));
+    const originals = ids.map(id => this.profileById(id));
+    if (originals.some(profile => !profile)) throw new Error(this.t('部分会话已被删除，请重新打开批量管理。'));
+    const snapshots = originals.map(profile => this.clone(profile));
+    const affected = snapshots.filter(profile => Object.prototype.hasOwnProperty.call(patch, 'group') || ['ssh', 'telnet'].includes(profile.type));
+    if (!affected.length) throw new Error(this.t('没有可修改的 SSH/Telnet 会话。'));
+    if (!await this.confirm(this.t('确认批量修改'), this.t('将修改 ') + affected.length + this.t(' 个会话。') + (patch.user ? this.t('\n用户名：') + patch.user : '') + (patch.port ? this.t('\n端口：') + patch.port : '') + (Object.prototype.hasOwnProperty.call(patch, 'group') ? this.t('\n目标：') + (this.displayGroup(patch.group) || this.t('根目录')) : ''), this.t('确认修改'))) return;
+    if (affected.some(profile => this.fingerprint(this.profileById(profile.id)) !== this.fingerprint(profile))) throw new Error(this.t('会话在预览期间已被修改，请重新操作。'));
+    this.bulkEditInProgress = true; const written = [];
+    try {
+      for (const profile of affected) {
+        if (this.fingerprint(this.profileById(profile.id)) !== this.fingerprint(profile)) throw new Error(this.t('批量处理期间会话发生变化，已停止继续修改。'));
+        const next = this.clone(profile); next.options = next.options || {};
+        if (Object.prototype.hasOwnProperty.call(patch, 'group')) next.group = patch.group || undefined;
+        if (patch.user) next.options.user = patch.user;
+        if (patch.port) next.options.port = Number(patch.port);
+        written.push({ before: profile, after: this.clone(next) });
+        if (this.profilesService && typeof this.profilesService.writeProfile === 'function') await this.profilesService.writeProfile(next);
+        else { const index = this.liveProfiles().findIndex(item => item.id === next.id); this.config.store.profiles[index] = next; }
+      }
+      await this.saveFeatureState(); await this.refreshAndRender(); this.notify(this.t('已修改 ') + affected.length + this.t(' 个会话。'), 'info');
+    } catch (error) {
+      written.forEach(item => { const index = this.liveProfiles().findIndex(profile => profile.id === item.before.id); if (index >= 0 && this.fingerprint(this.liveProfiles()[index]) === this.fingerprint(item.after)) this.config.store.profiles[index] = item.before; });
+      try { await this.saveFeatureState(); } catch (rollbackError) { this.log(this.t('批量修改回滚失败'), rollbackError); }
+      throw error;
+    } finally { this.bulkEditInProgress = false; }
+  }
+
+  async waitForOpenedTab(tab, timeout) {
+    if (!tab || !Object.prototype.hasOwnProperty.call(tab, 'session') && !('session' in tab)) return 'opened';
+    const deadline = Date.now() + (timeout || 30000);
+    while (!this.destroyed && Date.now() < deadline) {
+      if (tab.session && tab.session.open === true) return 'connected';
+      if (this.appService && !this.getOpenTabs().some(item => item.tab === tab)) return 'closed';
+      await new Promise(resolve => setTimeout(resolve, 250));
+    }
+    return 'pending';
+  }
+
+  async runBulkConnect(ids, concurrency, control, onProgress) {
+    if (this.bulkConnectInProgress) throw new Error(this.t('已有批量连接正在进行。'));
+    const profiles = ids.map(id => this.profileById(id)).map(profile => profile && this.clone(profile));
+    if (profiles.some(profile => !profile)) throw new Error(this.t('部分会话已被删除，请重新选择。'));
+    const targets = new Map(profiles.map(profile => [String(profile.id), this.connectionTargetKey(profile)]));
+    const protectedProfiles = profiles.filter(profile => this.productionRequired(profile));
+    if (protectedProfiles.length && !await this.confirm(this.t('生产会话连接确认'), this.t('本批包含 ') + protectedProfiles.length + this.t(' 个需要确认的会话：\n') + protectedProfiles.map(profile => this.connectionSummary(profile)).join('\n'), this.t('确认连接'))) return [];
+    this.bulkConnectInProgress = true; let cursor = 0; const results = [];
+    const worker = async () => {
+      while (cursor < profiles.length && !control.stopped && !this.destroyed) {
+        const profile = profiles[cursor++];
+        try {
+          if (this.fingerprint(this.profileById(profile.id)) !== this.fingerprint(profile) || this.connectionTargetKey(profile) !== targets.get(String(profile.id))) throw new Error(this.t('会话在连接预览后已修改，请重新确认。'));
+          const opened = await this.openProfile(profile, { confirmed: true, throwOnFailure: true }); const status = await this.waitForOpenedTab(opened, 30000); results.push({ name: profile.name, status });
+          if (status === 'pending' || status === 'opened' && ['ssh', 'telnet'].includes(profile.type)) { control.stopped = true; control.reason = this.t('存在连接待确认的窗口，已停止后续任务。'); }
+        }
+        catch (error) { results.push({ name: profile.name, status: 'failed', message: String(this.t(error.message) || error) }); }
+        if (onProgress) onProgress(results.slice(), profiles.length);
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+    };
+    try { await Promise.all(Array.from({ length: Math.max(1, Math.min(5, concurrency)) }, worker)); return results; }
+    finally { this.bulkConnectInProgress = false; }
+  }
+
+  async showBulkConnectProgress(ids, concurrency) {
+    const ref = this.createOverlay(this.t('批量连接进度')), body = document.createElement('div'); body.className = 'tsm2-dialog-body';
+    const summary = document.createElement('div'), list = document.createElement('div'); list.className = 'tsm2-import-list'; const control = { stopped: false };
+    body.append(summary, list, this.createButton(this.t('停止后续连接'), this.t('已打开的窗口不会关闭'), () => { control.stopped = true; summary.textContent += this.t(' · 已请求停止后续连接'); }, 'tsm2-secondary')); ref.dialog.appendChild(body);
+    summary.textContent = this.t('准备打开 ') + ids.length + this.t(' 个会话，并发 ') + concurrency + this.t('。关闭此进度窗口不会关闭终端。');
+    const results = await this.runBulkConnect(ids, concurrency, control, (rows, total) => {
+      summary.textContent = this.t('已处理 ') + rows.length + ' / ' + total + (control.stopped ? this.t(' · 已停止后续任务') : ''); list.replaceChildren();
+      rows.slice(-100).forEach(row => { const line = document.createElement('div'); line.className = 'tsm2-import-row'; line.textContent = row.name + ' · ' + ({ connected: this.t('已连接'), opened: this.t('窗口已打开'), pending: this.t('连接待确认'), closed: this.t('窗口已关闭'), failed: this.t('打开失败') }[row.status]) + (row.message ? ' · ' + row.message : ''); list.appendChild(line); });
+    });
+    summary.textContent = this.t('已完成 ') + results.length + ' / ' + ids.length + this.t(' 个连接任务') + (control.stopped ? this.t('，其余未打开。') : '。') + (control.reason || '');
+  }
+
+  async executeImportReport(plan, mode) {
+    if (this.reportImportInProgress || this.importInProgress) throw new Error(this.t('已有导入正在进行。'));
+    this.reportImportInProgress = true;
+    const report = { at: new Date().toISOString(), source: plan.sourceLabel, results: [], failedEntries: [], plan, mode };
+    try {
+      // Preserve empty directories, then isolate each profile transaction for retry.
+      let prepared;
+      try { prepared = await this.applyImportPlan({ ...plan, groupPaths: (plan.groupPaths || []).concat(plan.entries.map(entry => entry.profile.groupPath).filter(Boolean)), entries: [], invalid: [] }, mode); }
+      catch (error) {
+        plan.entries.forEach(entry => { report.results.push({ index: entry.index, name: entry.profile.name, sourceFile: entry.sourceFile || '', status: 'failed', reason: this.t('目录准备失败：') + String(this.t(error.message) || error) }); report.failedEntries.push(entry); });
+        if (!plan.entries.length) report.results.push({ name: this.t('目录结构'), status: 'failed', reason: String(this.t(error.message) || error) });
+        return report;
+      }
+      let persistenceError = null;
+      const markFailed = (entries, error) => entries.forEach(entry => { report.failedEntries.push(entry); report.results.push({ index: entry.index, name: entry.profile.name, sourceFile: entry.sourceFile || '', status: 'failed', reason: String(this.t(error.message) || error) }); });
+      const processBatch = async entries => {
+        if (persistenceError) { markFailed(entries, persistenceError); return; }
+        try {
+          const result = await this.applyImportPlan({ ...plan, preparedGroups: prepared.resolved || [], entries, invalid: [] }, mode);
+          const outcomes = new Map((result.outcomes || []).map(item => [item.index, item.status]));
+          entries.forEach(entry => { const status = outcomes.get(entry.index) || (result.imported ? 'success' : 'skipped'); report.results.push({ index: entry.index, name: entry.profile.name, sourceFile: entry.sourceFile || '', status, reason: status === 'success' ? this.t('已写入') : this.t('重复项，按当前规则跳过') }); });
+        } catch (error) {
+          if (error.tsmPersistenceFailure) { persistenceError = error; markFailed(entries, error); }
+          else if (entries.length > 1) { const middle = Math.floor(entries.length / 2); await processBatch(entries.slice(0, middle)); await processBatch(entries.slice(middle)); }
+          else markFailed(entries, error);
+        }
+      };
+      for (let index = 0; index < plan.entries.length; index += 50) await processBatch(plan.entries.slice(index, index + 50));
+      (plan.invalid || []).forEach(item => report.results.push({ index: item.index, name: this.t('无效记录'), status: 'skipped', reason: item.message }));
+      return report;
+    } finally { this.reportImportInProgress = false; this.lastImportReport = report; }
+  }
+
+  showImportReport(report) {
+    if (!report) { this.notify(this.t('本次运行尚无导入报告。'), 'info'); return; }
+    const ref = this.createOverlay(this.t('导入结果报告')); ref.dialog.classList.add('tsm2-wide-dialog');
+    const body = document.createElement('div'); body.className = 'tsm2-dialog-body';
+    const summary = document.createElement('div'); summary.textContent = this.t('成功 ') + report.results.filter(row => row.status === 'success').length + this.t(' · 跳过 ') + report.results.filter(row => row.status === 'skipped').length + this.t(' · 失败 ') + report.results.filter(row => row.status === 'failed').length; body.appendChild(summary);
+    this.createPagedChecklist(body, report.results.map((row, index) => ({ key: String(index), label: (row.status === 'success' ? this.t('成功') : row.status === 'failed' ? this.t('失败') : this.t('跳过')) + ' · ' + row.name, detail: (row.sourceFile ? row.sourceFile + ' · ' : '') + row.reason, disabled: true })), new Set(), null, true);
+    const actions = document.createElement('div'); actions.className = 'tsm2-list-controls';
+    actions.appendChild(this.createButton(this.t('导出报告'), this.t('导出不含凭据的结果报告'), () => this.downloadTextFile('tabby-import-report.json', JSON.stringify({ at: report.at, source: report.source, results: report.results }, null, 2)), 'tsm2-secondary'));
+    if (report.failedEntries.length) actions.appendChild(this.createButton(this.t('仅重试失败项'), this.t('已成功的会话不会再次导入'), async () => { const result = await this.executeImportReport({ ...report.plan, entries: report.failedEntries, invalid: [] }, report.mode); report.failedEntries = result.failedEntries; ref.overlay.remove(); this.showImportReport(result); }, 'tsm2-primary'));
+    body.appendChild(actions); ref.dialog.appendChild(body);
+  }
+
+  syncWindowNumbers() {
+    if (!this.windowNumbers) this.windowNumbers = new WeakMap();
+    if (!this.windowBatches) this.windowBatches = new Map();
+    const groups = new Map();
+    for (const { tab } of this.getOpenTabs()) {
+      if (!tab.profile) continue;
+      const id = String(tab.profile.id || '');
+      if (!groups.has(id)) groups.set(id, []);
+      groups.get(id).push(tab);
+    }
+    for (const id of this.windowBatches.keys()) if (!groups.has(id)) this.windowBatches.delete(id);
+    for (const [id, tabs] of groups) {
+      let batch = this.windowBatches.get(id);
+      // A new batch may arrive before a separate empty-tabs event was observed.
+      if (!batch || !tabs.some(tab => batch.tabs.has(tab))) {
+        batch = { tabs: new Set(), next: 1 };
+        for (const tab of tabs) this.windowNumbers.delete(tab);
+      }
+      for (const tab of tabs) if (!this.windowNumbers.has(tab)) this.windowNumbers.set(tab, batch.next++);
+      batch.tabs = new Set(tabs); this.windowBatches.set(id, batch);
+    }
+  }
+
+  windowNumber(tab) {
+    this.syncWindowNumbers();
+    return this.windowNumbers.get(tab) || 1;
+  }
+
+  tabLogInfo(tab) {
+    return this.logger && typeof this.logger.describeTab === 'function' ? this.logger.describeTab(tab) : null;
+  }
+
+  currentLoggingTab() {
+    const active = this.appService && this.appService.activeTab;
+    const tab = active && typeof active.getFocusedTab === 'function' ? active.getFocusedTab() : active;
+    return tab && tab.profile && tab.profile.type === 'ssh' ? tab : null;
+  }
+
+  expandWindowRows(rows) {
+    const result = [];
+    for (const row of rows) {
+      result.push(row);
+      if (row.kind !== 'profile' || this.foldedWindowProfiles && this.foldedWindowProfiles.has(String(row.profile.id))) continue;
+      for (const item of this.connectionMap && this.connectionMap.get(String(row.profile.id)) || []) {
+        if (item.tab.profile && item.tab.profile.type === 'ssh') result.push({ kind: 'window', tab: item.tab, top: item.top, depth: row.depth + 1 });
+      }
+    }
+    return result;
+  }
+
+  focusWindow(item) {
+    if (!this.getOpenTabs().some(current => current.tab === item.tab)) throw new Error(this.t('该终端窗口已关闭。'));
+    this.runInZone(() => { this.appService.selectTab(item.top); if (item.top !== item.tab && typeof item.top.focus === 'function') item.top.focus(item.tab); });
+    this.updateUnifiedLogUI(true);
+  }
+
+  logStateLabel(info) {
+    if (!info) return this.t('等待连接');
+    if (info.stopping) return this.t('正在停止…');
+    if (info.errorCode) return info.errorCode === 'CREATE_LOG_FAILED' ? this.t('无法创建日志') : this.t('写入失败');
+    if (info.recording) return info.recordingMode === 'automatic' ? this.t('自动记录中') : this.t('手动记录中');
+    return info.temporarilyStopped ? this.t('本次已停止') : this.t('未记录');
+  }
+
+  renderWindowRow(container, item) {
+    const tab = item.tab, info = this.tabLogInfo(tab);
+    const row = document.createElement('div'); row.className = 'tsm2-window-row'; row.style.paddingLeft = Math.min(52, 12 + item.depth * 10) + 'px';
+    row._tsmTab = tab;
+    row.dataset.profileId = String(tab.profile.id); row.dataset.sessionKey = info && info.sessionKey || '';
+    row.classList.toggle('active', this.currentLoggingTab() === tab);
+    const top = document.createElement('div'); top.className = 'tsm2-window-top';
+    const name = this.createButton(this.t('窗口 ') + this.windowNumber(tab), this.t('切换到此终端窗口'), () => this.focusWindow(item), 'tsm2-window-name');
+    const state = document.createElement('span'); state.className = 'tsm2-window-state' + (info && info.recording ? ' recording' : '') + (info && info.errorCode ? ' failed' : ''); state.textContent = (info && info.recording ? '● ' : '○ ') + this.logStateLabel(info);
+    top.append(name, state);
+    const address = document.createElement('div'); address.className = 'tsm2-window-address'; const opts = info && info.connection || this.effectiveConnectionOptions(tab.profile); address.textContent = (opts.user ? opts.user + '@' : '') + (opts.host || opts.target || '') + ':' + (opts.port || 22); address.title = tab.displayTitle || tab.title || address.textContent;
+    const bottom = document.createElement('div'); bottom.className = 'tsm2-window-bottom';
+    const time = document.createElement('span'); time.textContent = info && info.connectedAt ? new Date(info.connectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + this.t(' 连接') : this.t('连接状态待确认');
+    const actions = document.createElement('span'); actions.className = 'tsm2-window-actions';
+    const toggle = this.createButton(info && info.recording ? this.t('停止') : this.t('记录'), this.t('控制此窗口日志'), () => this.runWindowLogAction(tab, info && info.recording ? 'stop' : info && info.lastOutputPath ? 'resume' : 'start'), 'tsm2-window-link');
+    toggle.disabled = !info || !!info.stopping || !!(this.logBusy && this.logBusy.has(info.sessionKey));
+    const view = this.createButton(this.t('查看'), this.t('查看此窗口最近日志'), () => this.runWindowLogAction(tab, 'view'), 'tsm2-window-link'); view.disabled = !info || !(info.outputPath || info.lastOutputPath);
+    actions.append(toggle, view); bottom.append(time, actions); row.append(top, address, bottom);
+    row.addEventListener('click', event => { if (!event.target.closest('button')) this.focusWindow(item); });
+    container.appendChild(row);
+  }
+
+  renderCurrentLogPanel(panel) {
+    const section = document.createElement('section'); section.className = 'tsm2-current-log'; section.setAttribute('aria-label', this.t('会话信息')); panel.appendChild(section); this.fillCurrentLogPanel(section);
+  }
+
+  async toggleSessionInfo() {
+    const state = this.getStateStore(), previous = state.sessionInfoExpanded;
+    state.sessionInfoExpanded = !state.sessionInfoExpanded;
+    const panel = this.getRoot().querySelector('.tsm2-current-log');
+    if (panel) this.fillCurrentLogPanel(panel);
+    try { await this.config.save(); }
+    catch (error) { state.sessionInfoExpanded = previous; if (panel) this.fillCurrentLogPanel(panel); throw error; }
+  }
+
+  fillCurrentLogPanel(section) {
+    const tab = this.currentLoggingTab(), info = tab && this.tabLogInfo(tab);
+    const expanded = !!this.getStateStore().sessionInfoExpanded;
+    const selected = tab && tab.profile || this.profiles.find(profile => String(profile.id) === this.activeProfileId);
+    const conflict = this.logger && this.logger.bridgeConflict;
+    const signature = JSON.stringify([expanded, selected, info, tab && this.windowNumber(tab), !!conflict, this.config.store.language, this.getStateStore().language, info && !!(this.logBusy && this.logBusy.has(info.sessionKey))]);
+    if (section._contentSignature === signature) return;
+    section._contentSignature = signature;
+    const scroll = section.querySelector('.tsm2-info-body')?.scrollTop || 0;
+    section.replaceChildren(); section.classList.toggle('is-expanded', expanded);
+    const heading = this.createButton('', this.t('会话信息'), () => this.toggleSessionInfo(), 'tsm2-info-toggle');
+    heading.setAttribute('aria-expanded', String(expanded)); heading.setAttribute('aria-controls', 'tsm2-info-body');
+    const arrow = document.createElement('span'); arrow.textContent = expanded ? '▾' : '▸'; arrow.setAttribute('aria-hidden', 'true');
+    const label = document.createElement('span'); label.textContent = this.t('会话信息'); heading.append(arrow, label);
+    if (info && info.recording) { const dot = document.createElement('span'); dot.className = 'tsm2-info-recording'; dot.textContent = '●'; dot.title = this.logStateLabel(info); heading.appendChild(dot); }
+    section.appendChild(heading);
+    const body = document.createElement('div'); body.id = 'tsm2-info-body'; body.className = 'tsm2-info-body'; body.hidden = !expanded; section.appendChild(body);
+    if (!expanded) return;
+    if (!tab) { this.renderProfileDetails(body); return; }
+    const status = document.createElement('div'); status.className = 'tsm2-current-log-status' + (info && info.recording ? ' recording' : '') + (conflict || info && info.errorCode ? ' failed' : ''); status.setAttribute('aria-live', 'polite'); status.textContent = conflict ? this.t('日志插件冲突') : this.logStateLabel(info); status.title = conflict ? this.t('检测到独立日志插件，请退出 Tabby 后移出旧插件。') : info && info.errorCode || ''; body.appendChild(status);
+    this.renderProfileDetails(body);
+    const path = info && (info.outputPath || info.lastOutputPath);
+    if (path) { const file = document.createElement('div'); file.className = 'tsm2-current-log-file'; file.textContent = path.split(/[\\/]/).pop(); file.title = path; body.appendChild(file); }
+    const actions = document.createElement('div'); actions.className = 'tsm2-log-action-grid';
+    const main = this.createButton(info && info.recording ? this.t('停止') : path ? this.t('继续记录') : this.t('记录'), this.t('控制当前终端日志'), () => this.runWindowLogAction(tab, info && info.recording ? 'stop' : path ? 'resume' : 'start'), 'tsm2-primary tsm2-log-main');
+    main.disabled = !info || !!info.stopping || !!(this.logBusy && this.logBusy.has(info.sessionKey));
+    const view = this.createButton(this.t('查看'), this.t('打开本次连接最近的日志文件'), () => this.runWindowLogAction(tab, 'view'), 'tsm2-secondary'); view.disabled = !path;
+    const folder = this.createButton(this.t('目录'), this.t('打开本次日志所在目录'), () => this.runWindowLogAction(tab, 'directory'), 'tsm2-secondary'); folder.disabled = !info;
+    actions.append(main, view, folder);
+    if (info && !info.recording && path) { const fresh = this.createButton(this.t('新建'), this.t('为当前连接选择新的日志文件'), () => this.runWindowLogAction(tab, 'start'), 'tsm2-secondary'); fresh.disabled = !!info.stopping || !!(this.logBusy && this.logBusy.has(info.sessionKey)); actions.appendChild(fresh); }
+    section.appendChild(actions); body.scrollTop = scroll;
+  }
+
+  syncSplitFocusSubscriptions() {
+    if (this.destroyed) return;
+    if (!this.splitFocusSubscriptions) this.splitFocusSubscriptions = new Map();
+    const tops = new Set(this.appService && this.appService.tabs || []);
+    for (const [top, subscription] of this.splitFocusSubscriptions) {
+      if (!tops.has(top)) { subscription.unsubscribe(); this.splitFocusSubscriptions.delete(top); }
+    }
+    for (const top of tops) {
+      if (this.splitFocusSubscriptions.has(top)) continue;
+      const event = top.focusChanged$;
+      if (event && typeof event.subscribe === 'function') this.splitFocusSubscriptions.set(top, event.subscribe(() => {
+        if (this.appService.activeTab === top) this.handleActiveSessionChange();
+      }));
+    }
+  }
+
+  handleActiveSessionChange() {
+    const root = this.getRoot(); if (!root || this.destroyed) return;
+    const current = this.currentLoggingTab();
+    if (current) this.activeProfileId = String(current.profile.id);
+    // Update the small panel synchronously; switching focus does not change tree contents.
+    const panel = root.querySelector('.tsm2-current-log'); if (panel) this.fillCurrentLogPanel(panel);
+    root.querySelectorAll('.tsm2-profile').forEach(row => row.classList.toggle('active', row.dataset.profileId === this.activeProfileId));
+    root.querySelectorAll('.tsm2-window-row').forEach(row => row.classList.toggle('active', row._tsmTab === current));
+  }
+
+  updateUnifiedLogUI(force) {
+    const root = this.getRoot(); if (!root || this.destroyed) return;
+    const current = this.currentLoggingTab();
+    if (current) this.activeProfileId = String(current.profile.id);
+    const panel = root.querySelector('.tsm2-current-log'); if (panel) this.fillCurrentLogPanel(panel);
+    const signature = JSON.stringify(this.getOpenTabs().map(item => { const info = this.tabLogInfo(item.tab); return [this.windowNumber(item.tab), info, current === item.tab]; }));
+    if (force || signature !== this.windowLogSignature) { this.windowLogSignature = signature; this.scheduleSearchTreeRefresh(); }
+  }
+
+  async runWindowLogAction(tab, action) {
+    const info = this.tabLogInfo(tab), bridge = this.logger && this.logger.bridge;
+    if (!info || !bridge) throw new Error(this.t('此连接尚未就绪，或独立日志插件仍在运行；请检查插件部署。'));
+    if (!this.logBusy) this.logBusy = new Set();
+    if (this.logBusy.has(info.sessionKey)) return;
+    this.logBusy.add(info.sessionKey);
+    try {
+      const reference = this.logProfileReference(tab.profile);
+      const calls = { start: 'logStart', stop: 'logStop', resume: 'logResume', view: 'logView', directory: 'openSessionDirectory' };
+      const method = calls[action]; if (!method || typeof bridge[method] !== 'function') throw new Error(this.t('当前日志接口不支持此操作。'));
+      const promise = bridge[method](reference, info.sessionKey); this.updateUnifiedLogUI(true);
+      const result = await promise;
+      if (!result || !result.ok) {
+        const labels = { SESSION_CHANGED: this.t('原连接已经重连或关闭，请重新选择窗口。'), NO_PREVIOUS_LOG: this.t('上次日志不存在，请选择新日志文件。'), FILE_ALREADY_EXISTS: this.t('此文件已存在，请选择新文件名。'), WRITE_LOG_FAILED: this.t('日志写入失败，请检查磁盘空间及目录权限。'), LOG_STOPPING: this.t('日志正在结束，请稍后重试。'), LOG_BUSY: this.t('日志操作正在进行，请稍后重试。') };
+        throw new Error(labels[result && result.code] || this.logActionFailureMessage(result));
+      }
+    } catch (error) { this.notify(String(this.t(error.message) || this.t('日志操作失败。')), 'error'); }
+    finally { this.logBusy.delete(info.sessionKey); this.updateUnifiedLogUI(true); }
+  }
