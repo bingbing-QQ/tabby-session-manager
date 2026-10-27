@@ -1,6 +1,6 @@
 {
   "realTabbyRewrittenVersionAccepted": true,
-  "standardInstallUpgradeRollbackAccepted": false,
-  "npmNameOwnershipConfirmed": false,
-  "publicLicenseAndBehaviorReviewAccepted": false
+  "standardInstallUpgradeRollbackAccepted": true,
+  "npmNameOwnershipConfirmed": true,
+  "publicLicenseAndBehaviorReviewAccepted": true
 }

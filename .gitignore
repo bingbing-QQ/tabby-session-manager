@@ -1,0 +1,7 @@
+node_modules/
+verification/scratch-logs/
+artifacts/
+*.tgz
+*.log
+.env*
+.npmrc

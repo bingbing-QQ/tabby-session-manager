@@ -1,0 +1,13 @@
+{
+  "version": "4.1.0",
+  "channel": "latest",
+  "expectedAccount": "bingbing77",
+  "nativeChecksReportedPassed": true,
+  "rcOnlineInstallReportedPassed": true,
+  "rcRuntimeMatched": true,
+  "packageChecked": true,
+  "isolatedInstallChecked": true,
+  "checkedAt": "2026-10-27T09:09:18.591Z",
+  "packageManifestSha256": "056a62072bbb6d0398b6fbf8775b977f72f6d18b59c501735f029a724862974b",
+  "tarballSha256": "2d5cf8cb5e462fb195740bc21c939055e1206fe0bafa56d562e072276c1750d3"
+}

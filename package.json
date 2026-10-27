@@ -1,6 +1,6 @@
 {
   "name": "tabby-session-manager",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Bilingual session management, per-window SSH logging, eight themes and port forwarding diagnostics for Tabby",
   "main": "dist/index.js",
   "keywords": [
@@ -16,7 +16,7 @@
     "node": ">=16.9.0"
   },
   "displayName": "Tabby Session Suite",
-  "private": true,
+  "private": false,
   "files": [
     "dist/",
     "README.md",
@@ -39,11 +39,13 @@
     "prepublishOnly": "node scripts/check-release.cjs && node scripts/verify.cjs",
     "test:ui": "node scripts/verify-ui.cjs",
     "release:check": "node scripts/check-release.cjs",
-    "pack:preview": "npm pack --dry-run --json --ignore-scripts"
+    "pack:preview": "npm pack --dry-run --json --ignore-scripts",
+    "prepare:release": "node scripts/prepare-npm-release.cjs"
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "tag": "latest"
   },
   "author": {
     "name": "Bingbing (bingbing-QQ)",

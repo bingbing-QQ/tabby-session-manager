@@ -1,5 +1,52 @@
 # Changelog / 版本记录
 
+## 4.1.0
+
+- Tabby 设置入口统一命名为“会话管理套件 / Session Suite”，保留原设置页 ID，仍只注册一个设置入口。
+- 设置页分为“常规 / General”“日志 / Logging”“外观 / Appearance”，共用原有配置。
+- 常规提供语言、固定/浮动、面板宽度和会话信息展开状态；外观提供八套主题、主界面和终端同步、恢复原配色。
+- 保留已恢复的日志布局、原生新建会话、所有日志功能和其他会话管理功能；不更改已有配置键和日志数据。
+- 19 项验证与四组浏览器检查覆盖中英文、三个页签、共享设置、保存失败回退和窄窗口。维护者已报告实机与原生插件库安装正常。
+
+Unifies the existing settings entry as Session Suite with General, Logging and Appearance tabs, preserving configuration and behavior.
+
+## 4.0.4
+
+- 日志设置页先显示内容，再分批统计日志，避免统计异常阻断页面显示。
+- 显式导入 Buffer，兼容未提供全局 Buffer 的加载环境。
+- 同一目录每轮统计只读取一次；不可读文件、单个会话或映射错误被隔离并显示，关闭页面后取消剩余任务。
+- 保留 4.0.3 日志布局和原生新建会话、既有设置和日志文件。
+- 新增缺少全局 Buffer、文件读取失败、映射异常及关闭取消的验证；实机复验待完成。
+
+Shows logging settings before deferred file scans and isolates initialization/read errors instead of leaving a blank page.
+
+## 4.0.3
+
+- 逐项恢复旧版日志页面的布局：标题图标与说明、相连的路径输入和浏览按钮、固定比例会话列、日志数量按钮、展开区路径和右侧筛选工具、文件列表和底部说明。
+- 会话显示实际日志文件数；刷新目录时重新读取，不以筛选结果代替总数量。
+- 保留 4.0.2 原生新建会话、双语、主题、日志引擎和所有既有设置。
+- 模拟宿主布局与功能检查通过；实际 Tabby 显示需用户确认。
+
+Restores the earlier logging settings structure and file-count controls while preserving native session creation and saved configuration.
+
+## 4.0.2
+
+- 新建会话使用 Tabby 原生会话编辑页面；保留原生协议模板选择和完整设置。
+- 从分组菜单新建时预选实际分组 ID；从顶部新建时分组留空，不继承模板分组。
+- 允许用户在原生页面修改分组；取消不创建记录，保存失败保留草稿重试。
+- 保留 4.0.1 日志布局和既有功能与设置；原生页面的翻译由 Tabby 自身控制。
+
+New sessions use the native Tabby editor, preselecting the context group or leaving the root group empty.
+
+## 4.0.1
+
+- 恢复日志设置的分区布局、分组目录树和紧凑日志列表。
+- 日志筛选和排序放回展开的列表；按钮保持完整横排，适配中英文和窄窗口。
+- 保留自动日志、命令记录、路径映射、日志文件格式和全部既有设置。
+- 浏览器模拟宿主检查覆盖八套主题和中英文；本版本等待原生 Tabby 实机复验。
+
+Restores the structured logging settings layout and responsive controls without changing the logging engine or saved configuration.
+
 ## 4.0.0
 
 - 以已完成试用的重写版本为基础整理发布。维护者反馈在原 Tabby 环境验证后未发现问题。
