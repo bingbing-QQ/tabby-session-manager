@@ -1,8 +1,9 @@
-  constructor(config, profilesService, zone, ngbModal, passwordStorage, appService, logger) {
-    Object.assign(this,{config,profilesService,zone,ngbModal,passwordStorage,appService,logger});
+  constructor(config, profilesService, zone, ngbModal, passwordStorage, appService, logger, selector) {
+    Object.assign(this,{config,profilesService,zone,ngbModal,passwordStorage,appService,logger,selector});
     this.profiles=[];this.groups=[];this.viewMode='all';this.searchQuery='';this.activeProfileId=null;
     this.collapsedFolders=new Set();this.connectionMap=new Map();this.undoStack=[];this.subscriptions=[];
     this.sidebarWidth=280;this.isVisible=true;this.dockMode='pinned';this.themePreset='nocturneGlass';
+    if(typeof suiteSettingsController!=='undefined')this.releaseSettingsController=suiteSettingsController.register(this.config,this);
     this.startTimer=setTimeout(()=>this.start(),0);
   }
   start() {
@@ -23,7 +24,7 @@
     this.destroyed=true;clearTimeout(this.startTimer);clearTimeout(this.refreshTimer);clearTimeout(this.hideTimer);clearInterval(this.syncTimer);
     for(const s of this.subscriptions||[])try{s.unsubscribe();}catch{}
     for(const s of this.splitFocusSubscriptions?.values()||[])try{s.unsubscribe();}catch{}
-    this.removeCredentialGuard?.();this.hostThemeSync?.destroy();this.closeContextMenu();
+    this.releaseSettingsController?.();this.removeCredentialGuard?.();this.hostThemeSync?.destroy();this.closeContextMenu();
     if(typeof document!=='undefined'){document.removeEventListener('mousemove',this.resizeMoveHandler);document.removeEventListener('mouseup',this.resizeEndHandler);this.getRoot()?.remove();document.getElementById(STYLE_ID)?.remove();document.body.classList.remove('tsm2-pinned','tsm2-resizing');document.body.style.removeProperty('--tsm2-width');}
   }
   trackSubscription(value) {if(value)(this.subscriptions||(this.subscriptions=[])).push(value);return value;}

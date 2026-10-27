@@ -1,5 +1,6 @@
 'use strict';
 const fs=require('fs'),path=require('path'),os=require('os'),crypto=require('crypto');
+const {Buffer}=require('buffer');
 const {StringDecoder}=require('string_decoder');const suiteI18n=require('./i18n');
 const own=(map,key)=>map&&Object.prototype.hasOwnProperty.call(map,key)?map[key]:undefined;
 const normalized=x=>String(x??'').trim().toLowerCase();

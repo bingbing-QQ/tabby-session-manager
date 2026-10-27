@@ -1,1 +1,11 @@
-'use strict';const fs=require('fs'),path=require('path');const root=path.resolve(__dirname,'..'),p=JSON.parse(fs.readFileSync(path.join(root,'package.json'))),ready=JSON.parse(fs.readFileSync(path.join(root,'release-readiness.json')));const errors=[];if(p.private!==false)errors.push('Publication preparation is private. Complete the pending release checks before enabling npm publication.');for(const [key,value]of Object.entries(ready))if(value!==true)errors.push('Pending: '+key);if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}
+'use strict';
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const root=path.resolve(__dirname,'..'),manifestFile=path.join(root,'package.json'),p=JSON.parse(fs.readFileSync(manifestFile)),ready=JSON.parse(fs.readFileSync(path.join(root,'release-readiness.json'))),proof=JSON.parse(fs.readFileSync(path.join(root,'stable-publication.json'))),errors=[];
+if(p.private!==false)errors.push('Run npm run prepare:release first.');
+if(p.version!=='4.1.0'||p.publishConfig.tag!=='latest')errors.push('Unexpected stable version or publication tag.');
+if(process.env.npm_lifecycle_event==='prepublishOnly'&&process.env.npm_config_tag&&process.env.npm_config_tag!=='latest')errors.push('Use --tag latest for this stable release.');
+for(const [key,value]of Object.entries(ready))if(value!==true)errors.push('Pending: '+key);
+for(const key of ['nativeChecksReportedPassed','rcOnlineInstallReportedPassed','rcRuntimeMatched','packageChecked','isolatedInstallChecked'])if(proof[key]!==true)errors.push('Pending: '+key);
+if(proof.version!==p.version||proof.expectedAccount!=='bingbing77')errors.push('Unexpected publication evidence.');
+if(crypto.createHash('sha256').update(fs.readFileSync(manifestFile)).digest('hex')!==proof.packageManifestSha256)errors.push('Manifest changed; run prepare:release again.');
+if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log('PASS stable 4.1.0 publication checks');

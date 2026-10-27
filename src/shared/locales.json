@@ -2861,7 +2861,7 @@
   ],
   "界面语言": [
     "界面语言",
-    "Language"
+    "Interface Language"
   ],
   "跟随 Tabby": [
     "跟随 Tabby",
@@ -2950,5 +2950,77 @@
   "恢复安全备份": [
     "恢复安全备份",
     "Restore Safe Backup"
+  ],
+  "无法打开 Tabby 原生会话编辑器。": [
+    "无法打开 Tabby 原生会话编辑器。",
+    "Could not open the Tabby session editor."
+  ],
+  "选择会话协议": [
+    "选择会话协议",
+    "Select Session Protocol"
+  ],
+  "新建会话尚未保存": [
+    "新建会话尚未保存",
+    "New Session Not Saved"
+  ],
+  "文件夹默认折叠并记住展开状态。每个新 SSH 窗口生成独立日志；已有日志不会自动清理。": [
+    "文件夹默认折叠并记住展开状态。每个新 SSH 窗口生成独立日志；已有日志不会自动清理。",
+    "Folders start collapsed and remember your choice. Each new SSH window creates a separate log. Existing logs are not automatically deleted."
+  ],
+  "日志设置页面加载失败": [
+    "日志设置页面加载失败",
+    "Could not load logging settings"
+  ],
+  "Session Suite": [
+    "会话管理套件",
+    "Session Suite"
+  ],
+  "Suite Settings Title": [
+    "会话管理套件",
+    "Tabby Session Suite"
+  ],
+  "Logging": [
+    "日志",
+    "Logging"
+  ],
+  "Appearance": [
+    "外观",
+    "Appearance"
+  ],
+  "语言": [
+    "语言",
+    "Language"
+  ],
+  "简体中文": [
+    "简体中文",
+    "Simplified Chinese"
+  ],
+  "会话面板": [
+    "会话面板",
+    "Session Panel"
+  ],
+  "显示方式": [
+    "显示方式",
+    "Display Mode"
+  ],
+  "面板宽度": [
+    "面板宽度",
+    "Panel Width"
+  ],
+  "折叠": [
+    "折叠",
+    "Collapsed"
+  ],
+  "展开": [
+    "展开",
+    "Expanded"
+  ],
+  "主题同步": [
+    "主题同步",
+    "Theme Sync"
+  ],
+  "Suite General Tab": [
+    "常规",
+    "General"
   ]
 }

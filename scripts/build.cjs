@@ -1,10 +1,11 @@
 const fs=require('fs');const root=require('path').resolve(__dirname,'..');for(const folder of ['shared','logger'])for(const name of fs.readdirSync(root+'/src/'+folder))fs.writeFileSync(root+'/dist/'+name,fs.readFileSync(root+'/src/'+folder+'/'+name,'utf8').replace(/^\uFEFF/,'').replaceAll('\r\n','\n'));let retained=fs.readFileSync(root+'/src/suite-features.methods','utf8').replace(/^\uFEFF/,'').replaceAll('\r\n','\n');const parts=['session-replacement.methods','session-ui.methods'].map(n=>fs.readFileSync(root+'/src/'+n,'utf8').replace(/^\uFEFF/,''));const styles=fs.readFileSync(root+'/src/session.css','utf8').replace(/^\uFEFF/,'');
-const header=`/* Tabby Session Suite 4.0.0: replacement implementation; see src and docs/REIMPLEMENTATION.md. */
+const header=`/* Tabby Session Suite 4.1.0: replacement implementation; see src and docs/REIMPLEMENTATION.md. */
 'use strict';
 const core=require('tabby-core'),coreAngular=require('@angular/core'),common=require('@angular/common');
 const loggerModule=require('./logging'),suiteI18n=require('./i18n'),forwardCheckUI=require('./forward-check-ui');
 const {installSharedCredentialGuard}=require('./credential-guard'),{SessionHostThemeSync}=require('./host-theme');
 const optional=name=>{try{return require(name);}catch{return null;}};const ngb=optional('@ng-bootstrap/ng-bootstrap'),tabbySettings=optional('tabby-settings'),tabbySSH=optional('tabby-ssh');
+const suiteSettingsController=require('./settings-controller');
 const ROOT_ID='tabby-session-manager-root',STYLE_ID='tabby-session-manager-style';
 const CONFIG_KEY = 'sessionManager';
 const HOTKEY_ID = 'toggle-session-manager';
@@ -18,7 +19,7 @@ class SessionManagerService {
 `;
 const footer=`
 }
-SessionManagerService.ɵfac = candidate=>new (candidate||SessionManagerService)(coreAngular.ɵɵinject(core.ConfigService,8),coreAngular.ɵɵinject(core.ProfilesService,8),coreAngular.ɵɵinject(coreAngular.NgZone,8),ngb?.NgbModal?coreAngular.ɵɵinject(ngb.NgbModal,8):null,tabbySSH?.PasswordStorageService?coreAngular.ɵɵinject(tabbySSH.PasswordStorageService,8):null,coreAngular.ɵɵinject(core.AppService,8),coreAngular.ɵɵinject(loggerModule.AutoLoggerDecorator,8));
+SessionManagerService.ɵfac = candidate=>new (candidate||SessionManagerService)(coreAngular.ɵɵinject(core.ConfigService,8),coreAngular.ɵɵinject(core.ProfilesService,8),coreAngular.ɵɵinject(coreAngular.NgZone,8),ngb?.NgbModal?coreAngular.ɵɵinject(ngb.NgbModal,8):null,tabbySSH?.PasswordStorageService?coreAngular.ɵɵinject(tabbySSH.PasswordStorageService,8):null,coreAngular.ɵɵinject(core.AppService,8),coreAngular.ɵɵinject(loggerModule.AutoLoggerDecorator,8),core.SelectorService?coreAngular.ɵɵinject(core.SelectorService,8):null);
 SessionManagerService.ɵprov=coreAngular.ɵɵdefineInjectable({token:SessionManagerService,factory:SessionManagerService.ɵfac,providedIn:'root'});
 class SessionToolbarButtonProvider extends core.ToolbarButtonProvider {
   constructor(service) {super();this.service=service;}

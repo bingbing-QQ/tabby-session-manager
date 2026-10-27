@@ -21,8 +21,8 @@ AutoLoggerConfigProvider.ctorParameters=()=>[];angular.Injectable()(AutoLoggerCo
 AutoLoggerSettingsTabComponent.ctorParameters=()=>[{type:core.ConfigService},{type:electron.ElectronService},{type:electron.ElectronHostWindow},{type:angular.ChangeDetectorRef},{type:angular.NgZone},{type:angular.ElementRef}];
 angular.Component({template:'<div data-log-settings-mount></div>',standalone:false})(AutoLoggerSettingsTabComponent);
 class AutoLoggerSettingsTabProvider extends settings.SettingsTabProvider {
-  constructor(config){super();this.config=config;this.id = 'session-log-manager';this.icon='clipboard-list';this.weight=100;}
-  get title(){return suiteI18n.t('Session Log Manager',this.config);}
+  constructor(config){super();this.config=config;this.id = 'session-log-manager';this.icon='layer-group';this.weight=100;}
+  get title(){return suiteI18n.t('Session Suite',this.config);}
   getComponentType(){return AutoLoggerSettingsTabComponent;}
 }
 AutoLoggerSettingsTabProvider.ctorParameters=()=>[{type:core.ConfigService}];angular.Injectable()(AutoLoggerSettingsTabProvider);

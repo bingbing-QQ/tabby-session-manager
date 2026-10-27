@@ -1,9 +1,10 @@
-/* Tabby Session Suite 4.0.0: replacement implementation; see src and docs/REIMPLEMENTATION.md. */
+/* Tabby Session Suite 4.1.0: replacement implementation; see src and docs/REIMPLEMENTATION.md. */
 'use strict';
 const core=require('tabby-core'),coreAngular=require('@angular/core'),common=require('@angular/common');
 const loggerModule=require('./logging'),suiteI18n=require('./i18n'),forwardCheckUI=require('./forward-check-ui');
 const {installSharedCredentialGuard}=require('./credential-guard'),{SessionHostThemeSync}=require('./host-theme');
 const optional=name=>{try{return require(name);}catch{return null;}};const ngb=optional('@ng-bootstrap/ng-bootstrap'),tabbySettings=optional('tabby-settings'),tabbySSH=optional('tabby-ssh');
+const suiteSettingsController=require('./settings-controller');
 const ROOT_ID='tabby-session-manager-root',STYLE_ID='tabby-session-manager-style';
 const CONFIG_KEY = 'sessionManager';
 const HOTKEY_ID = 'toggle-session-manager';
@@ -827,11 +828,12 @@ class SessionManagerService {
     } catch (error) { this.notify(String(this.t(error.message) || this.t('日志操作失败。')), 'error'); }
     finally { this.logBusy.delete(info.sessionKey); this.updateUnifiedLogUI(true); }
   }
-  constructor(config, profilesService, zone, ngbModal, passwordStorage, appService, logger) {
-    Object.assign(this,{config,profilesService,zone,ngbModal,passwordStorage,appService,logger});
+  constructor(config, profilesService, zone, ngbModal, passwordStorage, appService, logger, selector) {
+    Object.assign(this,{config,profilesService,zone,ngbModal,passwordStorage,appService,logger,selector});
     this.profiles=[];this.groups=[];this.viewMode='all';this.searchQuery='';this.activeProfileId=null;
     this.collapsedFolders=new Set();this.connectionMap=new Map();this.undoStack=[];this.subscriptions=[];
     this.sidebarWidth=280;this.isVisible=true;this.dockMode='pinned';this.themePreset='nocturneGlass';
+    if(typeof suiteSettingsController!=='undefined')this.releaseSettingsController=suiteSettingsController.register(this.config,this);
     this.startTimer=setTimeout(()=>this.start(),0);
   }
   start() {
@@ -852,7 +854,7 @@ class SessionManagerService {
     this.destroyed=true;clearTimeout(this.startTimer);clearTimeout(this.refreshTimer);clearTimeout(this.hideTimer);clearInterval(this.syncTimer);
     for(const s of this.subscriptions||[])try{s.unsubscribe();}catch{}
     for(const s of this.splitFocusSubscriptions?.values()||[])try{s.unsubscribe();}catch{}
-    this.removeCredentialGuard?.();this.hostThemeSync?.destroy();this.closeContextMenu();
+    this.releaseSettingsController?.();this.removeCredentialGuard?.();this.hostThemeSync?.destroy();this.closeContextMenu();
     if(typeof document!=='undefined'){document.removeEventListener('mousemove',this.resizeMoveHandler);document.removeEventListener('mouseup',this.resizeEndHandler);this.getRoot()?.remove();document.getElementById(STYLE_ID)?.remove();document.body.classList.remove('tsm2-pinned','tsm2-resizing');document.body.style.removeProperty('--tsm2-width');}
   }
   trackSubscription(value) {if(value)(this.subscriptions||(this.subscriptions=[])).push(value);return value;}
@@ -998,7 +1000,7 @@ class SessionManagerService {
   createSvgButton(paths,title,action) {const b=this.createButton('',title,action),svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');for(const d of paths){const p=document.createElementNS(svg.namespaceURI,'path');p.setAttribute('d',d);svg.append(p);}b.append(svg);return b;}
   render() {
     const root=this.getRoot();if(!root)return;const y=root.querySelector('.tsm2-tree')?.scrollTop||0;root.replaceChildren();this.applyThemeToSurface(root);const panel=this._el('div','tsm2-panel'),header=this._el('header','tsm2-header');header.append(this._el('strong','tsm2-title',this.t('会话管理器')));
-    header.append(this.createSvgButton(['M8 3h8v6l3 5H5l3-5z M12 14v7'],this.t(this.dockMode==='pinned'?'固定':'浮动'),()=>this.toggleDockMode()),this.createSvgButton(['M4 6h16 M4 12h16 M4 18h16 M8 3v6 M16 9v6 M10 15v6'],this.t('数据管理'),()=>this.showDataManagementDialog()),this.createButton('+',this.t('新建'),e=>this.showMenu(e.clientX,e.clientY,[{label:this.t('新建会话'),action:()=>this.showProfileDialog(null,'')},{label:this.t('新建独立目录'),action:()=>this.showGroupDialog(null)}])),this.createButton('⋯',this.t('设置'),e=>this.showMenu(e.clientX,e.clientY,[{label:this.t('端口转发检查'),action:()=>this.showForwardCheckDialog()},{label:this.t('批量管理会话'),action:()=>this.showBulkManager()},{label:this.t('查看最近导入报告'),action:()=>this.showImportReport(this.lastImportReport)},{label:this.t('清空最近连接'),action:()=>this.clearRecentConnections()},{label:this.t('风格主题'),action:()=>this.showAppearanceDialog()},{label:this.t('刷新会话列表'),action:()=>this.refreshAndRender()},{label:this.t('隐藏会话管理器'),action:()=>this.toggleVisibility()}])));
+    header.append(this.createSvgButton(['M8 3h8v6l3 5H5l3-5z M12 14v7'],this.t(this.dockMode==='pinned'?'固定':'浮动'),()=>this.toggleDockMode()),this.createSvgButton(['M4 6h16 M4 12h16 M4 18h16 M8 3v6 M16 9v6 M10 15v6'],this.t('数据管理'),()=>this.showDataManagementDialog()),this.createButton('+',this.t('新建'),e=>this.showMenu(e.clientX,e.clientY,[{label:this.t('新建会话'),action:()=>this.createNativeProfile('')},{label:this.t('新建独立目录'),action:()=>this.showGroupDialog(null)}])),this.createButton('⋯',this.t('设置'),e=>this.showMenu(e.clientX,e.clientY,[{label:this.t('端口转发检查'),action:()=>this.showForwardCheckDialog()},{label:this.t('批量管理会话'),action:()=>this.showBulkManager()},{label:this.t('查看最近导入报告'),action:()=>this.showImportReport(this.lastImportReport)},{label:this.t('清空最近连接'),action:()=>this.clearRecentConnections()},{label:this.t('风格主题'),action:()=>this.showAppearanceDialog()},{label:this.t('刷新会话列表'),action:()=>this.refreshAndRender()},{label:this.t('隐藏会话管理器'),action:()=>this.toggleVisibility()}])));
     panel.append(header);const wrap=this._el('div','tsm2-search-wrap'),search=this.input('search',this.searchQuery);search.className='tsm2-search';search.placeholder=this.t('搜索名称、主机或用户名');search.addEventListener('compositionstart',()=>this.isSearchComposing=true);search.addEventListener('compositionend',()=>{this.isSearchComposing=false;this.searchQuery=search.value;this.refreshSearchTree();});search.addEventListener('input',()=>{this.searchQuery=search.value;if(!this.isSearchComposing)this.scheduleSearchTreeRefresh();});wrap.append(search);panel.append(wrap);this.renderFeatureBar(panel);
     const tree=this._el('div','tsm2-tree');panel.append(tree);this.renderTree(tree,this.buildTree());tree.scrollTop=y;const status=this._el('div','tsm2-status',this.statusMessage||'');status.hidden=!this.statusMessage;status.dataset.kind=this.statusKind||'info';panel.append(status);this.renderCurrentLogPanel(panel);const resize=this._el('div','tsm2-resize');resize.addEventListener('mousedown',e=>this.startResize(e));panel.append(resize);root.append(panel);
     panel.addEventListener('mouseenter',()=>clearTimeout(this.hideTimer));panel.addEventListener('mouseleave',()=>{if(this.dockMode==='autohide')this.hideTimer=setTimeout(()=>this.closeDrawer(),240);});if(this.dockMode==='autohide')root.append(this.createButton('›',this.t('会话管理器'),()=>this.openDrawer(),'tsm2-show'));this.updateLayout();this.applyAppearance();
@@ -1041,7 +1043,7 @@ class SessionManagerService {
   showMenu(x,y,items) {this.closeContextMenu();const ctx={elements:[],timers:new Set()};this.currentMenu=ctx;const menu=this.createContextMenu(x,y);ctx.elements.push(menu);this.appendContextMenuItems(menu,items);ctx.removeListener=e=>{if(!ctx.elements.some(n=>n.contains(e.target)))this.closeContextMenu();};document.addEventListener('mousedown',ctx.removeListener,true);return menu;}
   async showSubmenu(parent,b,children,force=false) {if(force)parent._submenuOwner=b;const ctx=this.currentMenu;if(!ctx)return;const token={};b._request=token;const items=typeof children==='function'?await children():children;if(this.currentMenu!==ctx||b._request!==token||!b.isConnected||parent._submenuOwner!==b||!force&&!b._pointerInside)return;for(const old of [...ctx.elements])if(old._parentMenu===parent){old.remove();ctx.elements.splice(ctx.elements.indexOf(old),1);}const r=b.getBoundingClientRect(),menu=this.createContextMenu(r.right+3,r.top);menu._parentMenu=parent;ctx.elements.push(menu);menu.addEventListener('mouseenter',()=>b._childInside=true);menu.addEventListener('mouseleave',()=>{b._childInside=false;const t=setTimeout(()=>{if(!b._childInside&&!b._pointerInside)menu.remove();},180);ctx.timers.add(t);});this.appendContextMenuItems(menu,items);const bounds=menu.getBoundingClientRect();if(bounds.right>window.innerWidth)menu.style.left=Math.max(4,r.left-bounds.width-3)+'px';return menu;}
   showProfileMenu(x,y,p) {return this.showMenu(x,y,[{label:this.t('连接'),action:()=>this.openProfile(p)},{label:this.t('编辑会话'),action:()=>this.editProfile(p)},{label:this.t(this.isFavorite(p.id)?'取消收藏':'收藏并置顶'),action:()=>this.toggleFavorite(p)},{label:this.t('切换到已打开窗口'),action:()=>this.showOpenWindows(p)},{label:this.t(this.productionRequired(p)?'关闭生产连接确认':'开启生产连接确认'),action:()=>this.toggleProduction(p)},{label:this.t('端口配置'),children:()=>this.getPortConfigMenuItems(p)},{label:this.t('会话日志'),children:()=>this.getProfileLogMenuItems(p)},{label:this.t('移动会话'),action:()=>this.showMoveProfileDialog(p)},{label:this.t('复制会话'),action:()=>this.cloneProfile(p)},this.viewMode==='recent'?{label:this.t('移除最近记录'),action:()=>this.removeRecentConnection(p.id)}:{label:this.t('删除会话'),danger:true,action:()=>this.deleteProfile(p)}]);}
-  showFolderMenu(x,y,node) {return this.showMenu(x,y,[{label:this.t('新建会话'),action:()=>this.showProfileDialog(null,node.groupId||node.path)},{label:this.t('新建子分组'),action:()=>this.showGroupDialog(node)},{label:this.t('移动目录'),disabled:!node.group,action:()=>this.showMoveGroupDialog(node.group)},{label:this.t('重命名分组'),disabled:!node.group,action:()=>this.renameGroup(node.group)},{label:this.t('删除分组及会话'),danger:true,disabled:!node.group,action:()=>this.deleteGroup(node.group)}]);}
+  showFolderMenu(x,y,node) {return this.showMenu(x,y,[{label:this.t('新建会话'),action:()=>this.createNativeProfile(node.groupId||node.path||'')},{label:this.t('新建子分组'),action:()=>this.showGroupDialog(node)},{label:this.t('移动目录'),disabled:!node.group,action:()=>this.showMoveGroupDialog(node.group)},{label:this.t('重命名分组'),disabled:!node.group,action:()=>this.renameGroup(node.group)},{label:this.t('删除分组及会话'),danger:true,disabled:!node.group,action:()=>this.deleteGroup(node.group)}]);}
   async editProfile(profile,draft) {const live=this.clone(this.profileById(profile.id)||profile),provider=this.profilesService?.providerForProfile?.(live);if(!provider||!this.ngbModal||!tabbySettings?.EditProfileModalComponent)return this.showProfileDialog(draft||live,live.group||'');let modal;try{modal=this.ngbModal.open(tabbySettings.EditProfileModalComponent,{size:'lg'});}catch{return this.showProfileDialog(draft||live,live.group||'');}Object.assign(modal.componentInstance,{partialProfile:this.clone(draft||live),profileProvider:provider});const result=await modal.result.catch(()=>null);if(!result)return this.refreshAndRender();try{result.type=provider.id;await this.guardedWriteProfile(result,live);await this.refreshAndRender();}catch(error){this.showEditDraftRecovery(result,live,error);}}
   createProfileGroupPicker(value) {const options=this.profileGroupChoices(),input=this.input('text',this.displayGroup(value)),list=this._el('datalist');list.id=this.makeId('groups');options.forEach(o=>{const e=this._el('option');e.value=o.label;list.append(e);});input.setAttribute('list',list.id);return {input,list,options,initialText:input.value};}
   resolveProfileGroupPicker(value,picker,original='') {const text=String(value||'').trim();if(!text)return '';if(text===picker.initialText)return original;const match=picker.options.find(o=>o.label===text);return match?match.value:text;}
@@ -1050,7 +1052,64 @@ class SessionManagerService {
   showMoveGroupDialog(g) {return this.showMoveDestinationDialog(this.t('移动目录'),g.name,g.parentGroupId||'',this.moveDestinationOptions(g.id),async parent=>{if(parent&&this.groupHasAncestor(parent,g.id))throw Error(this.t('不能移动到自身或子目录。'));const live=this.liveGroups().find(x=>x.id===g.id);if(live){live.parentGroupId=parent||undefined;delete live.parentId;await this.saveFeatureState();}});}
   async renameGroup(g) {const name=await this.prompt(this.t('重命名分组'),this.t('名称'),g.name);if(name?.trim()){const live=this.liveGroups().find(x=>x.id===g.id);if(live){live.name=name.trim();await this.saveFeatureState();await this.refreshAndRender();}}}
   showGroupDialog(parent) {const ref=this._dialog(this.t('新建独立目录')),name=this.addField(ref.body,this.t('名称'),this.input('text',''));ref.footer.prepend(this.createButton(this.t('保存'),this.t('保存'),async()=>{if(!name.value.trim())return;const g={id:this.makeId('group'),name:name.value.trim(),parentGroupId:parent?.groupId||undefined};if(this.profilesService?.newProfileGroup)await this.profilesService.newProfileGroup(g,{genId:false});else this.config.store.groups=[...this.liveGroups(),g];await this.saveFeatureState();ref.overlay.remove();await this.refreshAndRender();},'tsm2-primary'));return ref;}
+  async createNativeProfile(group='',draft=null) {
+    this.closeContextMenu();
+    if(!this.profilesService?.providerForProfile||!this.ngbModal||!tabbySettings?.EditProfileModalComponent){this.notify(this.t('无法打开 Tabby 原生会话编辑器。'),'error');return;}
+    let candidate=draft?this.clone(draft):null;
+    try {
+      if(!candidate){
+        let templates=[];
+        if(this.selector?.show&&this.profilesService.getProfiles){
+          const profiles=await this.profilesService.getProfiles();
+          templates=profiles.filter(p=>p.isTemplate&&this.profilesService.providerForProfile(p));
+        }
+        let template;
+        if(templates.length>1){
+          template=await this.selector.show(this.t('选择会话协议'),templates.map(p=>({name:p.name,icon:p.icon||undefined,result:p}))).catch(()=>null);
+          if(!template)return;
+        }else template=templates[0];
+        candidate=template?this.clone(template):{type:'ssh',options:{}};
+        delete candidate.id;delete candidate.sessionManagerGeneratedName;
+        candidate.name='';candidate.isBuiltin=false;candidate.isTemplate=false;
+        // An explicitly empty group prevents template/global defaults assigning a group.
+        candidate.group=String(group||'');
+      }
+      const provider=this.profilesService.providerForProfile(candidate);
+      if(!provider)throw Error(this.t('无法打开 Tabby 原生会话编辑器。'));
+      const modal=this.ngbModal.open(tabbySettings.EditProfileModalComponent,{size:'lg'});
+      Object.assign(modal.componentInstance,{partialProfile:this.clone(candidate),profileProvider:provider});
+      const result=await modal.result.catch(()=>null);
+      if(!result)return;
+      result.type=provider.id;delete result.id;result.isBuiltin=false;result.isTemplate=false;
+      if(!String(result.name||'').trim()){
+        const effective=this.profilesService.getConfigProxyForProfile?.(result)||result;
+        result.name=provider.getSuggestedName?.(effective)||this.t('会话');
+      }
+      try {
+        await this.writeNewNativeProfile(result);
+        await this.refreshAndRender();
+      }catch(error){this.showNativeCreateRecovery(result,error);}
+    }catch(error){this.notify(this.t(error.message),'error');}
+  }
+  async writeNewNativeProfile(result) {
+    const ids=new Set(this.liveProfiles().map(p=>String(p.id)));
+    if(!this.profilesService?.newProfile)result.id=this.makeId(result.type);
+    try {await this.writeProfile(result,true);}
+    catch(error){
+      // Keep the unsaved draft separate from the live list; retry must not duplicate it.
+      this.config.store.profiles=this.liveProfiles().filter(p=>!(p===result||result.id&&!ids.has(String(result.id))&&p.id===result.id));
+      throw error;
+    }
+  }
+  showNativeCreateRecovery(draft,error) {
+    const ref=this._dialog(this.t('新建会话尚未保存'));
+    ref.body.append(this._el('p','tsm2-help',String(error.message||error)));
+    ref.footer.prepend(this.createButton(this.t('继续编辑草稿'),this.t('继续编辑草稿'),()=>{ref.overlay.remove();return this.createNativeProfile('',draft);},'tsm2-primary'));
+    return ref;
+  }
+
   showProfileDialog(existing,group='') {
+    if(!existing)return this.createNativeProfile(group);
     const ref=this._dialog(this.t(existing?'编辑会话':'新建会话')),original=existing?this.clone(existing):null,picker=this.createProfileGroupPicker(group);const name=this.addField(ref.body,this.t('名称'),this.input('text',existing?.name)),type=this.addField(ref.body,this.t('协议'),this.select(['ssh','telnet','local','serial'].map(value=>({value,label:value.toUpperCase()})),existing?.type||'ssh'));
     const host=this.addField(ref.body,this.t('主机'),this.input('text',existing?.options?.host||existing?.options?.device||existing?.options?.cwd)),port=this.addField(ref.body,this.t('端口'),this.input('text',existing?.options?.port||22)),user=this.addField(ref.body,this.t('用户名'),this.input('text',existing?.options?.user)),auth=this.addField(ref.body,this.t('认证'),this.select(['interactive','password','publicKey','agent'].map(value=>({value,label:{interactive:this.t('交互式'),password:this.t('密码'),publicKey:this.t('私钥'),agent:'SSH Agent'}[value]})),existing?.options?.auth||'interactive')),password=this.addField(ref.body,this.t('密码'),this.input('password',''));password.autocomplete='new-password';password.disabled=!this.hasNativePasswordStorage();this.addField(ref.body,this.t('分组'),picker.input);ref.body.append(picker.list);const description=this.addField(ref.body,this.t('备注'),this.input('text',existing?.description));
     ref.footer.prepend(this.createButton(this.t('保存'),this.t('保存'),async()=>{if(!name.value.trim())throw Error(this.t('名称不能为空。'));const next=existing?this.clone(existing):{id:this.makeId(type.value),options:{}};next.name=name.value.trim();next.type=type.value;next.description=description.value;let dest=this.resolveProfileGroupPicker(picker.input.value,picker,group);if(dest&&!this.liveGroups().some(g=>g.id===dest)){const out=await this.ensureImportGroups([dest],[]);dest=out.resolved.get(this.canonicalGroupPath(dest));}next.group=dest||undefined;if(['ssh','telnet'].includes(next.type)){if(!host.value.trim())throw Error(this.t('请填写主机。'));const n=Number(port.value);if(!Number.isInteger(n)||n<1||n>65535)throw Error(this.t('端口配置无效。'));Object.assign(next.options,{host:host.value.trim(),port:n,user:user.value.trim(),auth:auth.value});}else next.options[next.type==='local'?'cwd':'device']=host.value;
@@ -1081,7 +1140,7 @@ class SessionManagerService {
   applyAppearance() {const surfaces=typeof document==='undefined'?[]:[this.getRoot(),...document.querySelectorAll('.tsm2-overlay,.tsm2-menu')];surfaces.filter(Boolean).forEach(node=>this.applyThemeToSurface(node));this.hostThemeSync?.applyUI(this.themePreset);}
 
 }
-SessionManagerService.ɵfac = candidate=>new (candidate||SessionManagerService)(coreAngular.ɵɵinject(core.ConfigService,8),coreAngular.ɵɵinject(core.ProfilesService,8),coreAngular.ɵɵinject(coreAngular.NgZone,8),ngb?.NgbModal?coreAngular.ɵɵinject(ngb.NgbModal,8):null,tabbySSH?.PasswordStorageService?coreAngular.ɵɵinject(tabbySSH.PasswordStorageService,8):null,coreAngular.ɵɵinject(core.AppService,8),coreAngular.ɵɵinject(loggerModule.AutoLoggerDecorator,8));
+SessionManagerService.ɵfac = candidate=>new (candidate||SessionManagerService)(coreAngular.ɵɵinject(core.ConfigService,8),coreAngular.ɵɵinject(core.ProfilesService,8),coreAngular.ɵɵinject(coreAngular.NgZone,8),ngb?.NgbModal?coreAngular.ɵɵinject(ngb.NgbModal,8):null,tabbySSH?.PasswordStorageService?coreAngular.ɵɵinject(tabbySSH.PasswordStorageService,8):null,coreAngular.ɵɵinject(core.AppService,8),coreAngular.ɵɵinject(loggerModule.AutoLoggerDecorator,8),core.SelectorService?coreAngular.ɵɵinject(core.SelectorService,8):null);
 SessionManagerService.ɵprov=coreAngular.ɵɵdefineInjectable({token:SessionManagerService,factory:SessionManagerService.ɵfac,providedIn:'root'});
 class SessionToolbarButtonProvider extends core.ToolbarButtonProvider {
   constructor(service) {super();this.service=service;}
