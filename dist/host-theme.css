@@ -51,3 +51,101 @@ html[data-tsm-host-theme="modernGradient"] :is(settings-tab,.modal-content) :is(
 html[data-tsm-host-theme="modernGradient"] :is(settings-tab,.modal-content) :is(.form-control,.form-select):focus {border-color:#55f5ff!important;box-shadow:0 0 0 2px #55f5ff22;}
 html[data-tsm-host-theme="liquidGlass"] :is(settings-tab,.modal-content) option {background:#252b3b;color:#f4f2ff;}
 html[data-tsm-host-theme="modernGradient"] :is(settings-tab,.modal-content) option {background:#100c20;color:#f4f2ff;}
+
+/* Native Tabby 1.0.238 tab strip. Keep layout, drag/close handlers, profile
+   color bars, progress and activity indicators owned by Tabby. */
+html[data-tsm-host-theme="graphiteGlass"] {
+  --tsm-tab-strip-bg:linear-gradient(110deg,#30343c,#1b1e24);
+  --tsm-tab-bg:linear-gradient(140deg,#2e3238,#21252b);--tsm-tab-hover:#353b44;--tsm-tab-active:#424952;
+  --tsm-tab-edge:#69727d;--tsm-tab-hover-edge:#9ba7b6;--tsm-tab-active-edge:#cbd8e6;
+  --tsm-tab-text:#cfd6df;--tsm-tab-active-text:#f3f4f6;--tsm-tab-mark:#dbe9f9;--tsm-tab-radius:12px;
+  --tsm-tab-shadow:inset 0 1px #ffffff20;--tsm-tab-active-shadow:inset 0 1px #ffffff40;
+}
+html[data-tsm-host-theme="obsidianChampagne"] {
+  --tsm-tab-strip-bg:linear-gradient(110deg,#252323,#171719);
+  --tsm-tab-bg:linear-gradient(135deg,#272629,#1d1d20);--tsm-tab-hover:#302d28;--tsm-tab-active:#38332a;
+  --tsm-tab-edge:#625442;--tsm-tab-hover-edge:#ac9167;--tsm-tab-active-edge:#d9bd89;
+  --tsm-tab-text:#d3cdc2;--tsm-tab-active-text:#fff5df;--tsm-tab-mark:#e9cc94;--tsm-tab-radius:12px;
+  --tsm-tab-shadow:inset 0 1px #e9cc9418;--tsm-tab-active-shadow:inset 0 1px #e9cc9438;
+}
+html[data-tsm-host-theme="warmFrost"] {
+  --tsm-tab-strip-bg:#e4ddcc;
+  --tsm-tab-bg:#e9e1d1;--tsm-tab-hover:#f4eddd;--tsm-tab-active:#fff9e8;
+  --tsm-tab-edge:#a89e87;--tsm-tab-hover-edge:#887858;--tsm-tab-active-edge:#665332;
+  --tsm-tab-text:#3d3425;--tsm-tab-active-text:#171714;--tsm-tab-mark:#665332;--tsm-tab-radius:10px;
+  --tsm-tab-shadow:inset 0 1px #fffdf5;--tsm-tab-active-shadow:inset 0 1px #ffffff;
+}
+html[data-tsm-host-theme="nocturneGlass"] {
+  --tsm-tab-strip-bg:linear-gradient(110deg,#172232,#0b1322);
+  --tsm-tab-bg:linear-gradient(140deg,#192638,#111b2a);--tsm-tab-hover:#203047;--tsm-tab-active:#253347;
+  --tsm-tab-edge:#536071;--tsm-tab-hover-edge:#8b98a9;--tsm-tab-active-edge:#e4b863;
+  --tsm-tab-text:#c5ceda;--tsm-tab-active-text:#f0f2f6;--tsm-tab-mark:#e4b863;--tsm-tab-radius:12px;
+  --tsm-tab-shadow:inset 0 1px #ffffff17;--tsm-tab-active-shadow:inset 0 1px #ffe4a933;
+}
+html[data-tsm-host-theme="ghibliSky"] {
+  --tsm-tab-strip-bg:#b0e0ee;
+  --tsm-tab-bg:#d2e8de;--tsm-tab-hover:#e2f1e5;--tsm-tab-active:#fff3cf;
+  --tsm-tab-edge:#749f98;--tsm-tab-hover-edge:#4d8174;--tsm-tab-active-edge:#345e4e;
+  --tsm-tab-text:#29413e;--tsm-tab-active-text:#142c29;--tsm-tab-mark:#345e4e;--tsm-tab-radius:16px;
+  --tsm-tab-shadow:inset 0 1px #ffffffaa;--tsm-tab-active-shadow:inset 0 1px #fffdf5;
+}
+html[data-tsm-host-theme="playfulNeo"] {
+  --tsm-tab-strip-bg:#4ecdc4;
+  --tsm-tab-bg:#fffefa;--tsm-tab-hover:#fff2c2;--tsm-tab-active:#ffe66b;
+  --tsm-tab-edge:#111111;--tsm-tab-hover-edge:#111111;--tsm-tab-active-edge:#111111;
+  --tsm-tab-text:#24312f;--tsm-tab-active-text:#111111;--tsm-tab-mark:#111111;--tsm-tab-radius:0px;
+  --tsm-tab-shadow:1px 1px #ff666b;--tsm-tab-active-shadow:2px 2px #111111;
+}
+html[data-tsm-host-theme="liquidGlass"] {
+  --tsm-tab-strip-bg:linear-gradient(100deg,#383149,#24353d);
+  --tsm-tab-bg:linear-gradient(120deg,#ffffff20,#d0bcff13,#b0fff51c);
+  --tsm-tab-hover:linear-gradient(120deg,#ffffff30,#d0bcff20,#b0fff52a);
+  --tsm-tab-active:linear-gradient(120deg,#ffffff40,#d0bcff24,#b0fff535);
+  --tsm-tab-edge:#d5e9ff75;--tsm-tab-hover-edge:#e3eaffbb;--tsm-tab-active-edge:#d4fbff;
+  --tsm-tab-text:#e3dfef;--tsm-tab-active-text:#ffffff;--tsm-tab-mark:#bcfff4;--tsm-tab-radius:18px;
+  --tsm-tab-shadow:inset 0 1px 1px #ffffff60,0 2px 6px #00000022;
+  --tsm-tab-active-shadow:inset 0 1px 2px #ffffff99,0 0 10px #aeeeff20;
+}
+html[data-tsm-host-theme="modernGradient"] {
+  --tsm-tab-strip-bg:linear-gradient(90deg,#200d35,#100c25 65%,#22102c);
+  --tsm-tab-bg:linear-gradient(110deg,#291239,#14192e);--tsm-tab-hover:linear-gradient(110deg,#3c1b50,#193044);
+  --tsm-tab-active:linear-gradient(110deg,#53205e,#16364c);
+  --tsm-tab-edge:#a452be;--tsm-tab-hover-edge:#e58aff;--tsm-tab-active-edge:#5df6ff;
+  --tsm-tab-text:#e5d8f5;--tsm-tab-active-text:#f4f2ff;--tsm-tab-mark:#5df6ff;--tsm-tab-radius:6px;
+  --tsm-tab-shadow:inset 0 1px #d279ed22;--tsm-tab-active-shadow:inset 0 1px #ec94ff55,0 0 8px #bc2fff30;
+}
+html[data-tsm-host-theme] tab-header {
+  margin:3px;min-width:0;border:1px solid var(--tsm-tab-edge)!important;border-radius:var(--tsm-tab-radius)!important;
+  background:var(--tsm-tab-bg)!important;color:var(--tsm-tab-text)!important;box-shadow:var(--tsm-tab-shadow)!important;
+}
+html[data-tsm-host-theme] tab-header:not(.active):hover {
+  background:var(--tsm-tab-hover)!important;color:var(--tsm-tab-active-text)!important;
+  border-color:var(--tsm-tab-hover-edge)!important;box-shadow:var(--tsm-tab-shadow)!important;
+}
+html[data-tsm-host-theme] tab-header.active,html[data-tsm-host-theme] tab-header.active:hover {
+  background:var(--tsm-tab-active)!important;color:var(--tsm-tab-active-text)!important;
+  border-color:var(--tsm-tab-active-edge)!important;box-shadow:var(--tsm-tab-active-shadow)!important;
+}
+html[data-tsm-host-theme] tab-header .name {color:inherit!important;}
+html[data-tsm-host-theme] tab-header .index {color:inherit!important;opacity:1!important;}
+html[data-tsm-host-theme] tab-header .buttons {top:0;}
+html[data-tsm-host-theme] tab-header .buttons button {color:var(--tsm-tab-active-text)!important;}
+/* Current tab uses fill and border highlighting across all eight themes. */
+html[data-tsm-host-theme] tab-header .current-tab-indicator {display:none!important;}
+html[data-tsm-host-theme] tab-header:focus-within {outline:2px solid var(--tsm-tab-active-edge);outline-offset:-3px;}
+html[data-tsm-host-theme] :is(.tabs-on-left,.tabs-on-right) tab-header {
+  margin:3px 0;flex-basis:calc(var(--tabs-height,38px) - 6px)!important;
+}
+html[data-tsm-host-theme="playfulNeo"] tab-header {border-width:2px!important;}
+
+/* Match the original :is selector specificity (including its .tab-bar > .inset
+   arm), so per-theme strips cannot be masked by the generic scene rule. */
+html[data-tsm-host-theme] :is(title-bar,.tab-bar,.tab-bar>.inset) {background:var(--tsm-tab-strip-bg)!important;}
+
+/* Keep a plain gap between tab number and title; suppress separator decorations
++   from inherited skins without altering saved names or native tab title text. */
+html[data-tsm-host-theme] tab-header :is(.index,.name) {
+  border-left:0!important;border-right:0!important;border-inline:0!important;box-shadow:none!important;
+}
+html[data-tsm-host-theme] tab-header .index::after,
+html[data-tsm-host-theme] tab-header .name::before {content:none!important;display:none!important;}

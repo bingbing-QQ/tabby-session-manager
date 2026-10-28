@@ -9,7 +9,7 @@ class AutoLoggerSettingsTabComponent {
   t(text) {return suiteI18n.t(text,this.config);}
   getConfig() {const store=this.config.store;if(!store.autoSessionLogger)store.autoSessionLogger=defaults(require('os').homedir());return store.autoSessionLogger;}
   profileName(entry) {return suiteI18n.profileName((this.config.store.profiles||[]).find(p=>String(p.id)===String(entry.id))||entry,this.config);}
-  settingsSignature() {const store=this.config?.store||{},state=store.sessionManager||{};return JSON.stringify([store.language,store.appearance?.language,...['language','dockMode','sidebarWidth','sessionInfoExpanded','themePreset','syncHostTheme','syncTerminalTheme'].map(key=>state[key])]);}
+  settingsSignature() {const store=this.config?.store||{},state=store.sessionManager||{};return JSON.stringify([store.language,store.appearance?.language,...['language','dockMode','sidebarWidth','sidebarFontSize','sessionInfoExpanded','themePreset','syncHostTheme','syncTerminalTheme'].map(key=>state[key])]);}
   ngOnInit() {
     this.languageChanged=()=>{this.render();this.zone?.run(()=>this.cd?.markForCheck?.());};
     if(typeof window!=='undefined')window.addEventListener('tabby-session-suite-language-changed',this.languageChanged);
@@ -36,50 +36,64 @@ class AutoLoggerSettingsTabComponent {
     const before={profileDirectories:cfg.profileDirectories,profileDirectoryKeys:cfg.profileDirectoryKeys,profiles:cfg.profiles};cfg.profileDirectories={...cfg.profileDirectories,[id]:directory};cfg.profileDirectoryKeys={...cfg.profileDirectoryKeys,[key]:directory};cfg.profiles={...cfg.profiles,[id]:{...(cfg.profiles?.[id]||{}),directory,name:entry.name,host:entry.host,port:entry.port,user:entry.user}};
     try{if(directory)fs.mkdirSync(directory,{recursive:true});await this.config.save();}catch(e){Object.assign(cfg,before);throw e;}if(!this.directoryStore.write(entry,directory))throw Error(this.t('保存日志路径失败。'));
   }
-  async pickDefault() {const result=await this.electron.dialog.showOpenDialog(this.hostWindow?.getWindow?.(),{title:this.t('Choose log directory'),properties:['openDirectory','showHiddenFiles','createDirectory']});if(result?.filePaths?.length){const cfg=this.getConfig(),previous=cfg.defaultDirectory;cfg.defaultDirectory=result.filePaths[0];try{await this.config.save();}catch(e){cfg.defaultDirectory=previous;throw e;}this.render();}}
-  async pickProfile(entry) {const result=await this.electron.dialog.showOpenDialog(this.hostWindow?.getWindow?.(),{title:this.t('Choose log directory'),properties:['openDirectory','showHiddenFiles','createDirectory']});if(result?.filePaths?.length){entry.directory=result.filePaths[0];await this.setProfileDirectory(entry);this.loadLogsForEntry(entry);this.render();}}
+  async pickDefault() {const result=await this.electron.dialog.showOpenDialog(this.hostWindow?.getWindow?.(),{title:this.t('Choose log directory'),properties:['openDirectory','showHiddenFiles','createDirectory']});if(result?.filePaths?.length){const cfg=this.getConfig(),previous=cfg.defaultDirectory;cfg.defaultDirectory=result.filePaths[0];try{await this.config.save();}catch(e){cfg.defaultDirectory=previous;throw e;}this.refreshLogs();this.render();}}
+  async pickProfile(entry) {const result=await this.electron.dialog.showOpenDialog(this.hostWindow?.getWindow?.(),{title:this.t('Choose log directory'),properties:['openDirectory','showHiddenFiles','createDirectory']});if(result?.filePaths?.length){const previous=entry.directory;entry.directory=result.filePaths[0];try{await this.setProfileDirectory(entry);}catch(error){entry.directory=previous;throw error;}this.refreshLogs();this.render();}}
   async toggleGroup(group) {const cfg=this.getConfig();cfg.collapsedGroups={...cfg.collapsedGroups,[group.key]:cfg.collapsedGroups?.[group.key]===false};await this.config.save();this.render();}
   async setAllGroupsCollapsed(collapsed) {const cfg=this.getConfig(),map={...cfg.collapsedGroups};for(const group of this.profileGroups){const pending=[group],seen=new Set();while(pending.length){const n=pending.pop();if(seen.has(n))continue;seen.add(n);map[n.key]=collapsed;pending.push(...n.children);}}cfg.collapsedGroups=map;void this.config.save();this.render();}
   formatSize(bytes) {const value=Number(bytes)||0;if(value<1024)return value+' B';const units=['KB','MB','GB'];let n=value/1024,i=0;while(n>=1024&&i<2){n/=1024;i++;}return n.toFixed(1)+' '+units[i];}
-  loadLogsForEntry(entry) {
-    entry.logs=[];entry.logError='';entry.logsScanned=true;
+  async scanLogMetadata(directory,generation) {
+    const catalog={rows:[],errors:[]};
+    if(!directory)return catalog;
     try {
-      const directory=entry.directory||this.getConfig().defaultDirectory;
-      if(!directory||!fs.existsSync(directory))return;
-      const tag=profileLogTag(entry.id),name=filename(entry.name);
-      let catalog=this.logCatalogCache?.get(directory);
-      if(!catalog){
-        catalog={rows:[],errors:[]};
-        for(const item of fs.readdirSync(directory,{withFileTypes:true})){
-          if(!item.isFile()||!item.name.toLowerCase().endsWith('.log'))continue;
-          const full=path.join(directory,item.name);let fd;
-          try {
-            fd=fs.openSync(full,'r');const buffer=Buffer.alloc(4096),count=fs.readSync(fd,buffer,0,buffer.length,0);
-            const owner=buffer.subarray(0,count).toString('utf8').split(/\r?\n/).find(line=>line.startsWith('Profile ID : '))?.slice(13).trim()||'';
-            const stat=fs.statSync(full);catalog.rows.push({owner,name:item.name,path:full,size:stat.size,mtime:stat.mtime,modified:stat.mtime,date:stat.mtime});
-          }catch(error){catalog.errors.push(item.name+': '+String(error.message||error));}
-          finally{if(fd!==undefined)try{fs.closeSync(fd);}catch{}}
-        }
-        this.logCatalogCache?.set(directory,catalog);
+      // Directory entries and lstat do not open file data streams. Never read headers here:
+      // opening an online-only placeholder can hydrate it and block the renderer.
+      const items=await fs.promises.readdir(directory,{withFileTypes:true});
+      for(let at=0;at<items.length;at+=8){
+        if(this.destroyed||generation!==this.logScanGeneration)return catalog;
+        const batch=await Promise.all(items.slice(at,at+8).map(async item=>{
+          if(!item.isFile()||!item.name.toLowerCase().endsWith('.log'))return null;
+          const full=path.join(directory,item.name);
+          try{const stat=await fs.promises.lstat(full);if(!stat.isFile()||stat.isSymbolicLink())return null;return {name:item.name,path:full,size:stat.size,mtime:stat.mtime,modified:stat.mtime,date:stat.mtime};}
+          catch(error){catalog.errors.push(item.name+': '+String(error.message||error));return null;}
+        }));
+        catalog.rows.push(...batch.filter(Boolean));
       }
-      entry.logs=catalog.rows.filter(log=>log.owner?log.owner===String(entry.id):log.name.includes('_'+tag+'_')||log.name.endsWith('_'+name+'.log')&&!/_p-[a-z0-9]+-[0-9a-f]{8}_/i.test(log.name)).sort((a,b)=>b.mtime-a.mtime);
-      entry.logError=catalog.errors.join('\n');
-    }catch(error){entry.logError=String(error.message||error);}
+    }catch(error){if(error.code!=='ENOENT')catalog.errors.push(String(error.message||error));}
+    return catalog;
+  }
+  async loadLogsForEntry(entry) {
+    const directory=entry.directory||this.getConfig().defaultDirectory,generation=this.logScanGeneration||0;
+    this.logScanGeneration=generation;this.logCatalogCache||=new Map();
+    if(!this.logCatalogCache.has(directory))this.logCatalogCache.set(directory,this.scanLogMetadata(directory,generation));
+    const catalog=await this.logCatalogCache.get(directory);
+    if(this.destroyed||generation!==this.logScanGeneration||directory!==(entry.directory||this.getConfig().defaultDirectory))return;
+    const tag=profileLogTag(entry.id),name=filename(entry.name);
+    entry.logs=catalog.rows.filter(log=>{
+      if(entry.allDirectoryLogs)return true;
+      if(log.name.includes('_'+tag+'_'))return true;
+      if(/_p-[a-z0-9]+-[0-9a-f]{8}_/i.test(log.name))return false;
+      const modern=/^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}-\d{3}_(.*)_[0-9a-f]{6,32}\.log$/i.exec(log.name);
+      return modern?modern[1]===name:log.name.endsWith('_'+name+'.log');
+    }).sort((a,b)=>b.mtime-a.mtime);
+    entry.logsScanned=true;entry.logError=catalog.errors.join('\n');
   }
   refreshLogs() {
     clearTimeout(this.logScanTimer);const generation=(this.logScanGeneration||0)+1;this.logScanGeneration=generation;
-    const pending=[...this.profileEntries],cache=new Map();this.logsLoading=true;
-    const next=()=>{
-      if(this.destroyed||generation!==this.logScanGeneration)return;
-      const entry=pending.shift();
-      if(entry){this.logCatalogCache=cache;try{this.loadLogsForEntry(entry);}catch(error){entry.logs=[];entry.logsScanned=true;entry.logError=String(error.message||error);}finally{this.logCatalogCache=null;}
+    this.logCatalogCache=new Map();this.logsLoading=true;
+    const pending=[...this.profileEntries];for(const entry of pending){entry.logs=[];entry.logError='';entry.logsScanned=false;entry.logLimit=100;}
+    const run=async()=>{
+      for(const entry of pending){
+        if(this.destroyed||generation!==this.logScanGeneration)return;
+        try{await this.loadLogsForEntry(entry);}catch(error){if(generation===this.logScanGeneration){entry.logs=[];entry.logsScanned=true;entry.logError=String(error.message||error);}}
+        if(this.destroyed||generation!==this.logScanGeneration)return;
         const button=this.mount?.querySelector?.('[data-log-count="'+this.profileEntries.indexOf(entry)+'"]');if(button){button.textContent=String(entry.logs.length);button.title=entry.logError||this.t(entry.logsExpanded?'Collapse logs':'Show logs');}
+        await new Promise(resolve=>setTimeout(resolve,0));
       }
-      if(pending.length)this.logScanTimer=setTimeout(next,0);else{this.logsLoading=false;}
+      if(!this.destroyed&&generation===this.logScanGeneration){this.logsLoading=false;if(pending.some(e=>e.logsExpanded))this.render();}
     };
-    this.logScanTimer=setTimeout(next,0);
+    this.logScanTimer=setTimeout(()=>void run(),0);
   }
-  toggleLogs(entry) {entry.logsExpanded=!entry.logsExpanded;if(entry.logsExpanded)this.loadLogsForEntry(entry);this.render();}
+  async toggleLogs(entry) {entry.logsExpanded=!entry.logsExpanded;this.render();if(entry.logsExpanded){await this.loadLogsForEntry(entry);this.render();}}
   filteredLogs(entry) {const query=this.logSearch.toLowerCase(),rows=entry.logs.filter(log=>log.name.toLowerCase().includes(query)),sort=this.logSort;return rows.sort((a,b)=>sort==='oldest'?a.mtime-b.mtime:['largest','sizeDesc'].includes(sort)?b.size-a.size:sort==='sizeAsc'?a.size-b.size:['name','nameAsc'].includes(sort)?a.name.localeCompare(b.name):sort==='nameDesc'?b.name.localeCompare(a.name):b.mtime-a.mtime);}
   formatDateTime(value) {return new Date(value).toLocaleString();}
   async viewLog(log) {const message=await this.electron.shell.openPath(log.path);if(message)throw Error(message);}
@@ -193,12 +207,12 @@ class AutoLoggerSettingsTabComponent {
     const general=el('section','asl-general');general.append(el('h5',null,this.t('General')));
     const check=(label,key)=>{const box=el('label','asl-check'),input=el('input');input.type='checkbox';input.checked=key==='recordCommands'?cfg[key]===true:cfg[key]!==false;input.addEventListener('change',guard(async()=>{const old=cfg[key];cfg[key]=input.checked;try{await this.config.save();}catch(e){cfg[key]=old;input.checked=old;throw e;}}));box.append(input,el('span',null,this.t(label)));general.append(box);};
     check('Enable default automatic logging','enabled');
-    const pathInput=el('input','form-control'),pathLabel=el('label','asl-field-label',this.t('Default log directory')),pathBox=el('div','asl-path');pathInput.id='tsm-default-log-directory';pathLabel.htmlFor=pathInput.id;pathInput.value=cfg.defaultDirectory||'';pathInput.setAttribute('aria-label',this.t('Default log directory'));pathInput.addEventListener('change',guard(async()=>{const old=cfg.defaultDirectory;cfg.defaultDirectory=pathInput.value;try{await this.config.save();}catch(e){cfg.defaultDirectory=old;pathInput.value=old;throw e;}}));pathBox.append(pathInput,button('Browse',()=>this.pickDefault()));general.append(pathLabel,pathBox,el('small','asl-help text-muted',this.t('Used only when an SSH profile has no specific directory. Existing log files are kept permanently and are never cleaned up by this plugin.')));
+    const pathInput=el('input','form-control'),pathLabel=el('label','asl-field-label',this.t('Default log directory')),pathBox=el('div','asl-path');pathInput.id='tsm-default-log-directory';pathLabel.htmlFor=pathInput.id;pathInput.value=cfg.defaultDirectory||'';pathInput.setAttribute('aria-label',this.t('Default log directory'));pathInput.addEventListener('change',guard(async()=>{const old=cfg.defaultDirectory;cfg.defaultDirectory=pathInput.value;try{await this.config.save();}catch(e){cfg.defaultDirectory=old;pathInput.value=old;throw e;}this.refreshLogs();}));pathBox.append(pathInput,button('Browse',()=>this.pickDefault()));general.append(pathLabel,pathBox,el('small','asl-help text-muted',this.t('Used only when an SSH profile has no specific directory. Existing log files are kept permanently and are never cleaned up by this plugin.')));
     check('Record submitted command lines','recordCommands');general.append(el('small','asl-help text-warning',this.t('Disabled by default. Enable only when command auditing is required: typed passwords or tokens may be written to local logs.')));loggingPage.append(general);
     const section=el('section'),sectionHeading=el('div','asl-section-heading'),sectionText=el('div');sectionText.append(el('h5',null,this.t('SSH profile log directories')),el('small','asl-help text-muted',this.t('Set a separate local log directory for each SSH profile.')));sectionHeading.append(sectionText,button('Reload',()=>this.refreshProfiles()));section.append(sectionHeading);
     if(this.profileGroups.length){const controls=el('div','asl-controls');controls.append(button('Expand all',()=>this.setAllGroupsCollapsed(false)),button('Collapse all',()=>this.setAllGroupsCollapsed(true)));section.append(controls);}else section.append(el('p','text-muted',this.t('No saved SSH profiles were detected.')));
-    const logPanel=entry=>{const panel=el('div','asl-log-panel'),toolbar=el('div','asl-log-toolbar'),search=el('input','form-control');search.type='search';search.value=this.logSearch;search.placeholder=this.t('Filter file names');search.setAttribute('aria-label',this.t('Filter file names'));search.addEventListener('change',()=>{this.logSearch=search.value;this.render();});const sort=el('select','form-select');sort.setAttribute('aria-label',this.t('Sort logs'));for(const [value,label]of [['newest','Newest'],['oldest','Oldest'],['nameAsc','Name A-Z'],['nameDesc','Name Z-A'],['sizeDesc','Largest'],['sizeAsc','Smallest']]){const option=el('option',null,this.t(label));option.value=value;sort.append(option);}sort.value=this.logSort;sort.addEventListener('change',()=>{this.logSort=sort.value;this.render();});toolbar.append(search,sort,button('Open Folder',()=>this.openDirectory(entry)));const panelHeader=el('div','asl-log-header'),directory=el('span','asl-directory text-muted',entry.directory||this.getConfig().defaultDirectory||this.t('No log directory configured'));directory.title=directory.textContent;panelHeader.append(directory,toolbar);panel.append(panelHeader);const list=el('div','asl-log-list'),logs=this.filteredLogs(entry);for(const log of logs){const row=el('div','asl-log-row'),name=el('span','asl-log-name',log.name);name.title=log.name;row.append(name,el('span','asl-log-size text-muted',this.formatSize(log.size)),el('span','asl-log-date text-muted',this.formatDateTime(log.mtime)),button('查看',()=>this.viewLog(log)));list.append(row);}if(!logs.length)list.append(el('p','text-muted',this.t('No log files found.')));panel.append(list);if(entry.logError)panel.append(el('p','text-danger',entry.logError));return panel;};
-    const draw=(group,parent,seen)=>{if(seen.has(group))return;seen.add(group);const box=el('section','asl-group'),expanded=cfg.collapsedGroups?.[group.key]===false,toggle=button('',()=>this.toggleGroup(group),'asl-group-toggle');toggle.setAttribute('aria-expanded',String(expanded));toggle.append(el('span',null,expanded?'▾':'▸'),el('strong','asl-group-name',group.key==='__ungrouped__'?this.t('Ungrouped'):group.name),el('span','asl-group-count text-muted',String(group.totalProfiles||group.entries.length)+' '+this.t('profiles')));if(group.children.length)toggle.append(el('small','asl-folder-count text-muted',group.children.length+' '+this.t('folders')));box.append(toggle);if(expanded){if(group.entries.length){const labels=el('div','asl-profile-grid asl-column-head text-muted');for(const text of ['Profile','Log directory','Logs',''])labels.append(el('span',null,this.t(text)));box.append(labels);}for(const entry of group.entries){const card=el('div','card'),row=el('div','asl-profile-grid'),name=el('strong','asl-profile-name',this.profileName(entry));name.title=this.profileName(entry);const input=el('input','form-control');input.value=entry.directory;input.placeholder=cfg.defaultDirectory;input.setAttribute('aria-label',this.profileName(entry)+' · '+this.t('Log directory'));input.title=entry.directory||cfg.defaultDirectory;input.addEventListener('change',guard(async()=>{const previous=entry.directory;entry.directory=input.value;try{await this.setProfileDirectory(entry);this.loadLogsForEntry(entry);this.render();}catch(e){entry.directory=previous;input.value=previous;throw e;}}));const count=button('',()=>this.toggleLogs(entry),'asl-log-count');count.dataset.logCount=String(this.profileEntries.indexOf(entry));count.textContent=entry.logsScanned?String(entry.logs.length):'—';count.title=this.t(entry.logsExpanded?'Collapse logs':'Show logs');count.setAttribute('aria-label',this.profileName(entry)+' · '+count.title);count.setAttribute('aria-expanded',String(entry.logsExpanded));row.append(name,input,count,button('Browse',()=>this.pickProfile(entry)));card.append(row);if(entry.logsExpanded)card.append(logPanel(entry));box.append(card);}if(group.children.length){const children=el('div','asl-children');group.children.forEach(child=>draw(child,children,seen));box.append(children);}}parent.append(box);};
+    const logPanel=entry=>{const panel=el('div','asl-log-panel'),toolbar=el('div','asl-log-toolbar'),search=el('input','form-control');search.type='search';search.value=this.logSearch;search.placeholder=this.t('Filter file names');search.setAttribute('aria-label',this.t('Filter file names'));search.addEventListener('change',()=>{this.logSearch=search.value;entry.logLimit=100;this.render();});const sort=el('select','form-select');sort.setAttribute('aria-label',this.t('Sort logs'));for(const [value,label]of [['newest','Newest'],['oldest','Oldest'],['nameAsc','Name A-Z'],['nameDesc','Name Z-A'],['sizeDesc','Largest'],['sizeAsc','Smallest']]){const option=el('option',null,this.t(label));option.value=value;sort.append(option);}sort.value=this.logSort;sort.addEventListener('change',()=>{this.logSort=sort.value;entry.logLimit=100;this.render();});toolbar.append(search,sort,button('Open Folder',()=>this.openDirectory(entry)));const panelHeader=el('div','asl-log-header'),directory=el('span','asl-directory text-muted',entry.directory||this.getConfig().defaultDirectory||this.t('No log directory configured'));directory.title=directory.textContent;panelHeader.append(directory,toolbar);panel.append(panelHeader);panel.append(el('p','text-muted',this.t('日志仅按文件名匹配，不读取内容。同名或重命名日志可查看目录全部日志。')),button(entry.allDirectoryLogs?'仅此会话':'目录全部日志',async()=>{entry.allDirectoryLogs=!entry.allDirectoryLogs;await this.loadLogsForEntry(entry);this.render();}));const list=el('div','asl-log-list'),logs=this.filteredLogs(entry),limit=entry.logLimit||100;for(const log of logs.slice(0,limit)){const row=el('div','asl-log-row'),name=el('span','asl-log-name',log.name);name.title=log.name;row.append(name,el('span','asl-log-size text-muted',this.formatSize(log.size)),el('span','asl-log-date text-muted',this.formatDateTime(log.mtime)),button('查看',()=>this.viewLog(log)));list.append(row);}if(!logs.length)list.append(el('p','text-muted',this.t('No log files found.')));panel.append(list);if(logs.length>limit)panel.append(button('加载更多',()=>{entry.logLimit=limit+100;this.render();}));if(entry.logError)panel.append(el('p','text-danger',entry.logError));return panel;};
+    const draw=(group,parent,seen)=>{if(seen.has(group))return;seen.add(group);const box=el('section','asl-group'),expanded=cfg.collapsedGroups?.[group.key]===false,toggle=button('',()=>this.toggleGroup(group),'asl-group-toggle');toggle.setAttribute('aria-expanded',String(expanded));toggle.append(el('span',null,expanded?'▾':'▸'),el('strong','asl-group-name',group.key==='__ungrouped__'?this.t('Ungrouped'):group.name),el('span','asl-group-count text-muted',String(group.totalProfiles||group.entries.length)+' '+this.t('profiles')));if(group.children.length)toggle.append(el('small','asl-folder-count text-muted',group.children.length+' '+this.t('folders')));box.append(toggle);if(expanded){if(group.entries.length){const labels=el('div','asl-profile-grid asl-column-head text-muted');for(const text of ['Profile','Log directory','Logs',''])labels.append(el('span',null,this.t(text)));box.append(labels);}for(const entry of group.entries){const card=el('div','card'),row=el('div','asl-profile-grid'),name=el('strong','asl-profile-name',this.profileName(entry));name.title=this.profileName(entry);const input=el('input','form-control');input.value=entry.directory;input.placeholder=cfg.defaultDirectory;input.setAttribute('aria-label',this.profileName(entry)+' · '+this.t('Log directory'));input.title=entry.directory||cfg.defaultDirectory;input.addEventListener('change',guard(async()=>{const previous=entry.directory;entry.directory=input.value;try{await this.setProfileDirectory(entry);this.refreshLogs();this.render();}catch(e){entry.directory=previous;input.value=previous;throw e;}}));const count=button('',()=>this.toggleLogs(entry),'asl-log-count');count.dataset.logCount=String(this.profileEntries.indexOf(entry));count.textContent=entry.logsScanned?String(entry.logs.length):'—';count.title=this.t(entry.logsExpanded?'Collapse logs':'Show logs');count.setAttribute('aria-label',this.profileName(entry)+' · '+count.title);count.setAttribute('aria-expanded',String(entry.logsExpanded));row.append(name,input,count,button('Browse',()=>this.pickProfile(entry)));card.append(row);if(entry.logsExpanded)card.append(logPanel(entry));box.append(card);}if(group.children.length){const children=el('div','asl-children');group.children.forEach(child=>draw(child,children,seen));box.append(children);}}parent.append(box);};
     for(const group of this.profileGroups)draw(group,section,new Set());loggingPage.append(section,el('small','asl-footer text-muted',this.t('文件夹默认折叠并记住展开状态。每个新 SSH 窗口生成独立日志；已有日志不会自动清理。')));
     const pages=suiteSettingsUI.render(this,el,button);for(const [key,page]of [['logging',loggingPage],['general',pages.general],['appearance',pages.appearance]]){page.hidden=this.activePage!==key;main.append(page);}host.append(main);
   }

@@ -1,11 +1,2 @@
 'use strict';
-const fs=require('fs'),path=require('path'),crypto=require('crypto');
-const root=path.resolve(__dirname,'..'),manifestFile=path.join(root,'package.json'),p=JSON.parse(fs.readFileSync(manifestFile)),ready=JSON.parse(fs.readFileSync(path.join(root,'release-readiness.json'))),proof=JSON.parse(fs.readFileSync(path.join(root,'stable-publication.json'))),errors=[];
-if(p.private!==false)errors.push('Run npm run prepare:release first.');
-if(p.version!=='4.1.0'||p.publishConfig.tag!=='latest')errors.push('Unexpected stable version or publication tag.');
-if(process.env.npm_lifecycle_event==='prepublishOnly'&&process.env.npm_config_tag&&process.env.npm_config_tag!=='latest')errors.push('Use --tag latest for this stable release.');
-for(const [key,value]of Object.entries(ready))if(value!==true)errors.push('Pending: '+key);
-for(const key of ['nativeChecksReportedPassed','rcOnlineInstallReportedPassed','rcRuntimeMatched','packageChecked','isolatedInstallChecked'])if(proof[key]!==true)errors.push('Pending: '+key);
-if(proof.version!==p.version||proof.expectedAccount!=='bingbing77')errors.push('Unexpected publication evidence.');
-if(crypto.createHash('sha256').update(fs.readFileSync(manifestFile)).digest('hex')!==proof.packageManifestSha256)errors.push('Manifest changed; run prepare:release again.');
-if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log('PASS stable 4.1.0 publication checks');
+const path=require('path');try{const result=require('./release-state.cjs').validate(path.resolve(__dirname,'..'),true);console.log('PASS stable '+result.version+' publication guard: accepted candidate, runtime, package and recent account preparation');}catch(error){console.error('STOP: '+error.message);process.exitCode=1;}

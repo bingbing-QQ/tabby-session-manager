@@ -290,6 +290,7 @@
     }
     const signature = JSON.stringify(Array.from(map, ([id, items]) => [id, items.map(item => item.tab.session && item.tab.session.open === true)]));
     const changed = signature !== this.connectionSignature;
+    if(this.expandedWindowProfiles)for(const id of this.expandedWindowProfiles){const before=this.connectionMap?.get(id)||[],after=map.get(id)||[];if(!after.some(item=>before.some(old=>old.tab===item.tab)))this.expandedWindowProfiles.delete(id);}
     this.connectionMap = map; this.connectionSignature = signature;
     this.updateUnifiedLogUI(false);
     if (changed && this.getRoot() && !this.destroyed) this.refreshSearchTree();
@@ -667,7 +668,7 @@
     const result = [];
     for (const row of rows) {
       result.push(row);
-      if (row.kind !== 'profile' || this.foldedWindowProfiles && this.foldedWindowProfiles.has(String(row.profile.id))) continue;
+      if (row.kind !== 'profile' || !this.expandedWindowProfiles?.has(String(row.profile.id))) continue;
       for (const item of this.connectionMap && this.connectionMap.get(String(row.profile.id)) || []) {
         if (item.tab.profile && item.tab.profile.type === 'ssh') result.push({ kind: 'window', tab: item.tab, top: item.top, depth: row.depth + 1 });
       }

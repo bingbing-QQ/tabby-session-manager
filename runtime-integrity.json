@@ -1,22 +1,22 @@
 {
-  "version": "4.1.0",
+  "version": "4.1.1",
   "algorithm": "sha256",
-  "status": "npm-4.1.0-published;maintainer-reported-native-catalog-install-passed",
+  "status": "formal-package-preparation;not-yet-published",
   "files": {
     "dist/contrast.js": "e4708330f7f5516a89382906ec801ce2878e27d16cba4c01554d3bbeea940af5",
     "dist/credential-guard.js": "04032b393f24a2353b0d70c279cec68da9aaedc403bf5a09ce53b9965ea0cb4d",
     "dist/forward-check-ui.js": "63af5db03235bb77444f6d980de2460fa3b5c033d1a5f250b5745cf584cbe655",
     "dist/forward-check.js": "88a8c2aa740ee13f8e2e4fa0c787e1320fbbbf7304ad019a79e02dace338a4d1",
-    "dist/host-theme.css": "fdf5c38186ce764aadd2101d28ef6bd5fc70b6205334276888e1585fbdf54281",
+    "dist/host-theme.css": "82a4b2573dd6ab12c064591393f441c6c4691132c7a71257b9ac57131aaed82a",
     "dist/host-theme.js": "ab466798eb9a2e500022524de6e6cf11bc93a74c6137f8265658b6a48adcd179",
     "dist/i18n.js": "758d94bec9022ea4cc9c4d6b680bce9f4802b25045f7c0c46e26036f695fa81d",
-    "dist/index.js": "78d1018b48caf892a313bd92435a16c6a02797064d229e3e32d03e12052aa5bd",
-    "dist/locales.json": "fd1f81b34d120ecfd34a7b6b21437501b38feea19b4a0d7d9b58a700711bda5f",
+    "dist/index.js": "afbb006c3f9868819274cb911cf752d1ee2cc9bc341763417164584479456188",
+    "dist/locales.json": "4bcfcc2524d144147dd85fdcc65aa660f90c5d0c97e0b41af0c07ecae5594342",
     "dist/logging-core.js": "0c0f10781354e0d3d65c3c76d922bb29efd16e5a6e364cb067d22ca6ee50e7ab",
-    "dist/logging-settings.js": "4087a1df26caddfd3a959a8a2360e8d2a5a648ecbbe49540baffc685f8876b41",
+    "dist/logging-settings.js": "83229af8fa0340f1c82a6e94f53e004037f18e53855c8638e7208605a3430318",
     "dist/logging.js": "8e43d37266e7a6a961336dcce868af4a667b29dc0e61e03c0ca7ba3d300f18d6",
     "dist/palettes.json": "7274ea628df5a7137dfadd8f7dcdccea46f2e894b07ef82ff0a9eddc75b1455e",
     "dist/settings-controller.js": "88a2f29b1ca02f89e52efba302fba095dc3d1380d83bba4aa05aee47a55b54a5",
-    "dist/suite-settings-ui.js": "07f203b10938ae4212d5596b91311c0c9069906947ae33098ccfa58d16774687"
+    "dist/suite-settings-ui.js": "2bb27114a14c290e47d685d894d9fbc4fd4a14031d0e94bf5859b69e14036230"
   }
 }

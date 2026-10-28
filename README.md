@@ -16,21 +16,27 @@
 
 ## 安装与升级
 
-正式版已发布，可在 Tabby 设置 → 插件中搜索 session-manager。也可完全退出 Tabby，在“打开插件目录”得到的用户插件根目录中安装：
+4.1.1 发布后，可在 Tabby 设置 → 插件中搜索 session-manager。也可完全退出 Tabby，在“打开插件目录”得到的用户插件根目录中安装：
 
 ~~~powershell
-npm.cmd install tabby-session-manager@4.1.0 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
+npm.cmd install tabby-session-manager@4.1.1 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
 ~~~
 
 ZIP 手动安装时，最终应为 node_modules/tabby-session-manager/package.json 与 dist/index.js。不要多套目录。先将旧同名 builtin 插件移出扫描路径备份，避免两份插件互相干扰；不要同时启用旧的独立日志插件。
 
 升级保留原配置键、设置页内部 ID、路径映射和日志格式。安装前备份配置和插件。禁用、卸载或回滚前先恢复同步前的主题与配色，不删除配置、凭据或日志。详见 [安装说明](docs/INSTALL.md)。
 
+## 4.1.1 更新
+
+- 日志列表仅异步读取文件信息，不自动打开旧日志内容；同名/改名历史日志可选择“目录全部日志”。主动点击“查看”可能下载对应的云端文件。
+- 已开窗口默认折叠，常规支持 11–22 px 字体大小。
+- 八套主题顶部标签栏使用底色和边框高亮，移除当前标签横线和标题前装饰竖线。
+
 ## 验证与兼容
 
-维护者报告 Windows / Tabby 1.0.238 的功能、中英文、禁用启用、卸载重装、回滚升级以及 4.1.0-rc.1 的 npm 在线安装测试通过。另有 20 项自动验证和四组浏览器模拟宿主检查。程序文件与已测试候选版一致；20 项中的一项验证 Windows npm 命令参数传递。
+维护者报告 Windows / Tabby 1.0.238 下 4.1.1-local.4 测试通过，并确认准备正式发布。正式运行文件与该候选版逐一比对，仅构建版本注释不同。自动化覆盖功能回归及五组浏览器模拟宿主检查。真实 Tabby 与 OneDrive 验收来自维护者反馈，不是独立原生自动化。
 
-这些记录不等于全平台或所有场景认证。其他系统和宿主版本尚未验证。4.1.0 已发布至 npm latest；维护者报告已从 Tabby 原生插件库搜索、获取并重启验证正常。详见 [兼容说明](docs/COMPATIBILITY.md)。
+4.1.0 的 npm 和原生插件库安装已有成功记录；4.1.1 本材料准备时尚未发布。其他系统和宿主版本尚未验证。详见 [兼容说明](docs/COMPATIBILITY.md)。
 
 ## 数据行为
 

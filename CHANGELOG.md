@@ -1,5 +1,18 @@
 # Changelog / 版本记录
 
+## 4.1.1
+
+- 日志目录异步读取文件名、大小和时间，不再为分类自动读取旧日志文件头，避免该操作触发云端日志下载。
+- 日志按文件名匹配；同名、改名或无法匹配的历史日志可使用“目录全部日志”。每次显示 100 条，可继续加载。主动查看仅联机文件仍可能触发对应文件下载。
+- 同一会话的已开窗口默认折叠；手动展开在当前批次保留，全部关闭后重置。
+- 常规增加 11–22 px 字体大小，中英文同步，列表行高与虚拟列表高度随之调整。
+- 八套主题适配顶部标签栏，当前标签使用底色和边框高亮，取消当前标签横线及序号/名称间的装饰竖线。
+- 保留会话、日志路径、凭据保护、主题、原生编辑、转发诊断和现有设置。
+- 维护者报告本地测试通过；自动化覆盖模拟云端文件、设置、列表及八套主题，真实 OneDrive 验证来自维护者反馈。
+
+Uses asynchronous metadata-only log listing, adds filename/all-directory browsing, collapsed window rows and adjustable sidebar font size, and refines all eight themed tab strips. Preserves existing settings and recording behavior.
+
+
 ## 4.1.0
 
 - Tabby 设置入口统一命名为“会话管理套件 / Session Suite”，保留原设置页 ID，仍只注册一个设置入口。

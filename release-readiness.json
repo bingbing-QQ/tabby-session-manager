@@ -1,6 +1,11 @@
 {
-  "realTabbyRewrittenVersionAccepted": true,
-  "standardInstallUpgradeRollbackAccepted": true,
-  "npmNameOwnershipConfirmed": true,
-  "publicLicenseAndBehaviorReviewAccepted": true
+  "version": "4.1.1",
+  "channel": "latest",
+  "published": false,
+  "localCandidate": "4.1.1-local.4",
+  "maintainerReportedNativeAcceptance": true,
+  "acceptanceSource": "User reported tests passed and requested formal release preparation",
+  "targetHost": "Windows / Tabby 1.0.238",
+  "independentNativeAutomation": false,
+  "independentOneDriveVerification": false
 }

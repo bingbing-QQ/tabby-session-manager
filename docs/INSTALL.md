@@ -1,28 +1,35 @@
 # 安装与升级 / Installation
 
-## 首次安装
+## 在线安装或升级
 
-在 Tabby 设置 → 插件 → 打开插件目录中获取实际用户插件根目录。完全退出 Tabby，将安装包内 tabby-session-manager 文件夹放在该目录的 node_modules 下；最终结构为 node_modules/tabby-session-manager/package.json 和 dist/index.js。没有 node_modules 时创建它。
+4.1.1 发布并被索引后，可在 Tabby 设置 → 插件中搜索 session-manager 并安装或升级。也可完全退出 Tabby，在实际用户插件根目录中执行：
 
-如果原先安装在 resources/builtin-plugins，先备份并将旧同名插件移到扫描路径之外，不要同时留两份。源码包外层文件夹可能不同，真正插件根目录必须直接包含 package.json 和 dist，不能多套一层。
+```powershell
+npm.cmd install tabby-session-manager@4.1.1 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
+```
 
-在已安装列表搜索 session-manager，并确认未被禁用。首次连接前核对会话日志设置：新安装默认启用自动日志，输入记录默认关闭。日志为本机明文；已有偏好保留。
+Windows 默认用户插件目录通常为 `%APPDATA%\tabby\plugins`，自定义或便携版应以 Tabby“打开插件目录”为准。
 
-用户已在原安装环境试用确认正常，但这不代替所有标准目录、新安装、卸载和回滚流程的验收。
+## 离线安装
 
-## 升级与回滚
+在同一用户插件根目录中运行 `npm.cmd install "实际路径\tabby-session-manager-4.1.1.tgz" --no-audit --no-fund`。源码 ZIP 不能直接交给 npm 安装。
 
-完全退出 Tabby，备份旧插件文件夹，再替换同名目录。保留配置、凭据、已有日志和映射文件。主题、语言、会话 ID 和日志路径不需要重置，不要同时启用旧独立日志插件。
+手动安装 ZIP 时，把其中 tabby-session-manager 文件夹放到插件根目录的 node_modules 下，最终直接存在 `node_modules/tabby-session-manager/package.json` 和 `dist/index.js`，不要多套目录。旧同名 builtin 插件应备份并移出扫描目录，避免重复加载；不要同时启用旧独立日志插件。
 
-卸载或回滚前，在风格主题中恢复 Tabby 原设置，再退出并卸载/移走插件或换回 3.6.0。删除插件文件夹不会自动删除日志、会话或保存的密码。
+## 配置、日志与回退
 
-## 在线安装
+安装前完全退出 Tabby，备份配置与插件目录。版本升级保留原配置键、设置入口 ID、凭据保护、日志路径和已有文件。4.1.1 的目录列表不为分类读取旧日志正文；同名或改名历史日志可从“目录全部日志”查看。主动查看仅联机文件可能下载该文件。
 
-GitHub 仓库和 Release 本身不进入 Tabby 在线插件搜索。发布到 npmjs.org、被索引后，才可在 Tabby 搜索 session-manager。是否可以发布同名包取决于 npm 名称可用性和账户权限；目前尚未发布。
+新安装默认启用自动日志，输入记录默认关闭。日志是明文，插件不自动清理。按需调整这些选项后再建立连接。
+
+需要回退时，先恢复同步前的主题与配色，完全退出 Tabby，然后在实际用户插件目录执行：
+
+```powershell
+npm.cmd install tabby-session-manager@4.1.0 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
+```
+
+新增字体设置键保留即可，旧版不使用它。不要删除配置、凭据或日志来完成回退。
 
 ## English
 
-Use Settings → Plugins → Open Plugins Directory to locate the actual user plugin root. Quit Tabby, then place the tabby-session-manager folder under node_modules. package.json and dist must be directly inside it. Avoid duplicate builtin/user copies and the old standalone logger.
-
-Back up the old plugin on upgrades, preserving configuration, credentials, mappings and logs. Restore original Tabby colors before uninstalling or rolling back. GitHub hosting does not populate the online plugin catalog; npm publication and indexing are separate steps.
-
+Quit Tabby and install in its actual user plugin root. Use the .tgz for npm or place the ZIP's package folder directly under node_modules. Preserve configuration, credentials, mappings and logs. Restore original appearance before disabling or rolling back. GitHub hosting alone does not populate the plugin catalog; npm publication and indexing are separate steps. Version 4.1.1 is not yet published at material-preparation time.

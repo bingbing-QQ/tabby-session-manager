@@ -35,7 +35,7 @@
   clampWidth(value) {return Math.max(220,Math.min(Number(value)||280,typeof window==='undefined'?640:Math.max(220,window.innerWidth-200)));}
   getStateStore() {return this.config?.store?.sessionManager||null;}
   loadUIState() {
-    const state=this.getStateStore()||{};this.sidebarWidth=this.clampWidth(state.sidebarWidth);this.isVisible=state.sidebarVisible!==false;this.dockMode=state.dockMode==='autohide'?'autohide':'pinned';
+    const state=this.getStateStore()||{};this.sidebarWidth=this.clampWidth(state.sidebarWidth);this.sidebarFontSize=Math.max(11,Math.min(22,Number(state.sidebarFontSize)||13));this.isVisible=state.sidebarVisible!==false;this.dockMode=state.dockMode==='autohide'?'autohide':'pinned';
     this.themePreset=Object.hasOwn(this.getThemePalettes(),state.themePreset)?state.themePreset:'nocturneGlass';this.collapsedFolders=new Set(state.collapsedList||[]);
   }
   async saveUIState() {

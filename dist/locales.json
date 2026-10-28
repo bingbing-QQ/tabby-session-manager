@@ -3022,5 +3022,25 @@
   "Suite General Tab": [
     "常规",
     "General"
+  ],
+  "字体大小": [
+    "字体大小",
+    "Font Size"
+  ],
+  "目录全部日志": [
+    "目录全部日志",
+    "All Directory Logs"
+  ],
+  "仅此会话": [
+    "仅此会话",
+    "This Session Only"
+  ],
+  "日志仅按文件名匹配，不读取内容。同名或重命名日志可查看目录全部日志。": [
+    "日志仅按文件名匹配，不读取内容。同名或重命名日志可查看目录全部日志。",
+    "Logs are matched by file name without reading contents. For duplicate or renamed sessions, view all directory logs."
+  ],
+  "加载更多": [
+    "加载更多",
+    "Load More"
   ]
 }

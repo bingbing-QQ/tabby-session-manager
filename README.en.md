@@ -16,19 +16,21 @@ New log names use date-time_session-name_short-ID.log and exclusive file creatio
 
 ## Installation
 
-Search session-manager in Tabby Settings → Plugins. Stable 4.1.0 is published on npm. Alternatively, quit Tabby and run this in the actual user plugin root opened from Settings:
+Search session-manager in Tabby Settings → Plugins. Version 4.1.1 is prepared for publication; 4.1.0 is already published. Alternatively, quit Tabby and run this in the actual user plugin root opened from Settings:
 
 ~~~sh
-npm install tabby-session-manager@4.1.0 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
+npm install tabby-session-manager@4.1.1 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
 ~~~
 
 For ZIP installation, package.json and dist/index.js must be directly under node_modules/tabby-session-manager. Back up and move any old same-name builtin copy outside scanned locations. Avoid enabling the former standalone logger simultaneously. Preserve configuration, credentials, mappings and logs. Restore original appearance before disabling, removing or rolling back. See docs/INSTALL.md.
 
+## 4.1.1 changes
+
+Metadata-only asynchronous log listing avoids automatically reading old log headers. Filename matching and all-directory browsing keep historical files reachable. Explicitly viewing an online-only file may download it. Window rows default to collapsed, sidebar font size supports 11–22 px, and all eight tab strips use fill/border highlighting without a current-tab underline or title separator.
+
 ## Validation
 
-The maintainer reports passing native functional, bilingual, disable/enable, uninstall/reinstall, rollback/upgrade and npm candidate installation checks on Windows / Tabby 1.0.238. Twenty verification scripts and four browser fixture suites also pass. Runtime files match the tested 4.1.0-rc.1 candidate. One script checks Windows npm argument handling.
-
-Other platforms and hosts are unverified. These checks are not exhaustive certification. The maintainer also reports successful discovery and installation of stable 4.1.0 through Tabby's native plugin catalog. See docs/COMPATIBILITY.md.
+The maintainer reports successful local testing of 4.1.1-local.4 on Windows / Tabby 1.0.238 and requested this release. Runtime files match that candidate except for the build-version banner. Regression checks and five browser fixture suites distinguish automated evidence from maintainer-reported native and OneDrive acceptance. Version 4.1.1 has not been published at preparation time. Other platforms and hosts are unverified. See docs/COMPATIBILITY.md.
 
 ## Data behavior
 
