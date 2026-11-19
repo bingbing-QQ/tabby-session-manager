@@ -1,5 +1,5 @@
 const fs=require('fs');const root=require('path').resolve(__dirname,'..');for(const folder of ['shared','logger'])for(const name of fs.readdirSync(root+'/src/'+folder))fs.writeFileSync(root+'/dist/'+name,fs.readFileSync(root+'/src/'+folder+'/'+name,'utf8').replace(/^\uFEFF/,'').replaceAll('\r\n','\n'));let retained=fs.readFileSync(root+'/src/suite-features.methods','utf8').replace(/^\uFEFF/,'').replaceAll('\r\n','\n');const parts=['session-replacement.methods','session-ui.methods'].map(n=>fs.readFileSync(root+'/src/'+n,'utf8').replace(/^\uFEFF/,''));const styles=fs.readFileSync(root+'/src/session.css','utf8').replace(/^\uFEFF/,'');
-const header=`/* Tabby Session Suite 4.1.1: replacement implementation; see src and docs/REIMPLEMENTATION.md. */
+const header=`/* Tabby Session Suite 4.1.2: replacement implementation; see src and docs/REIMPLEMENTATION.md. */
 'use strict';
 const core=require('tabby-core'),coreAngular=require('@angular/core'),common=require('@angular/common');
 const loggerModule=require('./logging'),suiteI18n=require('./i18n'),forwardCheckUI=require('./forward-check-ui');

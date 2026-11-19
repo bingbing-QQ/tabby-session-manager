@@ -1,7 +1,7 @@
 {
-  "version": "4.1.1-local.4",
-  "source": "maintainer-reported local test acceptance",
-  "indexComparison": "ignore only the version banner line",
+  "version": "4.1.2-local.2",
+  "source": "maintainer accepted local test build",
+  "indexComparison": "ignore version banner only",
   "files": {
     "dist/contrast.js": "e4708330f7f5516a89382906ec801ce2878e27d16cba4c01554d3bbeea940af5",
     "dist/credential-guard.js": "04032b393f24a2353b0d70c279cec68da9aaedc403bf5a09ce53b9965ea0cb4d",
@@ -10,8 +10,8 @@
     "dist/host-theme.css": "82a4b2573dd6ab12c064591393f441c6c4691132c7a71257b9ac57131aaed82a",
     "dist/host-theme.js": "ab466798eb9a2e500022524de6e6cf11bc93a74c6137f8265658b6a48adcd179",
     "dist/i18n.js": "758d94bec9022ea4cc9c4d6b680bce9f4802b25045f7c0c46e26036f695fa81d",
-    "dist/index.js": "40da3eb4daffc8c686524555788a28c4e5ef0f22707829d902c7340b9b40f6bd",
-    "dist/locales.json": "4bcfcc2524d144147dd85fdcc65aa660f90c5d0c97e0b41af0c07ecae5594342",
+    "dist/index.js": "85c43d79b41567fbdfeaf26bcf9a3ef57aea4d8cee3c27f8e83584d71cba777e",
+    "dist/locales.json": "b70a97838077fe072d10eb71fba1b72ef4e3624397389ce8fde5881e878145cc",
     "dist/logging-core.js": "0c0f10781354e0d3d65c3c76d922bb29efd16e5a6e364cb067d22ca6ee50e7ab",
     "dist/logging-settings.js": "83229af8fa0340f1c82a6e94f53e004037f18e53855c8638e7208605a3430318",
     "dist/logging.js": "8e43d37266e7a6a961336dcce868af4a667b29dc0e61e03c0ca7ba3d300f18d6",

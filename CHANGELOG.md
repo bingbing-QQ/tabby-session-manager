@@ -1,5 +1,12 @@
 # Changelog / 版本记录
 
+## 4.1.2
+
+双击会话名称建立连接；单击名称在约 500 毫秒判别后展开或收起窗口列表，双击取消待执行的展开动作。左侧箭头立即展开或收起。每个 SSH 窗口新增重新连接、关闭按钮，与记录和查看并列；使用原生重连和关闭确认，分屏操作针对选定终端。支持中英文，保留既有配置、主题与日志功能。
+
+Double-click a session name to connect. A single click toggles window rows after an approximately 500 ms recognition interval; double-click cancels that toggle. The arrow toggles immediately. Each SSH window adds Reconnect and Close beside logging actions, using native reconnection and close confirmation with targeted split-pane handling. Existing settings, themes and logging remain supported.
+
+
 ## 4.1.1
 
 - 日志目录异步读取文件名、大小和时间，不再为分类自动读取旧日志文件头，避免该操作触发云端日志下载。

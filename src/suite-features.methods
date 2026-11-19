@@ -690,6 +690,43 @@
     return info.temporarilyStopped ? this.t('本次已停止') : this.t('未记录');
   }
 
+  cancelProfileWindowClick() {clearTimeout(this.profileWindowClickTimer);this.profileWindowClickTimer=null;}
+  scheduleProfileWindowClick(profile) {
+    this.cancelProfileWindowClick();
+    this.profileWindowClickTimer=setTimeout(()=>{
+      this.profileWindowClickTimer=null;if(this.destroyed)return;
+      const row=Array.from(this.getRoot()?.querySelectorAll('.tsm2-profile')||[]).find(n=>n.dataset.profileId===String(profile.id));
+      if(row)this.toggleProfileWindowRows(profile,row);
+    },500);
+  }
+  toggleProfileWindowRows(profile,row) {
+    const id=String(profile.id),items=this.connectionMap?.get(id)||[];if(!items.length)return;
+    this.expandedWindowProfiles||=new Set();const expanded=!this.expandedWindowProfiles.has(id);
+    expanded?this.expandedWindowProfiles.add(id):this.expandedWindowProfiles.delete(id);
+    const tree=this.getRoot()?.querySelector('.tsm2-tree');if(!row||!tree)return this.refreshSearchTree();
+    const arrow=row.querySelector('button');if(arrow)arrow.textContent=expanded?'▾':'▸';
+    const slot=row.parentElement,virtual=slot!==tree,anchor=virtual?slot:row;
+    let next=virtual?row.nextElementSibling:row.nextElementSibling,removedHeight=0;
+    while(next&&next.classList.contains('tsm2-window-row')){const after=next.nextElementSibling;removedHeight+=Math.max(92,Math.ceil((this.sidebarFontSize||13)*7.1));next.remove();next=after;}
+    // Existing virtual window slots can follow the profile slot after a scroll.
+    if(virtual){let nextSlot=slot.nextElementSibling;while(nextSlot?.querySelector('.tsm2-window-row')?.dataset.profileId===id){const after=nextSlot.nextElementSibling;removedHeight+=parseFloat(nextSlot.style.height)||0;nextSlot.remove();nextSlot=after;}}
+    const fragment=document.createDocumentFragment();if(expanded)for(const item of items)if(item.tab.profile?.type==='ssh')this.renderWindowRow(fragment,{...item,depth:1});
+    const addedHeight=fragment.childNodes.length*Math.max(92,Math.ceil((this.sidebarFontSize||13)*7.1));
+    if(virtual){slot.append(fragment);removedHeight=expanded?0:items.filter(x=>x.tab.profile?.type==='ssh').length*Math.max(92,Math.ceil((this.sidebarFontSize||13)*7.1));const delta=addedHeight-removedHeight;slot.style.height=(Math.max(30,Math.ceil((this.sidebarFontSize||13)*2.3))+addedHeight)+'px';for(let n=slot.nextElementSibling;n;n=n.nextElementSibling)n.style.top=(parseFloat(n.style.top)+delta)+'px';slot.parentElement.style.height=(parseFloat(slot.parentElement.style.height)+delta)+'px';tree.onscroll=()=>this.refreshSearchTree();}
+    else row.after(fragment);
+  }
+  async runWindowConnectionAction(item,action) {
+    if(!this.getOpenTabs().some(x=>x.tab===item.tab))throw Error(this.t('该终端窗口已关闭。'));
+    this.windowConnectionBusy||=new WeakSet();const tab=item.tab;if(this.windowConnectionBusy.has(tab))return;this.windowConnectionBusy.add(tab);
+    try{
+      if(action==='reconnect'){if(typeof tab.reconnect!=='function')throw Error(this.t('此窗口不支持重新连接'));await tab.reconnect();}
+      else if(action==='close'){
+        if(tab.effectivelyPinned)throw Error(this.t('请先取消固定此窗口'));
+        if(item.top===tab)await this.appService.closeTab(tab,true);
+        else {if(typeof tab.canClose==='function'&&!await tab.canClose())return;await tab.destroy();}
+      }
+    }finally{this.windowConnectionBusy.delete(tab);this.refreshConnections(false);this.refreshSearchTree();}
+  }
   renderWindowRow(container, item) {
     const tab = item.tab, info = this.tabLogInfo(tab);
     const row = document.createElement('div'); row.className = 'tsm2-window-row'; row.style.paddingLeft = Math.min(52, 12 + item.depth * 10) + 'px';
@@ -707,7 +744,7 @@
     const toggle = this.createButton(info && info.recording ? this.t('停止') : this.t('记录'), this.t('控制此窗口日志'), () => this.runWindowLogAction(tab, info && info.recording ? 'stop' : info && info.lastOutputPath ? 'resume' : 'start'), 'tsm2-window-link');
     toggle.disabled = !info || !!info.stopping || !!(this.logBusy && this.logBusy.has(info.sessionKey));
     const view = this.createButton(this.t('查看'), this.t('查看此窗口最近日志'), () => this.runWindowLogAction(tab, 'view'), 'tsm2-window-link'); view.disabled = !info || !(info.outputPath || info.lastOutputPath);
-    actions.append(toggle, view); bottom.append(time, actions); row.append(top, address, bottom);
+    const reconnect=this.createButton(this.t('重新连接'),this.t('重新连接此窗口'),()=>this.runWindowConnectionAction(item,'reconnect'),'tsm2-window-link');const close=this.createButton(this.t('关闭'),this.t('关闭此窗口'),()=>this.runWindowConnectionAction(item,'close'),'tsm2-window-link');reconnect.disabled=typeof tab.reconnect!=='function'||!!this.windowConnectionBusy?.has(tab);close.disabled=!!this.windowConnectionBusy?.has(tab);actions.append(toggle, view, reconnect, close); bottom.append(time, actions); row.append(top, address, bottom);
     row.addEventListener('click', event => { if (!event.target.closest('button')) this.focusWindow(item); });
     container.appendChild(row);
   }

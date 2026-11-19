@@ -4,6 +4,10 @@
 
 Session management, per-window SSH logging, eight themes and selectable forwarding diagnostics for Tabby. One Session Suite settings entry contains General, Logging and Appearance tabs with Chinese and English support.
 
+## 4.1.2 interaction update
+
+Double-click a session name to connect. A single click toggles window rows after an approximately 500 ms recognition interval; double-click cancels that toggle. The arrow toggles immediately. Each SSH window adds Reconnect and Close beside logging actions, using native reconnection and close confirmation with targeted split-pane handling. Existing settings, themes and logging remain supported.
+
 ## Features
 
 - Sessions and folders, native creation and editing, favorites, independent recent-history cleanup and window switching.
@@ -16,10 +20,10 @@ New log names use date-time_session-name_short-ID.log and exclusive file creatio
 
 ## Installation
 
-Search session-manager in Tabby Settings → Plugins. Version 4.1.1 is prepared for publication; 4.1.0 is already published. Alternatively, quit Tabby and run this in the actual user plugin root opened from Settings:
+Search session-manager in Tabby Settings → Plugins. Version 4.1.2 is prepared for publication; 4.1.0 is already published. Alternatively, quit Tabby and run this in the actual user plugin root opened from Settings:
 
 ~~~sh
-npm install tabby-session-manager@4.1.1 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
+npm install tabby-session-manager@4.1.2 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
 ~~~
 
 For ZIP installation, package.json and dist/index.js must be directly under node_modules/tabby-session-manager. Back up and move any old same-name builtin copy outside scanned locations. Avoid enabling the former standalone logger simultaneously. Preserve configuration, credentials, mappings and logs. Restore original appearance before disabling, removing or rolling back. See docs/INSTALL.md.
@@ -30,7 +34,7 @@ Metadata-only asynchronous log listing avoids automatically reading old log head
 
 ## Validation
 
-The maintainer reports successful local testing of 4.1.1-local.4 on Windows / Tabby 1.0.238 and requested this release. Runtime files match that candidate except for the build-version banner. Regression checks and five browser fixture suites distinguish automated evidence from maintainer-reported native and OneDrive acceptance. Version 4.1.1 has not been published at preparation time. Other platforms and hosts are unverified. See docs/COMPATIBILITY.md.
+The maintainer reports successful local testing of 4.1.2-local.2 on Windows / Tabby 1.0.238 and requested this release. Runtime files match that candidate except for the build-version banner. Regression checks and five browser fixture suites distinguish automated evidence from maintainer-reported native and OneDrive acceptance. Version 4.1.2 has not been published at preparation time. Other platforms and hosts are unverified. See docs/COMPATIBILITY.md.
 
 ## Data behavior
 

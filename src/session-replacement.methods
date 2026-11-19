@@ -21,7 +21,7 @@
     void this.refreshAndRender();
   }
   ngOnDestroy() {
-    this.destroyed=true;clearTimeout(this.startTimer);clearTimeout(this.refreshTimer);clearTimeout(this.hideTimer);clearInterval(this.syncTimer);
+    this.destroyed=true;this.cancelProfileWindowClick();clearTimeout(this.startTimer);clearTimeout(this.refreshTimer);clearTimeout(this.hideTimer);clearInterval(this.syncTimer);
     for(const s of this.subscriptions||[])try{s.unsubscribe();}catch{}
     for(const s of this.splitFocusSubscriptions?.values()||[])try{s.unsubscribe();}catch{}
     this.releaseSettingsController?.();this.removeCredentialGuard?.();this.hostThemeSync?.destroy();this.closeContextMenu();

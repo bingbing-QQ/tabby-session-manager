@@ -4,6 +4,10 @@
 
 为 Tabby 提供会话管理、按窗口控制 SSH 日志、八套风格主题及端口转发诊断。设置统一为“会话管理套件”，包含常规、日志和外观三个页签，支持中文和英文。
 
+## 4.1.2 操作更新
+
+双击会话名称建立连接；单击名称在约 500 毫秒判别后展开或收起窗口列表，双击取消待执行的展开动作。左侧箭头立即展开或收起。每个 SSH 窗口新增重新连接、关闭按钮，与记录和查看并列；使用原生重连和关闭确认，分屏操作针对选定终端。支持中英文，保留既有配置、主题与日志功能。
+
 ## 功能
 
 - 会话与分组管理、原生新建和编辑、收藏、最近连接独立清理、窗口识别及切换。
@@ -16,10 +20,10 @@
 
 ## 安装与升级
 
-4.1.1 发布后，可在 Tabby 设置 → 插件中搜索 session-manager。也可完全退出 Tabby，在“打开插件目录”得到的用户插件根目录中安装：
+4.1.2 发布后，可在 Tabby 设置 → 插件中搜索 session-manager。也可完全退出 Tabby，在“打开插件目录”得到的用户插件根目录中安装：
 
 ~~~powershell
-npm.cmd install tabby-session-manager@4.1.1 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
+npm.cmd install tabby-session-manager@4.1.2 --registry=https://registry.npmjs.org/ --ignore-scripts --no-audit --no-fund
 ~~~
 
 ZIP 手动安装时，最终应为 node_modules/tabby-session-manager/package.json 与 dist/index.js。不要多套目录。先将旧同名 builtin 插件移出扫描路径备份，避免两份插件互相干扰；不要同时启用旧的独立日志插件。
@@ -34,9 +38,9 @@ ZIP 手动安装时，最终应为 node_modules/tabby-session-manager/package.js
 
 ## 验证与兼容
 
-维护者报告 Windows / Tabby 1.0.238 下 4.1.1-local.4 测试通过，并确认准备正式发布。正式运行文件与该候选版逐一比对，仅构建版本注释不同。自动化覆盖功能回归及五组浏览器模拟宿主检查。真实 Tabby 与 OneDrive 验收来自维护者反馈，不是独立原生自动化。
+维护者报告 Windows / Tabby 1.0.238 下 4.1.2-local.2 测试通过，并确认准备正式发布。正式运行文件与该候选版逐一比对，仅构建版本注释不同。自动化覆盖功能回归及五组浏览器模拟宿主检查。真实 Tabby 与 OneDrive 验收来自维护者反馈，不是独立原生自动化。
 
-4.1.0 的 npm 和原生插件库安装已有成功记录；4.1.1 本材料准备时尚未发布。其他系统和宿主版本尚未验证。详见 [兼容说明](docs/COMPATIBILITY.md)。
+4.1.0 的 npm 和原生插件库安装已有成功记录；4.1.2 本材料准备时尚未发布。其他系统和宿主版本尚未验证。详见 [兼容说明](docs/COMPATIBILITY.md)。
 
 ## 数据行为
 

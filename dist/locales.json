@@ -3042,5 +3042,25 @@
   "加载更多": [
     "加载更多",
     "Load More"
+  ],
+  "重新连接": [
+    "重新连接",
+    "Reconnect"
+  ],
+  "重新连接此窗口": [
+    "重新连接此窗口",
+    "Reconnect This Window"
+  ],
+  "关闭此窗口": [
+    "关闭此窗口",
+    "Close This Window"
+  ],
+  "此窗口不支持重新连接": [
+    "此窗口不支持重新连接",
+    "This window does not support reconnection"
+  ],
+  "请先取消固定此窗口": [
+    "请先取消固定此窗口",
+    "Unpin this window first"
   ]
 }

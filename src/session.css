@@ -103,3 +103,7 @@ body.tsm2-pinned :is(.modal-backdrop,ngb-modal-backdrop) {z-index:100030!importa
 @media(prefers-reduced-motion:reduce) {#tabby-session-manager-root *,.tsm2-overlay *,.tsm2-menu *{transition:none!important;animation:none!important;}}
 
 .tsm2-status[data-kind=error] {color:var(--ui-danger,#ffc5c9);}
+
+.tsm2-window-bottom{flex-wrap:wrap}.tsm2-window-actions{margin-left:auto;gap:4px}.tsm2-window-link{padding:1px 2px;font-size:inherit}.tsm2-window-bottom>span:first-child{flex:1 1 70px}.tsm2-window-row{height:auto;min-height:var(--tsm2-window-height,62px)}
+
+.tsm2-window-actions{flex-wrap:wrap;justify-content:flex-end;min-width:0;max-width:100%;flex:0 1 auto;white-space:normal}.tsm2-window-link{white-space:nowrap}

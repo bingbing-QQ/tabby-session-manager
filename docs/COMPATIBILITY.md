@@ -9,3 +9,7 @@
 主题同步、密码保护和原生编辑器依赖宿主接口。同步关闭后还原宿主样式，终端字体仍由 Tabby 控制。端口检查不自动修复系统或隧道。
 
 See VALIDATION-v4.1.1.md, PRIVACY.md and INSTALL.md. Automated fixtures, maintainer-reported native acceptance and pending online publication are separate evidence categories.
+
+## 4.1.2
+
+维护者已验收 4.1.2-local.2。本版运行文件除版本注释外与该候选版一致；交互测试覆盖单击等待、双击取消展开、普通/虚拟列表、指定窗口重连关闭与分屏确认。实际原生行为来自维护者反馈，自动化使用模拟宿主。4.1.2 在本材料准备时尚未发布。

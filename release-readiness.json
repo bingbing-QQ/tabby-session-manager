@@ -1,11 +1,10 @@
 {
-  "version": "4.1.1",
+  "version": "4.1.2",
   "channel": "latest",
   "published": false,
-  "localCandidate": "4.1.1-local.4",
+  "localCandidate": "4.1.2-local.2",
   "maintainerReportedNativeAcceptance": true,
-  "acceptanceSource": "User reported tests passed and requested formal release preparation",
+  "acceptanceSource": "User confirmed test build and requested formal release",
   "targetHost": "Windows / Tabby 1.0.238",
-  "independentNativeAutomation": false,
-  "independentOneDriveVerification": false
+  "independentNativeAutomation": false
 }
